@@ -1,0 +1,861 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cfcbd6fb-acbe-40e2-9d9e-49f0251e4604" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../APIDiff/1.0.0 to 1.0.1.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___D__work_droid_tu_sdk_release_tusdk_evavideo_for_android_demo_Example_app_libs_TuSDKCore_3_1_0_jar_unspecified_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___D__work_droid_tu_sdk_release_tusdk_evavideo_for_android_demo_Example_app_libs_TuSDKEva_1_0_1_jar_unspecified_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___D__work_droid_tu_sdk_release_tusdk_evavideo_for_android_demo_Example_app_libs_android_support_v7_recyclerview_jar_unspecified_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____local_aars___D__work_droid_tu_sdk_release_tusdk_evavideo_for_android_demo_Example_app_libs_universal_image_loader_1_9_4_jar_unspecified_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_core_common_1_1_1_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_core_runtime_1_1_1_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_common_1_1_1_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_livedata_1_1_1_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_livedata_core_1_1_1_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_runtime_1_1_1_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__android_arch_lifecycle_viewmodel_1_1_1_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_alexvasilkov_gesture_views_2_5_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_animated_vector_drawable_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_appcompat_v7_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_asynclayoutinflater_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_collections_28_0_0_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_constraint_constraint_layout_1_1_3_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_constraint_constraint_layout_solver_1_1_3_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_coordinatorlayout_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_cursoradapter_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_customview_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_documentfile_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_drawerlayout_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_interpolator_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_loader_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_localbroadcastmanager_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_multidex_1_0_3_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_multidex_instrumentation_1_0_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_print_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_slidingpanelayout_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_annotations_28_0_0_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_compat_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_ui_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_core_utils_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_fragment_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_media_compat_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_v4_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_support_vector_drawable_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_swiperefreshlayout_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_espresso_espresso_core_3_0_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_espresso_espresso_idling_resource_3_0_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_monitor_1_0_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_test_runner_1_0_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_versionedparcelable_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_android_support_viewpager_28_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_annotations_4_9_0_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_disklrucache_4_9_0_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_gifdecoder_4_9_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_glide_4_9_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_jakob_grabner_Circle_Progress_View_v1_3_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_findbugs_jsr305_2_0_1_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_javawriter_2_1_1_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__javax_inject_javax_inject_1_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_junit_4_12_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__net_sf_kxml_kxml2_2_3_0_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hamcrest_hamcrest_core_1_3_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hamcrest_hamcrest_integration_1_3_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_hamcrest_hamcrest_library_1_3_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_commons_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_coroutines_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_commons_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_coroutines_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_sdk27_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_sdk27_coroutines_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_sqlite_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_support_v4_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_support_v4_commons_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_appcompatV7_base_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_commons_base_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_platform_base_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_sqlite_base_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_supportV4_base_0_10_8_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_annotations_13_0_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_3_40_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_40_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_3_40_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlinx_kotlinx_coroutines_android_1_0_0_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlinx_kotlinx_coroutines_core_1_0_0_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlinx_kotlinx_coroutines_core_common_1_0_0_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/libs/TuSDKEva-1.0.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hs_err_pid6232.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ReleaseNote/Release-Notes-1.0.1-Android.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/runConfigurations.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/._.DS_Store" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/audios/audio_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/cover.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/fonts/SourceHanSansCN-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/fonts/SourceHanSansCN-Normal.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/01-jiugongge/images/img_9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/audios/audio_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/cover.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/fonts/SourceHanSansCN-Medium.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/02-shilitaohua/images/img_9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/._.DS_Store" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/._cover.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/audios/audio_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/cover.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/fonts/SourceHanSansCN-ExtraLight.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/fonts/SourceHanSansCN-Heavy.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/fonts/SourceHanSansCN-Normal.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/fonts/SourceHanSansCN-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/images/img_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/images/img_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/03-quweixiatlianlvxing/images/img_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/audios/audio_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/cover.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/fonts/FZSEJW--GB1-0.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/fonts/SourceHanSansCN-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_18.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_19.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_22.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_23.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_24.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_25.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_26.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_27.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_28.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_29.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_30.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_31.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_33.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_34.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_35.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_36.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_37.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_38.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_39.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_40.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_41.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_42.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_43.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_44.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_45.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_46.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_47.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_48.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_49.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_50.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_51.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_52.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/04-happywedding/images/img_9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/audios/audio_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/cover.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/fonts/FZSEJW--GB1-0.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_18.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_19.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_22.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_23.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_24.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_25.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_26.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_27.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_28.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_29.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_30.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_31.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_33.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_34.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_35.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_36.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_37.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_38.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/05-happywedding/images/img_9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/audios/audio_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/cover.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/fonts/SourceHanSansCN-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/fonts/SourceHanSansCN-Light.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/fonts/SourceHanSansCN-Medium.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/fonts/SourceHanSansCN-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_18.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_19.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_22.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/06-weddingday/images/img_9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/audios/audio_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/cover.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/fonts/SourceHanSansCN-Medium.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/images/img_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/images/img_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/images/img_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/images/img_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/images/img_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/images/img_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/images/img_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/07-lianyuanjie/images/img_7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/08-happybirthday/audios/audio_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/08-happybirthday/cover.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/08-happybirthday/fonts/SourceHanSansCN-Normal.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/08-happybirthday/images/img_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/08-happybirthday/images/img_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/08-happybirthday/images/img_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/08-happybirthday/images/img_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/08-happybirthday/images/img_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/audios/audio_0.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/cover.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/fonts/SourceHanSansCN-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/fonts/SourceHanSansCN-Medium.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/images/img_0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/images/img_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/images/img_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/images/img_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/images/img_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/images/img_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/images/img_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/images/img_7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/09-shishangchaoliu/images/img_8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/brushes/lsq_brush_default.gbsh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/model/lsq_tutucloud_dl_landmark_2.0.0.dpm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/stickers/lsq_sticker_0_1623.gsce" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/stickers/lsq_sticker_0_1667.gsce" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/stickers/lsq_sticker_0_1668.gsce" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/stickers/lsq_sticker_0_1669.gsce" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_filter_Beauty02_257.gfilter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_filter_Beauty03_258.gfilter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_filter_Burning_173.gfilter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_filter_Cartoon_ShortVideo_252.gfilter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_filter_Cartoon_live_254.gfilter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_filter_LiveHeartbeat_239.gfilter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_filter_LiveMirrorImage_240.gfilter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_filter_LiveOldTV_242.gfilter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_filter_LiveRadialBlur_245.gfilter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_filter_Money_174.gfilter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/textures/lsq_internal_filters.filter" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/EvaPlayerManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/app/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/libs/TuSDKCore-3.1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/libs/TuSDKCore-3.1.0.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/libs/TuSDKEva-1.0.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/libs/android-support-v7-recyclerview.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/libs/android-support-v7-recyclerview.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/libs/universal-image-loader-1.9.4.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/libs/universal-image-loader-1.9.4.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/proguard-rules.pro" beforeDir="false" afterPath="$PROJECT_DIR$/app/proguard-rules.pro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/androidTest/java/org/lsque/tusdkevademo/ExampleInstrumentedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/androidTest/java/org/lsque/tusdkevademo/ExampleInstrumentedTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/02-shilitaohua/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/04-happywedding/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/05-happywedding/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/06-weddingday/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/06-weddingday/images/img_11.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/06-weddingday/images/img_12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/08-happybirthday/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/09-shishangchaoliu/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/TuSDK.bundle/others/lsq_tusdk_configs.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/others/lsq_tusdk_configs.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/audios/city_sunshine.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/audios/city_sunshine.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/audios/eye_of_forgiveness.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/audios/eye_of_forgiveness.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/audios/lovely_piano_song.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/audios/lovely_piano_song.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/audios/motions.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/audios/motions.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/audios/pickled_pink.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/audios/pickled_pink.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/assets/audios/rush.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/audios/rush.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/AlbumActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/AlbumAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/AlbumFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/AlbumInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumInfo.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/AudioItemFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AudioItemFactory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/AudioListActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AudioListActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/AudioListAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AudioListAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/DemoEntryActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/DemoEntryActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/EditType.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/EditType.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/EditorModelItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/EditorModelItem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/ImageCuterActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ImageCuterActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/ModelAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/ModelDetailActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelDetailActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/ModelEditorAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/ModelItemFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelItemFactory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/MovieCuterActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/MovieCuterActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/ScreenAdapterActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ScreenAdapterActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/SplashActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/SplashActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/TuApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/TuApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieCoverListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieCoverListView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieScrollContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieScrollContent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieScrollView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieScrollView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkRangeSelectionBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkRangeSelectionBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/playview/rangeselect/TuSdkMovieColorGroupView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/rangeselect/TuSdkMovieColorGroupView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/playview/rangeselect/TuSdkMovieColorRectView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/rangeselect/TuSdkMovieColorRectView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/playview/rangeselect/TuSdkMovieGrayView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/rangeselect/TuSdkMovieGrayView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/utils/AppManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/AppManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/utils/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/utils/NumberUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/NumberUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/utils/PermissionUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/PermissionUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/java/org/lsque/tusdkevademo/views/TouchSelesView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/views/TouchSelesView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/jniLibs/arm64-v8a/libtusdk-eva.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-eva.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/jniLibs/arm64-v8a/libtusdk-library.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-library.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/jniLibs/armeabi-v7a/libtusdk-eva.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/armeabi-v7a/libtusdk-eva.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/jniLibs/armeabi-v7a/libtusdk-library.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/armeabi-v7a/libtusdk-library.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/anim/activity_close_from_top_to_bottom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/anim/activity_close_from_top_to_bottom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/anim/activity_keep_status.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/anim/activity_keep_status.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/anim/activity_open_from_bottom_to_top.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/anim/activity_open_from_bottom_to_top.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/anim/lsq_decelerate_interpolator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/anim/lsq_decelerate_interpolator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/anim/lsq_fade_in.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/anim/lsq_fade_in.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/anim/lsq_fade_out.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/anim/lsq_fade_out.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable-v24/ic_launcher_foreground.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/editor_text_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/editor_text_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/ic_launcher_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/item_editor_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/item_editor_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/item_editor_image_num_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/item_editor_image_num_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_default_bg.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_default_bg.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_editor_change_voice_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_editor_change_voice_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_home_bg.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_home_bg.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_left_bar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_left_bar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_left_bar_rect.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_left_bar_rect.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_model_create_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_model_create_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_model_seekbar_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_model_seekbar_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_model_seekbar_thumb.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_model_seekbar_thumb.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_model_seekbar_thumb_pressed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_model_seekbar_thumb_pressed.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_model_voice_seekbar_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_model_voice_seekbar_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_next_step_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_next_step_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_right_bar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_right_bar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/drawable/lsq_right_bar_rect.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/lsq_right_bar_rect.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/activity_audio_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_audio_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/activity_eva_play.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_eva_play.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/activity_image_cuter.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_image_cuter.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/activity_movie_editor_cut.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_movie_editor_cut.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/activity_splash.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/album_activity.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/album_activity.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/demo_entry_activity.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/demo_entry_activity.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/item_audio_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_audio_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/item_editor_image.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_editor_image.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/item_editor_text.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_editor_text.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/lsq_album_select_video_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/lsq_album_select_video_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/lsq_range_selection.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/lsq_range_selection.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/model_detail_activity.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/model_detail_activity.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/model_editor_activity.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/model_editor_activity.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/model_list_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/model_list_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/movie_album_fragment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/movie_album_fragment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/layout/title_item_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/title_item_layout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-hdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-hdpi/ic_launcher_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-mdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-mdpi/ic_launcher_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xhdpi/edit_ic_arrow_left.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/edit_ic_arrow_left.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xhdpi/edit_ic_arrow_right.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/edit_ic_arrow_right.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xhdpi/lsq_change_bgm.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/lsq_change_bgm.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xhdpi/lsq_close.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/lsq_close.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xhdpi/lsq_model_create.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/lsq_model_create.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xhdpi/lsq_nav_bar_back.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/lsq_nav_bar_back.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xhdpi/lsq_player_img.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/lsq_player_img.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xhdpi/lsq_sure_ic.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/lsq_sure_ic.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/values/dimens.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/test/java/org/lsque/tusdkevademo/ExampleUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/org/lsque/tusdkevademo/ExampleUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../视频融合文档 - Android.md" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="304">
+              <caret line="16" column="82" selection-start-line="16" selection-start-column="82" selection-end-line="16" selection-end-column="82" />
+            </state>
+          </provider>
+          <provider editor-type-id="android-manifest" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5339">
+              <caret line="325" column="33" selection-start-line="325" selection-start-column="33" selection-end-line="325" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="178">
+              <caret line="13" column="28" lean-forward="true" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/TuApplication.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="399">
+              <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/DemoEntryActivity.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="152">
+              <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>stop</find>
+      <find>TLog</find>
+      <find>_init</find>
+      <find>_buildEncodecEnvironment</find>
+      <find>init()</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/DemoEntryActivity.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="3" />
+    <option name="y" value="2" />
+    <option name="width" value="1022" />
+    <option name="height" value="736" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Example" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Example" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="Example" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Example" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="Example" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Example" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Example" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Example" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Example" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Example" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="app" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="AndroidView" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="android.project.structure.last.selected" value="SDK Location" />
+    <property name="android.project.structure.proportion" value="0.15" />
+    <property name="android.sdk.path" value="D:/sdk" />
+    <property name="device.picker.selection" value="291569e6" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../droid_tu_sdk_project/droid-sdk-eva/build.gradle" />
+    <property name="not.eligible.for.single.variant.sync" value="true" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="show.do.not.ask.upgrade.gradle.plugin" value="3.1.4" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app\libs" />
+      <recent name="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app\src\main\jniLibs" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cfcbd6fb-acbe-40e2-9d9e-49f0251e4604" name="Default Changelist" comment="" />
+      <created>1565940136218</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1565940136218</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="2576" height="1426" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.3298887" />
+      <window_info id="Structure" order="2" side_tool="true" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info id="Build Variants" order="4" side_tool="true" />
+      <window_info id="Image Layers" order="5" />
+      <window_info id="Designer" order="6" />
+      <window_info id="Resources Explorer" order="7" />
+      <window_info id="Capture Tool" order="8" />
+      <window_info anchor="bottom" id="Run" order="0" />
+      <window_info anchor="bottom" id="Logcat" order="1" visible="true" weight="0.32894737" />
+      <window_info anchor="bottom" id="TODO" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" />
+      <window_info anchor="bottom" id="Terminal" order="4" />
+      <window_info anchor="bottom" id="Event Log" order="5" side_tool="true" />
+      <window_info anchor="bottom" id="Flutter Performance" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Build" order="8" weight="0.32972136" />
+      <window_info anchor="bottom" id="Android Profiler" order="9" />
+      <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
+      <window_info anchor="right" id="Capture Analysis" order="1" />
+      <window_info anchor="right" id="Gradle" order="2" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info anchor="right" id="Flutter Inspector" order="4" />
+      <window_info anchor="right" id="PlantUML" order="5" />
+      <window_info anchor="right" id="Flutter Outline" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Codota" order="8" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.3298887" />
+      <window_info id="Structure" order="2" side_tool="true" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info id="Build Variants" order="4" side_tool="true" />
+      <window_info id="Image Layers" order="5" />
+      <window_info id="Designer" order="6" />
+      <window_info id="Resources Explorer" order="7" />
+      <window_info id="Capture Tool" order="8" />
+      <window_info anchor="bottom" id="Run" order="0" />
+      <window_info anchor="bottom" id="Logcat" order="1" weight="0.32946634" />
+      <window_info anchor="bottom" id="TODO" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" />
+      <window_info anchor="bottom" id="Terminal" order="4" />
+      <window_info anchor="bottom" id="Event Log" order="5" side_tool="true" />
+      <window_info anchor="bottom" id="Flutter Performance" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Build" order="8" visible="true" weight="0.32972136" />
+      <window_info anchor="bottom" id="Android Profiler" order="9" show_stripe_button="false" />
+      <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
+      <window_info anchor="right" id="Capture Analysis" order="1" />
+      <window_info anchor="right" id="Gradle" order="2" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info anchor="right" id="Flutter Inspector" order="4" />
+      <window_info anchor="right" id="PlantUML" order="5" />
+      <window_info anchor="right" id="Flutter Outline" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Codota" order="8" />
+    </layout-to-restore>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/MainActivity.java" />
+    <entry file="jar://$PROJECT_DIR$/app/libs/TuSDKEva-1.0.1.jar!/org/lasque/tusdk/eva/TuSdkEvaSaver.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-751">
+          <caret line="36" column="16" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="16" column="82" selection-start-line="16" selection-start-column="82" selection-end-line="16" selection-end-column="82" />
+        </state>
+      </provider>
+      <provider editor-type-id="android-manifest" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5339">
+          <caret line="325" column="33" selection-start-line="325" selection-start-column="33" selection-end-line="325" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/TuApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/DemoEntryActivity.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/app/libs/TuSDKCore-3.1.0.jar!/org/lasque/tusdk/core/media/codec/encoder/TuSdkMediaFileSuitEncoderBase.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-439">
+          <caret line="18" column="22" selection-start-line="18" selection-start-column="22" selection-end-line="18" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/app/libs/TuSDKEva-1.0.0.jar!/org/lasque/tusdk/eva/TuSdkEvaSaverImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/app/libs/TuSDKEva-1.0.1.jar!/org/lasque/tusdk/eva/TuSdkEvaSaverImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="188" selection-start-line="188" selection-end-line="188" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="13" column="28" lean-forward="true" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
