@@ -12,10 +12,8 @@ package org.lsque.tusdkevademo
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.View
 import kotlinx.android.synthetic.main.title_item_layout.*
-import org.lasque.tusdk.impl.activity.TuFragmentActivity
 
 class AlbumActivity : ScreenAdapterActivity() {
 
@@ -24,6 +22,8 @@ class AlbumActivity : ScreenAdapterActivity() {
     private var isOnlyVideo = false
     private var currentWidth = 0
     private var currentHeight = 0
+    private var videoDuration = 0f
+    private var isAlpha = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +32,15 @@ class AlbumActivity : ScreenAdapterActivity() {
         isOnlyVideo = intent.getBooleanExtra("onlyVideo", false)
         currentWidth = intent.getIntExtra("width", 0)
         currentHeight = intent.getIntExtra("height", 0)
+        videoDuration = intent.getFloatExtra("videoDuration",0f)
+        isAlpha = intent.getBooleanExtra("isAlpha",false)
         var bundle = Bundle()
         bundle.putBoolean("onlyImage", isOnlyImage)
         bundle.putBoolean("onlyVideo", isOnlyVideo)
         bundle.putInt("width", currentWidth)
         bundle.putInt("height", currentHeight)
+        bundle.putFloat("videoDuration",videoDuration)
+        bundle.putBoolean("isAlpha",isAlpha)
         mAlbumFragment!!.arguments = bundle
         initView()
     }

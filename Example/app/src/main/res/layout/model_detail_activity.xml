@@ -1,51 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/lsq_default_bg">
+    android:background="#131313">
 
-    <include
-        android:id="@+id/lsq_title"
-        layout="@layout/title_item_layout"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
-        android:textStyle="bold"
-        android:text="小清新婚礼派对电子请柬"
-        android:textSize="16sp"
+        android:lineSpacingExtra="6dp"
+        android:id="@+id/lsq_model_replace_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:textColor="@color/lsq_color_white"
-        android:layout_marginTop="374dp"
-        app:layout_constraintTop_toBottomOf="@id/lsq_title"
-        android:layout_marginLeft="21dp"
+        android:textSize="15sp"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_model_name"
+        app:layout_constraintTop_toBottomOf="@id/lsq_model_name" />
+
+
+    <TextView
+        android:id="@+id/lsq_next_step"
+        android:layout_width="160dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="28dp"
+        android:background="@drawable/lsq_model_create_bg"
+        android:drawableStart="@mipmap/lsq_model_create"
+        android:drawableLeft="@mipmap/lsq_model_create"
+        android:drawablePadding="-20dp"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingLeft="20dp"
+        android:text="一键制作"
+        android:textColor="@color/lsq_color_white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
         android:id="@+id/lsq_model_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="28dp"
+        android:text="小清新婚礼派对电子请柬"
+        android:textColor="@color/lsq_color_white"
+        android:textSize="16sp"
 
-    <FrameLayout
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lsq_title"
-        android:id="@+id/lsq_model_seles"
-        app:layout_constraintBottom_toTopOf="@id/lsq_model_name"
-        android:layout_width="0dp"
-        android:layout_height="350dp">
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@id/lsq_video_display_area" />
 
-    <ImageView
-        android:background="@null"
-        android:visibility="gone"
-        android:src="@mipmap/lsq_player_img"
-        app:layout_constraintBottom_toBottomOf="@id/lsq_model_seles"
-        app:layout_constraintRight_toRightOf="@id/lsq_model_seles"
-        app:layout_constraintLeft_toLeftOf="@id/lsq_model_seles"
-        app:layout_constraintTop_toTopOf="@id/lsq_model_seles"
-        android:id="@+id/lsq_player_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lsq_video_display_area"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#000000"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:id="@+id/lsq_model_seles"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lsq_title"></FrameLayout>
+
+        <ImageView
+            android:id="@+id/lsq_player_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:src="@mipmap/lsq_player_img"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/lsq_model_seles"
+            app:layout_constraintLeft_toLeftOf="@id/lsq_model_seles"
+            app:layout_constraintRight_toRightOf="@id/lsq_model_seles"
+            app:layout_constraintTop_toTopOf="@id/lsq_model_seles" />
+
+
+
+        <include
+            android:id="@+id/lsq_title"
+            layout="@layout/title_item_layout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <at.grabner.circleprogress.CircleProgressView
         android:id="@+id/lsq_editor_cut_load_parogress"
@@ -53,63 +98,44 @@
         android:layout_height="30dp"
         android:layout_gravity="center"
         android:src="@mipmap/lsq_player_img"
-        app:layout_constraintBottom_toBottomOf="@id/lsq_model_seles"
-        app:layout_constraintRight_toRightOf="@id/lsq_model_seles"
-        app:layout_constraintLeft_toLeftOf="@id/lsq_model_seles"
         app:cpv_barColor="@color/lsq_color_white"
         app:cpv_barWidth="2dp"
         app:cpv_maxValue="100"
         app:cpv_rimColor="@color/lsq_color_transparent"
         app:cpv_rimWidth="2dp"
-        app:cpv_textColor="@color/lsq_color_transparent" />
+        app:cpv_textColor="@color/lsq_color_transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <SeekBar
-        android:paddingEnd="10dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        android:maxHeight="4dp"
-        app:layout_constraintRight_toRightOf="@id/lsq_model_seles"
-        app:layout_constraintLeft_toLeftOf="@id/lsq_model_seles"
-        app:layout_constraintTop_toBottomOf="@id/lsq_model_seles"
         android:id="@+id/lsq_seek"
         android:layout_width="0dp"
-        android:layout_height="14dp"
-        android:thumb="@drawable/lsq_model_seekbar_thumb"
+        android:layout_height="wrap_content"
+        android:maxHeight="4dp"
+        android:paddingTop="27dp"
+        android:paddingBottom="30dp"
         android:progressDrawable="@drawable/lsq_model_seekbar_bg"
-        android:paddingStart="10dp" />
-
-
-    
-    <TextView
-        android:lineHeight="12dp"
-        android:textSize="14sp"
-        android:textColor="@color/lsq_color_white"
-        android:layout_marginTop="22dp"
-        app:layout_constraintLeft_toLeftOf="@id/lsq_model_name"
-        app:layout_constraintTop_toBottomOf="@id/lsq_model_name"
-        android:id="@+id/lsq_model_replace_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    
-    <TextView
-        android:background="@drawable/lsq_model_create_bg"
-        android:gravity="center"
-        android:text="一键制作"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="@color/lsq_color_white"
-        android:layout_marginBottom="28dp"
-        app:layout_constraintRight_toRightOf="parent"
+        android:thumb="@drawable/lsq_model_seekbar_thumb"
+        android:thumbOffset="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/lsq_video_display_area"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/lsq_next_step"
-        android:layout_width="160dp"
-        android:layout_height="52dp"
-        android:drawableStart="@mipmap/lsq_model_create"
-        android:drawableLeft="@mipmap/lsq_model_create"
-        android:drawablePadding="-30dp"
-        android:paddingLeft="30dp"
-        android:paddingStart="30dp" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lsq_video_display_area" />
+
+    <include
+        android:layout_marginRight="6dp"
+        android:id="@+id/lsq_video_seek_bar"
+        layout="@layout/include_seek_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginBottom="13dp"
+        app:layout_constraintBottom_toBottomOf="@id/lsq_video_display_area"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 
-
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

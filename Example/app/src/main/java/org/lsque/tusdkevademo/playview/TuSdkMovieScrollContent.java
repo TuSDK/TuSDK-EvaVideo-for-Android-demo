@@ -23,6 +23,11 @@ import org.lsque.tusdkevademo.playview.rangeselect.TuSdkMovieColorRectView;
 public class TuSdkMovieScrollContent extends RelativeLayout {
     private static final String TAG = "TuSdkMovieScrollContent";
     private TuSdkMovieCoverListView mCoverListView;
+
+    public TuSdkRangeSelectionBar getSelectRange() {
+        return mSelectRange;
+    }
+
     private TuSdkRangeSelectionBar mSelectRange;
     protected TuSdkMovieColorGroupView mColorGroupView;
     private OnPlayProgressChangeListener progressChangeListener;
@@ -74,7 +79,7 @@ public class TuSdkMovieScrollContent extends RelativeLayout {
             if (isNeedShowCursor)layoutParams0.rightMargin = TuSdkContext.dip2px(15);
             addView(mCoverListView, layoutParams0);
 
-            //添加画色控件
+//            //添加画色控件
             LayoutParams layoutParams2 = new LayoutParams(width, height);
             if (mType == 1) layoutParams2.leftMargin = TuSdkContext.dip2px(15);
             if (isNeedShowCursor)layoutParams2.rightMargin = TuSdkContext.dip2px(15);
@@ -101,6 +106,8 @@ public class TuSdkMovieScrollContent extends RelativeLayout {
 
             LayoutParams mCoverLayoutParams = (LayoutParams) mCoverListView.getLayoutParams();
             mCoverLayoutParams.leftMargin = mSelectRange.getBarWidth();
+            mCoverLayoutParams.topMargin = TuSdkContext.dip2px(3f);
+            mCoverLayoutParams.bottomMargin = TuSdkContext.dip2px(3f);
             mCoverListView.setLayoutParams(mCoverLayoutParams);
 
             LayoutParams mSelectLayoutParams = (LayoutParams) mSelectRange.getLayoutParams();

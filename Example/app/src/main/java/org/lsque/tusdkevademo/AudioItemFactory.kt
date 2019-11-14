@@ -33,7 +33,7 @@ class AudioItemFactory {
         fun getAudioItemList(context: Context) : List<AudioItem>{
             var audioList : ArrayList<AudioItem> = java.util.ArrayList()
             context.assets.list("audios")
-            for (i in 0 until nameList.size){
+            for (i in nameList.indices){
                 audioList.add(AudioItem("audios/${dirList[i]}", nameList[i]))
             }
             return audioList

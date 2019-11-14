@@ -3,76 +3,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.lsque.tusdkevademo">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> <!-- 获取WIFI信息 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> <!-- 允许应用程序写数据到外部存储设备（主要是SD卡） -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> <!-- 在sdcard中创建/删除文件的权限 -->
-    <uses-permission android:name="android.permission.CAMERA"/> <!-- 开启闪光灯权限 -->
-    <uses-permission android:name="android.permission.FLASHLIGHT"/> <!-- 访问麦克风 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
-    <uses-feature android:name="android.hardware.camera.flash"/> <!-- 以下为非必要权限 -->
-    <!-- 位置信息 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> <!-- 允许访问GPS -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> <!-- 读取本机信息 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/> <!-- 读取日志 -->
-
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true"/>
-
     <application
         android:name=".TuApplication"
         android:allowBackup="true"
+        android:appComponentFactory="@string/app_name"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
-        android:hardwareAccelerated="true"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:appComponentFactory="@string/app_name"
+        android:usesCleartextTraffic="true"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".SplashActivity" >
+        <activity android:name=".SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DemoEntryActivity"
+        <activity
+            android:name=".DemoEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-        </activity>
-        <activity android:name=".ModelDetailActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+        <activity
+            android:name=".ModelDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity android:name=".ImageCuterActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ImageCuterActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".AlbumActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity android:name=".AlbumActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".AudioListActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity android:name=".AudioListActivity"
             android:launchMode="standard"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/Transparent"/>
+        <activity
+            android:name=".MovieCuterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity android:name=".MovieCuterActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ModelEditorActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity android:name=".ModelEditorActivity"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".NetworkModelExampleActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+    </application> <!-- 获取WIFI信息 -->
+    <uses-feature android:name="android.hardware.camera" /> <!-- 允许应用程序写数据到外部存储设备（主要是SD卡） -->
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.flash" /> <!-- 在sdcard中创建/删除文件的权限 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" /> <!-- 开启闪光灯权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 访问麦克风 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    </application>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" /> <!-- 以下为非必要权限 -->
+    <!-- 位置信息 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许访问GPS -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- 读取本机信息 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 读取日志 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 
 </manifest>

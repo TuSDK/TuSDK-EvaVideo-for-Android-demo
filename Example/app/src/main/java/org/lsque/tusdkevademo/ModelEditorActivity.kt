@@ -14,20 +14,26 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.RectF
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.LinearLayoutManager
+import android.os.Environment.DIRECTORY_DCIM
+import android.os.Environment.DIRECTORY_MOVIES
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.DisplayMetrics
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
+import android.widget.Toast
 import kotlinx.android.synthetic.main.model_detail_activity.lsq_model_seles
 import kotlinx.android.synthetic.main.model_detail_activity.lsq_player_img
-import kotlinx.android.synthetic.main.model_detail_activity.lsq_seek
 import kotlinx.android.synthetic.main.model_editor_activity.*
 import kotlinx.android.synthetic.main.title_item_layout.*
 import org.jetbrains.anko.startActivityForResult
@@ -39,11 +45,14 @@ import org.lasque.tusdk.core.media.codec.video.TuSdkVideoQuality
 import org.lasque.tusdk.core.seles.output.SelesView
 import org.lasque.tusdk.core.struct.TuSdkMediaDataSource
 import org.lasque.tusdk.core.utils.AssetsHelper
+import org.lasque.tusdk.core.utils.FileHelper
 import org.lasque.tusdk.core.utils.TLog
 import org.lasque.tusdk.core.utils.ThreadHelper
+import org.lasque.tusdk.core.view.TuSdkViewHelper
 import org.lasque.tusdk.eva.*
 import org.lasque.tusdk.eva.structure.TuSdkEvaEntityCompari
 import org.lasque.tusdk.eva.structure.TuSdkEvaEntityQueue
+import java.io.File
 import java.util.*
 import kotlin.math.min
 
@@ -54,20 +63,24 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         public const val ALBUM_REQUEST_CODE_IMAGE = 1
         public const val ALBUM_REQUEST_CODE_VIDEO = 2
         public const val AUDIO_REQUEST_CODE = 3
+        public const val ALBUM_REQUEST_CODE_ALPHA_VIDEO = 4
     }
 
     /**  Eva播放器 */
-    private var mEvaPlayer:TuSdkEvaPlayerImpl? = null;
+    private var mEvaPlayer: TuSdkEvaPlayerImpl? = null;
     /**  Eva AssetManager */
     private var mEvaAssetManager: TuSdkEvaAssetManager? = null
+    /** 是否已经销毁 **/
+    private var isRelease = false
+
     /**  Eva播放器进度监听 */
     private var mPlayerProcessListener: TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener = TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener { progress, currentTimeNN, durationNN ->
         lsq_seek.progress = (progress * 100).toInt()
         if (currentTimeNN == durationNN) {
-          ThreadHelper.post({
-              mEvaPlayer!!.pause()
-              lsq_player_img.visibility = View.VISIBLE
-          })
+            ThreadHelper.post({
+                mEvaPlayer!!.pause()
+                lsq_player_img.visibility = View.VISIBLE
+            })
         }
     }
 
@@ -88,6 +101,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
     private var mEditorAdapter: ModelEditorAdapter? = null
 
     private var isEnable = true
+
+    private var isCanChangeAudio = true
+
+    private var mFrameDurationNN = 0L
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data == null) return
@@ -112,6 +129,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                         mCurrentVideoEntity!!.setCropRectF(RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3]))
                         mCurrentVideoEntity!!.setImagePath(data!!.getStringExtra("imagePath"))
                     }
+
+                    ALBUM_REQUEST_CODE_ALPHA_VIDEO -> {
+                        mCurrentVideoEntity!!.videoPath = data!!.getStringExtra("videoPath")
+                    }
                 }
             }
             /** 音频选择回调 */
@@ -129,6 +150,18 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_editor_activity)
         initView()
+//        setListenerToRootView()
+        lsq_edit_content.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                if (lsq_editor_replace_text.visibility == View.VISIBLE) {
+                    lsq_text_editor_layout.visibility = View.GONE
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(lsq_editor_replace_text.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+                }
+                return false
+            }
+
+        })
     }
 
     private fun playerReplay() {
@@ -140,50 +173,62 @@ class ModelEditorActivity : ScreenAdapterActivity() {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun initView() {
         lsq_title_item_title.text = "融合预览"
-        lsq_back.setOnClickListener { finish() }
+        lsq_back.setOnClickListener {
+            if(!isRelease) {
+                isRelease = true
+                mEvaPlayer!!.release()
+            }
+            finish()
+        }
         val modelItem = intent.getParcelableExtra<ModelItem>("model")
-        mEvaPlayer = TuSdkEvaPlayerImpl(AssetsHelper.getAssetPath(TuSdkContext.context(),modelItem.templateName))
+        mEvaPlayer = TuSdkEvaPlayerImpl(
+                if (AssetsHelper.getAssetPath(TuSdkContext.context(), modelItem.templateName) == null) {
+                    modelItem.modelDownloadFilePath
+                } else {
+                    AssetsHelper.getAssetPath(TuSdkContext.context(), modelItem.templateName)
+                })
 
         /** 资源加载进度监听 */
-        mEvaPlayer!!.assetManager.setAssetLoadCallback(object : TuSdkEvaAssetManager.TuSdkEvaAssetLoadCallback{
+        mEvaPlayer!!.assetManager.setAssetLoadCallback(object : TuSdkEvaAssetManager.TuSdkEvaAssetLoadCallback {
             override fun onPrepareLoad() {
                 /**  加载可替换项资源完成时回调 */
                 ThreadHelper.post {
                     TuSdk.messageHub().dismiss()
                     mEvaAssetManager = mEvaPlayer!!.assetManager
-                    /** 设置播放控件 */
-                    mEvaPlayer!!.setDisplayContent(lsq_model_seles)
-                    setEditorList(mEvaPlayer!!.assetManager.replaceImageList, mEvaPlayer!!.assetManager.replaceVideoList, mEvaPlayer!!.assetManager.replaceTextList)
+                    setEditorList(mEvaPlayer!!.assetManager.replaceImageList, mEvaPlayer!!.assetManager.replaceVideoList, mEvaPlayer!!.assetManager.replaceTextList, mEvaPlayer!!.assetManager.replaceAlphaVideoList)
                     mEditorAdapter!!.setEditorModelList(mEditorList)
                     /** 如果没有音频可替换项,则隐藏音频替换按钮 */
                     if (mEvaPlayer!!.assetManager.replaceAudioList.size() == 0) {
-                        lsq_editor_change_bgm.visibility = View.GONE
+                        isCanChangeAudio = false
                     }
 
                     var metrics = DisplayMetrics()
                     windowManager.defaultDisplay.getRealMetrics(metrics)
+                    val displayArea = Rect()
+                    lsq_model_seles.getGlobalVisibleRect(displayArea)
                     val videoHeight = mEvaPlayer!!.assetManager.inputSize.height.toFloat()
                     val videoWidth = mEvaPlayer!!.assetManager.inputSize.width.toFloat()
                     val whp = videoHeight / videoWidth
+                    val hwp = videoWidth / videoHeight
                     if (videoWidth > videoHeight) {
                         (lsq_model_seles.layoutParams as ConstraintLayout.LayoutParams).height = (metrics.widthPixels * whp).toInt()
                     } else {
-                        if (videoHeight < lsq_model_seles.layoutParams.height){
+                        if (videoHeight < lsq_model_seles.layoutParams.height) {
                             lsq_model_seles.layoutParams.height = videoHeight.toInt()
-                            lsq_model_seles.layoutParams.width = min(metrics.widthPixels,videoWidth.toInt())
+                            lsq_model_seles.layoutParams.width = min(metrics.widthPixels, videoWidth.toInt())
                         } else {
-                            if (videoWidth > metrics.widthPixels){
+                            if (videoWidth > metrics.widthPixels) {
                                 lsq_model_seles.layoutParams.height = (metrics.widthPixels * whp * 0.5).toInt()
                                 lsq_model_seles.layoutParams.width = (metrics.widthPixels * 0.5).toInt()
                             } else {
-                                lsq_model_seles.layoutParams.width = min(metrics.widthPixels,(metrics.widthPixels * (lsq_model_seles.layoutParams.height / videoHeight)).toInt())
+                                lsq_model_seles.layoutParams.width = (displayArea.height() * hwp).toInt()
                             }
                         }
                     }
-
-
+                    (lsq_model_seles.layoutParams as ConstraintLayout.LayoutParams).topToBottom = R.id.lsq_title
+                    mEvaPlayer!!.setDisplayContent(lsq_model_seles)
                     mEvaPlayer!!.selesView.fillMode = SelesView.SelesFillModeType.PreserveAspectRatioAndFill
-
+                    lsq_seek.visibility = View.VISIBLE
                     mEvaPlayer!!.play()
                 }
             }
@@ -207,7 +252,6 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         mEvaPlayer!!.load()
 
 
-
         var editorAdapter = ModelEditorAdapter(this, mEditorList)
         editorAdapter.setOnItemClickListener(object : ModelEditorAdapter.OnItemClickListener {
 
@@ -220,8 +264,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                     EvaAsset.TuSdkEvaAssetType.EvaOnlyImage -> isOnlyImage = true
                     EvaAsset.TuSdkEvaAssetType.EvaVideoImage -> isOnlyImage = false
                 }
+                mFrameDurationNN = mEvaPlayer!!.evaReceiver.frameDuration
+                var videoDuration = (item.endFrame - item.weight) * mFrameDurationNN / 1000
                 mCurrentImageEntity = item
-                startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_IMAGE, "onlyImage" to isOnlyImage, "onlyVideo" to false, "width" to item.evaImageAsset.width(), "height" to item.evaImageAsset.height())
+                startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_IMAGE, "videoDuration" to videoDuration, "onlyImage" to isOnlyImage, "onlyVideo" to false, "width" to item.evaImageAsset.width(), "height" to item.evaImageAsset.height())
             }
 
             /** 视频修改项点击时间 */
@@ -233,8 +279,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                     EvaAsset.TuSdkEvaAssetType.EvaOnlyVideo -> isOnlyVideo = true
                     EvaAsset.TuSdkEvaAssetType.EvaVideoImage -> isOnlyVideo = false
                 }
+                mFrameDurationNN = mEvaPlayer!!.evaReceiver.frameDuration
+                var videoDuration = (item.endFrame - item.weight) * mFrameDurationNN / 1000L
                 mCurrentVideoEntity = item
-                startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_VIDEO, "onlyImage" to false, "onlyVideo" to isOnlyVideo, "width" to mEvaPlayer!!.assetManager.inputSize.width, "height" to mEvaPlayer!!.assetManager.inputSize.height)
+                startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_VIDEO, "videoDuration" to videoDuration, "onlyImage" to false, "onlyVideo" to isOnlyVideo, "width" to mEvaPlayer!!.assetManager.inputSize.width, "height" to mEvaPlayer!!.assetManager.inputSize.height , "isAlpha" to item.isAlpha)
             }
 
             /** 文字修改项点击事件 */
@@ -245,6 +293,8 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 lsq_text_editor_layout.visibility = View.VISIBLE
                 lsq_editor_replace_text.requestFocus()
                 mCurrentEditPostion = position
+                var inputManager: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.showSoftInput(lsq_editor_replace_text, 0);
             }
 
         })
@@ -300,8 +350,20 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             }
         })
         lsq_editor_change_bgm.setOnClickListener {
+            if (!isCanChangeAudio) {
+                Toast.makeText(this, "此资源不支持替换背景音乐", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             startActivityForResult<AudioListActivity>(AUDIO_REQUEST_CODE)
             this.overridePendingTransition(R.anim.activity_open_from_bottom_to_top, R.anim.activity_keep_status)
+        }
+
+        lsq_reset_assets.setOnClickListener {
+            if (mEvaAssetManager != null) {
+                //todo reset() 方法目前有问题 无法重置 并且会使音频消失
+                mEvaAssetManager!!.reset()
+                editorAdapter.notifyItemMoved(0, editorAdapter.itemCount - 1)
+            }
         }
 
         lsq_editor_text_commit.setOnClickListener {
@@ -325,7 +387,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             /** 保存功能 */
             val saver = TuSdkEvaSaverImpl()
             /**  设置保存路径 */
-            saver.setOutputFilePath("${Environment.getExternalStorageDirectory().path}/eva_output${System.currentTimeMillis()}.mp4")
+            saver.setOutputFilePath("${Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM).path}/eva_output${System.currentTimeMillis()}.mp4")
 
             /** 设置保存属性 **/
             var options = TuSdkEvaSaver
@@ -353,6 +415,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
                 override fun onCompleted(e: Exception?, outputFile: TuSdkMediaDataSource, total: Int) {
                     TLog.e("[debug] save completed !!! : %s", outputFile.path)
+                    sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(File(outputFile.path))))
                     ThreadHelper.post {
                         setEnable(true)
                         lsq_editor_cut_load.setVisibility(View.GONE)
@@ -363,10 +426,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             })
         }
 
-        TuSdk.messageHub().setStatus(this,R.string.lsq_assets_loading)
+        TuSdk.messageHub().setStatus(this, R.string.lsq_assets_loading)
     }
 
-    private fun setEditorList(replaceImageList: TuSdkEvaEntityQueue<TuSdkEvaImageEntity>, replaceVideoList: TuSdkEvaEntityQueue<TuSdkEvaVideoEntity>, replaceTextList: TuSdkEvaEntityQueue<TuSdkEvaTextEntity>) {
+    private fun setEditorList(replaceImageList: TuSdkEvaEntityQueue<TuSdkEvaImageEntity>, replaceVideoList: TuSdkEvaEntityQueue<TuSdkEvaVideoEntity>, replaceTextList: TuSdkEvaEntityQueue<TuSdkEvaTextEntity>, replaceAlphaVideoList: TuSdkEvaEntityQueue<TuSdkEvaVideoEntity>) {
         mEditorList.clear()
         val editorList = TuSdkEvaEntityQueue<TuSdkEvaEntityCompari>()
         /**  遍历可替换图片项列表 */
@@ -381,15 +444,20 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         for (compari in replaceTextList) {
             editorList.add(compari)
         }
+        for (compari in replaceAlphaVideoList) {
+            editorList.add(compari)
+        }
         for (compari in editorList) {
             if (compari is TuSdkEvaImageEntity) {
                 mEditorList.add(EditorModelItem(compari, EditType.Image))
             } else if (compari is TuSdkEvaVideoEntity) {
-                mEditorList.add(EditorModelItem(compari, EditType.Video))
+                if (compari.isAlpha) mEditorList.add(EditorModelItem(compari, EditType.Alpha))
+                else mEditorList.add(EditorModelItem(compari, EditType.Video))
             } else if (compari is TuSdkEvaTextEntity) {
                 mEditorList.add(EditorModelItem(compari, EditType.Text))
             }
         }
+
     }
 
     private fun setEnable(b: Boolean) {
@@ -416,7 +484,9 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mEvaPlayer!!.release()
+        if(!isRelease) {
+            mEvaPlayer!!.release()
+        }
         TuSdk.getAppTempPath().deleteOnExit()
     }
 

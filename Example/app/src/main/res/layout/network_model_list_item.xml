@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6dp"
+    android:layout_marginBottom="12dp">
+
+    <ImageView
+        android:scaleType="fitXY"
+        android:id="@+id/lsq_model_icon"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/lsq_model_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="11dp"
+        android:lineHeight="6dp"
+        android:text="111111111111111"
+        android:textColor="@color/lsq_color_white"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_model_icon"
+        app:layout_constraintTop_toBottomOf="@id/lsq_model_icon" />
+
+    <ImageView
+        android:id="@+id/lsq_model_download"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="6dp"
+        android:src="@mipmap/download_ic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+    <ImageView
+        android:layout_marginBottom="6dp"
+        android:layout_marginRight="6dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="invisible"
+        android:src="@mipmap/pre_downloading_ic"
+        android:id="@+id/lsq_model_pre_loading"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="6dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,13 +11,18 @@
 package org.lsque.tusdkevademo
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_audio_list.*
+import org.lasque.tusdk.core.utils.TLog
+import java.lang.Exception
 
 
 class AudioListActivity : ScreenAdapterActivity() {
+
+    private var mMediaPlayer : MediaPlayer = MediaPlayer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +34,22 @@ class AudioListActivity : ScreenAdapterActivity() {
         lsq_audio_list.layoutManager = LinearLayoutManager(this)
         val audioAdapter = AudioListAdapter(this,AudioItemFactory.getAudioItemList(this))
         audioAdapter.setOnItemClickListener(object : AudioListAdapter.OnItemClickListener{
+            override fun onSelect(view: View, item: AudioItem, position: Int) {
+                try {
+                    mMediaPlayer.release()
+                    mMediaPlayer = MediaPlayer()
+                    val audioFd = assets.openFd(item.audioPath)
+                    mMediaPlayer.setDataSource(audioFd.fileDescriptor,audioFd.startOffset,audioFd.length)
+                    mMediaPlayer.isLooping = true
+                    mMediaPlayer.prepare()
+                    mMediaPlayer.start()
+                } catch (e: Exception){
+                    TLog.e(e)
+                }
+            }
+
             override fun onClick(view: View, item: AudioItem, position: Int) {
+                mMediaPlayer.stop()
                 val intent = intent
                 val bundle = Bundle()
                 intent.setClass(this@AudioListActivity,ModelEditorActivity.javaClass)
@@ -46,6 +66,7 @@ class AudioListActivity : ScreenAdapterActivity() {
     override fun finish() {
         overridePendingTransition(0,R.anim.activity_close_from_top_to_bottom)
         super.finish()
+        mMediaPlayer.release()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

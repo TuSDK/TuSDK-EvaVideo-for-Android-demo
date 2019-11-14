@@ -20,7 +20,7 @@ public class SplashActivity extends Activity
         setContentView(R.layout.activity_splash);
 
         TextView mVersion = findViewById(R.id.lsq_version);
-        mVersion.setText(String.format("TuSDK Video %s", "TUEVA 1.0.0"));
+        mVersion.setText(String.format("TuSDK Video %s", "TUEVA "+ BuildConfig.VERSION_NAME));
 
         ThreadHelper.postDelayed(new Runnable() {
             @Override
@@ -32,7 +32,7 @@ public class SplashActivity extends Activity
 //                intent.putExtra("isDirectEdit",false);
 //                intent.putExtra("videoPath",path);
 
-                startActivity(new Intent(SplashActivity.this,DemoEntryActivity.class));
+                startActivity(new Intent(SplashActivity.this,NetworkModelExampleActivity.class));
 //                startActivity(intent);
                 overridePendingTransition(R.anim.lsq_fade_in,R.anim.lsq_fade_out);
                 finish();

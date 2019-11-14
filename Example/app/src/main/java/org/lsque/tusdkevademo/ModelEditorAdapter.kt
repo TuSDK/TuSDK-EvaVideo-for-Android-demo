@@ -11,7 +11,13 @@
 package org.lsque.tusdkevademo
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.ColorSpace
+import android.os.Build
+import android.text.TextUtils
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +31,8 @@ import org.lasque.tusdk.eva.EvaAsset
 import org.lasque.tusdk.eva.TuSdkEvaImageEntity
 import org.lasque.tusdk.eva.TuSdkEvaTextEntity
 import org.lasque.tusdk.eva.TuSdkEvaVideoEntity
+import java.nio.ByteBuffer
+import java.nio.IntBuffer
 import java.util.*
 
 
@@ -41,17 +49,18 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
     private val IMAGE_TYPE = 1
     private val TEXT_TYPE = 2
     private val VIDEO_TYPE = 3
+    private val ALPHA_VIDEO_TYPE = 4
 
-    override fun onCreateViewHolder(p0: ViewGroup?, p1: Int): ViewHolder {
-        val viewHolder = when (p1) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val viewHolder = when (viewType) {
             IMAGE_TYPE -> {
-                ImageViewHolder(mInflater.inflate(R.layout.item_editor_image, p0, false))
+                ImageViewHolder(mInflater.inflate(R.layout.item_editor_image, parent, false))
             }
             TEXT_TYPE -> {
-                TextViewHolder(mInflater.inflate(R.layout.item_editor_text, p0, false))
+                TextViewHolder(mInflater.inflate(R.layout.item_editor_text, parent, false))
             }
             VIDEO_TYPE -> {
-                ImageViewHolder(mInflater.inflate(R.layout.item_editor_image, p0, false))
+                ImageViewHolder(mInflater.inflate(R.layout.item_editor_image, parent, false))
             }
             else -> {
                 null
@@ -64,56 +73,62 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
         return mModelList.size
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         when (mModelList[position].modelType) {
             EditType.Image -> {
                 val item = mModelList[position]
-                (viewHolder as ImageViewHolder).textView.text = mContext.getString(R.string.lsq_editor_item_image)
-                viewHolder!!.itemView.setOnClickListener { mItemClickListener!!.onClick(viewHolder.itemView, mModelList[position].modelItem as TuSdkEvaImageEntity, position, EditType.Image) }
+                (holder as ImageViewHolder).textView.text = mContext.getString(R.string.lsq_editor_item_image)
+                holder!!.itemView.setOnClickListener { mItemClickListener!!.onClick(holder.itemView, mModelList[position].modelItem as TuSdkEvaImageEntity, position, EditType.Image) }
 
-                var imageEntriy = (item.modelItem as TuSdkEvaImageEntity);
-                val loadImage = imageEntriy.loadImage();
-                viewHolder.imageView.setImageBitmap(loadImage);
-
-
+                var imageEntriy = (item.modelItem as TuSdkEvaImageEntity)
+                val loadImage = imageEntriy.loadImage()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    loadImage.isPremultiplied = true
+                }
+                holder.imageView.setImageBitmap(loadImage)
             }
 
             EditType.Text -> {
                 val item = mModelList[position]
-                val itemTextView = (viewHolder as TextViewHolder).textView
+                val textEntity = item.modelItem as TuSdkEvaTextEntity
+                val itemTextView = (holder as TextViewHolder).textView
                 itemTextView.text = (item.modelItem as TuSdkEvaTextEntity).displayText
-                viewHolder!!.itemView.setOnClickListener { mItemClickListener!!.onClick(viewHolder.itemView, mModelList[position].modelItem as TuSdkEvaTextEntity, position, EditType.Text) }
+                itemTextView.textColor = if(TextUtils.isEmpty(textEntity.replaceText)) Color.parseColor("#555555") else Color.parseColor("#ffffff")
+                holder!!.itemView.setOnClickListener { mItemClickListener!!.onClick(holder.itemView, mModelList[position].modelItem as TuSdkEvaTextEntity, position, EditType.Text) }
             }
 
 
-            EditType.Video -> {
-
-                viewHolder!!.itemView.setOnClickListener { mItemClickListener!!.onClick(viewHolder.itemView, mModelList[position].modelItem as TuSdkEvaVideoEntity, position, EditType.Video) }
+            EditType.Video,EditType.Alpha-> {
+                holder!!.itemView.setOnClickListener { mItemClickListener!!.onClick(holder.itemView, mModelList[position].modelItem as TuSdkEvaVideoEntity, position, EditType.Video) }
                 val item = mModelList[position]
                 val currentItem = item.modelItem as TuSdkEvaVideoEntity
 
                 var showText = ""
                 if (currentItem.assetType == EvaAsset.TuSdkEvaAssetType.EvaVideoImage) {
-                    showText = mContext.getString(R.string.lsq_editor_item_video_image)
+                    showText =mContext.getString(R.string.lsq_editor_item_video_image)
                 } else if (currentItem.assetType == EvaAsset.TuSdkEvaAssetType.EvaOnlyVideo) {
                     showText = mContext.getString(R.string.lsq_editor_item_video)
+                } else if (currentItem.assetType == EvaAsset.TuSdkEvaAssetType.EvaAlphaVideo){
+                    showText = "Alpha"
                 }
 
-                (viewHolder as ImageViewHolder).textView.text = showText
+                (holder as ImageViewHolder).textView.text = showText
 
                 if (!StringHelper.isBlank(currentItem.videoPath)) {
 
                     if (currentItem.videoPath.startsWith(STORAGE)) {
-                        Glide.with(mContext).asBitmap().load(currentItem.videoPath).into((viewHolder.imageView))
+                        Glide.with(mContext).asBitmap().load(currentItem.videoPath).into((holder.imageView))
                     } else {
-                        Glide.with(mContext).asBitmap().load("file:///android_asset/${currentItem.videoPath}").into((viewHolder.imageView))
+                        Glide.with(mContext).asBitmap().load("file:///android_asset/${currentItem.videoPath}").into((holder.imageView))
                     }
 
                 } else {
-
-                    val loadImage = currentItem.loadImageAssetBitmap();
-                    viewHolder.imageView.setImageBitmap(loadImage);
+                    val loadImage = currentItem.loadImageAssetBitmap()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        loadImage.isPremultiplied = true
+                    }
+                    holder.imageView.setImageBitmap(loadImage)
                 }
             }
         }
@@ -128,6 +143,9 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
                 TEXT_TYPE
             }
             EditType.Video -> {
+                VIDEO_TYPE
+            }
+            EditType.Alpha ->{
                 VIDEO_TYPE
             }
         }

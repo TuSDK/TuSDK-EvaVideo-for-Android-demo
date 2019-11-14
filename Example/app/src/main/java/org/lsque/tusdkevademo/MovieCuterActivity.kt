@@ -18,15 +18,19 @@ import android.media.MediaCodecInfo
 import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import android.text.TextUtils
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.RelativeLayout
 import com.alexvasilkov.gestures.GestureController
 import com.alexvasilkov.gestures.State
+import kotlinx.android.synthetic.main.activity_image_cuter.*
 import kotlinx.android.synthetic.main.activity_movie_editor_cut.*
+import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_change_media
+import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_cutRegionView
 import kotlinx.android.synthetic.main.title_item_layout.*
+import org.jetbrains.anko.textColor
 import org.lasque.tusdk.core.TuSdk
 import org.lasque.tusdk.core.api.extend.TuSdkMediaPlayerListener
 import org.lasque.tusdk.core.api.extend.TuSdkMediaProgress
@@ -71,7 +75,7 @@ class MovieCuterActivity : ScreenAdapterActivity() {
     /** 右边控件选择的时间     微秒 */
     private var mRightTimeRangUs: Long = 0
     /** 最小裁切时间  */
-    private val mMinCutTimeUs = (3 * 1000000).toLong()
+    private val mMinCutTimeUs = (1 * 1000000).toLong()
     /** 裁切工具  */
     private var cuter: TuSdkMediaFilesCuterImpl? = null
     /** 是否已经设置总时间  */
@@ -87,6 +91,10 @@ class MovieCuterActivity : ScreenAdapterActivity() {
 
     private var mDefaultCropRect: RectF = RectF(0f, 0f, 1f, 1f)
     private var mCurrentCropRect: RectF = RectF(0f, 0f, 1f, 1f)
+
+    private var maxPercent = 0f
+
+    private var isFirstSetRightBarPercent = true
 
 
     //播放器回调
@@ -128,6 +136,7 @@ class MovieCuterActivity : ScreenAdapterActivity() {
             mVideoPlayer!!.seekToPercentage(percent)
         }
 
+
         lsq_range_line.setSelectRangeChangedListener { leftPercent, rightPercent, type ->
             if (type == 0) {
                 mLeftTimeRangUs = (leftPercent * mVideoPlayer!!.durationUs()).toLong()
@@ -152,17 +161,18 @@ class MovieCuterActivity : ScreenAdapterActivity() {
 
         lsq_range_line.setExceedCriticalValueListener(object : TuSdkRangeSelectionBar.OnExceedCriticalValueListener {
             override fun onMinValueExceed() {
-
-            }
-
-            override fun onMaxValueExceed() {
                 val minTime = (mMinCutTimeUs / 1000000).toInt()
                 @SuppressLint("StringFormatMatches") val tips = String.format(getString(R.string.lsq_min_time_effect_tips), minTime)
                 TuSdk.messageHub()!!.showToast(this@MovieCuterActivity, tips)
             }
+
+            override fun onMaxValueExceed() {
+
+            }
         })
 
         lsq_back.setOnClickListener { finish() }
+        lsq_next.textColor = Color.parseColor("#007aff")
         lsq_next.setOnClickListener {
             setEnable(false)
             mVideoPlayer!!.pause()
@@ -263,6 +273,14 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         val height = intent.getIntExtra("height", 0)
         getCutRegionView()
         initPlayer()
+        lsq_range_line.selectRange.viewTreeObserver.addOnGlobalLayoutListener {
+            if (isFirstSetRightBarPercent && lsq_range_line.selectRange.measuredWidth != 0){
+            lsq_range_line.setRightBarPosition(maxPercent)
+            isFirstSetRightBarPercent = false
+                val globalLayoutListener = this
+                lsq_range_line.selectRange.viewTreeObserver.removeOnGlobalLayoutListener { globalLayoutListener }
+        }
+        }
         val regionRatio = lsq_cutRegionView.regionRatio
         val regionRect = lsq_cutRegionView.regionRect
         lsq_cutRegionView.visibility = View.VISIBLE
@@ -287,6 +305,7 @@ class MovieCuterActivity : ScreenAdapterActivity() {
 
     override fun onResume() {
         super.onResume()
+
     }
 
 
@@ -375,16 +394,21 @@ class MovieCuterActivity : ScreenAdapterActivity() {
     /** 初始化播放器  */
     fun initPlayer() {
         val videoPath = intent.getStringExtra("videoPath")
+        val maxDurationUs = intent.getFloatExtra("videoDuration",0f)
         val sourceList = ArrayList<TuSdkMediaDataSource>()
 
         val video = TuSdkMediaDataSource(videoPath)
         sourceList.add(video)
 
         mDurationTimeUs = getVideoFormat(videoPath)!!.getLong(MediaFormat.KEY_DURATION)
+        maxPercent = min ((maxDurationUs / mDurationTimeUs),1f)
+        lsq_range_line.setMaxWidth(maxPercent)
+        lsq_range_tips.text = "需截取视频的时长范围为 : 1.0s 至 ${maxDurationUs / 1000f / 1000f}s"
+
 
 
         val duration = mDurationTimeUs / 1000000.0f
-        mRightTimeRangUs = mDurationTimeUs
+        mRightTimeRangUs = (mDurationTimeUs * maxPercent).toLong()
 
 
         /** 创建预览视图  */
@@ -505,7 +529,6 @@ class MovieCuterActivity : ScreenAdapterActivity() {
                     override fun onImageExtractorCompleted(videoImagesList: List<TuSdkVideoImageExtractor.VideoImage>) {
                         /** 注意： videoImagesList 需要开发者自己释放 bitmap  */
                         imageThumbExtractor.release()
-
                     }
                 })
                 .extractImages() // 抽取图片
@@ -523,7 +546,7 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         val width = intent.getIntExtra("width", 0)
         val height = intent.getIntExtra("height", 0)
         lsq_cutRegionView.edgeMaskColor = Color.parseColor("#00ffffff")
-        lsq_cutRegionView.edgeSideColor = 0x80FFFFFF.toInt()
+        lsq_cutRegionView.edgeSideColor = 0xff007aff.toInt()
         lsq_cutRegionView.setEdgeSideWidthDP(2)
         lsq_cutRegionView.regionSize = TuSdkSize(width, height)
         lsq_cutRegionView.addOnLayoutChangeListener(mRegionLayoutChangeListener)

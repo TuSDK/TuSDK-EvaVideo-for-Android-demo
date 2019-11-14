@@ -53,7 +53,7 @@ class ImageCuterActivity : ScreenAdapterActivity() {
         val width = intent.getIntExtra("width", 0)
         val height = intent.getIntExtra("height", 0)
         lsq_cutRegionView.edgeMaskColor = 0x80000000.toInt()
-        lsq_cutRegionView.edgeSideColor = 0x80FFFFFF.toInt()
+        lsq_cutRegionView.edgeSideColor = 0xff007aff.toInt()
         lsq_cutRegionView.setEdgeSideWidthDP(2)
         lsq_cutRegionView.regionSize = TuSdkSize(width, height)
         lsq_cutRegionView.addOnLayoutChangeListener(mRegionLayoutChangeListener)

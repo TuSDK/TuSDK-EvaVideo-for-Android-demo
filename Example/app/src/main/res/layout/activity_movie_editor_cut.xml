@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,7 +19,7 @@
     <!--选择框 TuSdkMovieScrollContent-->
     <org.lsque.tusdkevademo.playview.TuSdkMovieScrollContent
         android:id="@+id/lsq_range_line"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="47dp"
@@ -28,6 +28,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
+    <TextView
+        android:layout_marginTop="5dp"
+        android:text="可选择时间长度为1.0s 至 "
+        android:textSize="12sp"
+        android:textColor="@color/lsq_color_white"
+        android:gravity="center"
+        app:layout_constraintRight_toRightOf="@id/lsq_range_line"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_range_line"
+        app:layout_constraintTop_toBottomOf="@id/lsq_range_line"
+        android:id="@+id/lsq_range_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <!--播放区域-->
     <com.alexvasilkov.gestures.views.GestureFrameLayout
@@ -145,4 +157,4 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lsq_voice_seek" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

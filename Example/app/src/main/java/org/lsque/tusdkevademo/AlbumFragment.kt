@@ -14,15 +14,16 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.movie_album_fragment.*
 import org.jetbrains.anko.startActivityForResult
 import org.lasque.tusdk.core.utils.sqllite.ImageSqlHelper
 import org.lasque.tusdk.impl.view.widget.TuProgressHub
+import org.lsque.tusdkevademo.ModelEditorActivity.Companion.ALBUM_REQUEST_CODE_ALPHA_VIDEO
 import java.util.*
 
 class AlbumFragment  : Fragment(){
@@ -31,6 +32,8 @@ class AlbumFragment  : Fragment(){
     private val MIN_VIDEO_DURATION = 3000
     /* 最大视频时长(单位：ms) */
     private val MAX_VIDEO_DURATION = 60000 * 3
+
+    private var isAlpha = false
 
     private var mAlbumAdapter : AlbumAdapter? = null
 
@@ -42,6 +45,7 @@ class AlbumFragment  : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         val gridLayoutManager = GridLayoutManager(activity, 4)
         lsq_album_list.layoutManager = gridLayoutManager
+        isAlpha = arguments!!.getBoolean("isAlpha")
     }
 
     override fun onResume() {
@@ -121,7 +125,14 @@ class AlbumFragment  : Fragment(){
                                     albumFragment.activity!!.startActivityForResult<ImageCuterActivity>(ModelEditorActivity.ALBUM_REQUEST_CODE_IMAGE,"width" to albumFragment.arguments!!["width"],"height" to albumFragment.arguments!!["height"],"imagePath" to item.path)
                                 }
                                 AlbumItemType.Video -> {
-                                    albumFragment.activity!!.startActivityForResult<MovieCuterActivity>(ModelEditorActivity.ALBUM_REQUEST_CODE_VIDEO,"width" to albumFragment.arguments!!["width"],"height" to albumFragment.arguments!!["height"],"videoPath" to item.path)
+                                    if (albumFragment.isAlpha) {
+                                        var intent = Intent()
+                                        intent.putExtra("videoPath", item?.path)
+                                        albumFragment.activity?.setResult(ALBUM_REQUEST_CODE_ALPHA_VIDEO,intent)
+                                        albumFragment.activity?.finish()
+                                    } else {
+                                        albumFragment.activity!!.startActivityForResult<MovieCuterActivity>(ModelEditorActivity.ALBUM_REQUEST_CODE_VIDEO,"videoDuration" to albumFragment.arguments!!["videoDuration"],"width" to albumFragment.arguments!!["width"],"height" to albumFragment.arguments!!["height"],"videoPath" to item.path)
+                                    }
                                 }
                             }
                         }

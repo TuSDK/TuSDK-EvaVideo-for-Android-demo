@@ -25,13 +25,16 @@ object ModelItemFactory {
     }
 
     private fun createModelItem(modelDir: String,modelName : String,templateName: String) : ModelItem{
-        return ModelItem(modelDir,modelName,"$modelDir/$templateName")
+        return ModelItem(modelDir,modelName,"$modelDir/$templateName","http://files.tusdk.com/eva/$templateName",templateName,"")
     }
 
 }
 
-data class ModelItem(var modelDir:String,var modelName : String,var templateName:String) : Parcelable {
+data class ModelItem(var modelDir:String,var modelName : String,var templateName:String,var modelDownloadUrl : String,var fileName:String,var modelDownloadFilePath:String) : Parcelable {
     constructor(parcel: Parcel) : this(
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString()) {
@@ -41,6 +44,9 @@ data class ModelItem(var modelDir:String,var modelName : String,var templateName
         parcel.writeString(modelDir)
         parcel.writeString(modelName)
         parcel.writeString(templateName)
+        parcel.writeString(modelDownloadUrl)
+        parcel.writeString(fileName)
+        parcel.writeString(modelDownloadFilePath)
     }
 
     override fun describeContents(): Int {

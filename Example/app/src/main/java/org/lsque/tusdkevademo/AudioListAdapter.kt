@@ -11,32 +11,47 @@
 package org.lsque.tusdkevademo
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import android.graphics.Color
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import org.jetbrains.anko.find
+import org.jetbrains.anko.textColor
 
 
 class AudioListAdapter(context: Context, audioList: List<AudioItem>) : RecyclerView.Adapter<AudioListAdapter.ViewHolder>(){
+
+    private var mCurrentSelectItem = -1
 
     var mAudioList = audioList
     var mContext = context
     var mInflater : LayoutInflater = LayoutInflater.from(mContext)
     var mItemClickListener : OnItemClickListener? = null
-    override fun onCreateViewHolder(p0: ViewGroup?, p1: Int): ViewHolder {
-        return ViewHolder(mInflater.inflate(R.layout.item_audio_list,p0,false))
+    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
+        return ViewHolder(mInflater.inflate(R.layout.item_audio_list,parent,false))
     }
 
     override fun getItemCount(): Int {
         return mAudioList.size
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var currentItem = mAudioList[position]
-        viewHolder!!.textView.text = currentItem.audioName
-        viewHolder!!.itemView.setOnClickListener { mItemClickListener!!.onClick(viewHolder.itemView,currentItem,position) }
+        holder!!.textView.text = currentItem.audioName
+        holder!!.textView.textColor = if (position == mCurrentSelectItem){Color.parseColor("#007aff")} else {Color.parseColor("#ffffff")}
+        holder!!.itemView.setOnClickListener {
+            if (mCurrentSelectItem != position){
+                var preItemIndex = mCurrentSelectItem
+                mCurrentSelectItem = position
+                notifyItemChanged(preItemIndex)
+                notifyItemChanged(mCurrentSelectItem)
+                mItemClickListener!!.onSelect(holder.itemView,currentItem,position)
+            } else {
+                mItemClickListener!!.onClick(holder.itemView,currentItem,position)
+            }
+        }
     }
 
 
@@ -50,6 +65,7 @@ class AudioListAdapter(context: Context, audioList: List<AudioItem>) : RecyclerV
 
     interface OnItemClickListener {
         fun onClick(view: View, item: AudioItem, position: Int)
+        fun onSelect(view:View,item:AudioItem,position: Int)
     }
 
 }

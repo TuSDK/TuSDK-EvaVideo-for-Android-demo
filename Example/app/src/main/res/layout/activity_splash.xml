@@ -17,7 +17,7 @@
         android:layout_marginTop="@dimen/lsq__space_100"
         android:textSize="@dimen/lsq_font_size_70"
         android:layout_centerHorizontal="true"
-        android:textStyle="bold"
+
 
         android:text="TUEVA MIX"
         android:layout_width="wrap_content"

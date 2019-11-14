@@ -1,11 +1,12 @@
 package org.lsque.tusdkevademo;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import org.lasque.tusdk.impl.TuSpecialScreenHelper;
 import org.lsque.tusdkevademo.utils.AppManager;
+import org.lsque.tusdkevademo.utils.DisplayUtils;
 
 /**
  * @author xujie
@@ -21,6 +22,7 @@ public class ScreenAdapterActivity extends FragmentActivity {
         {
             setTheme(android.R.style.Theme_NoTitleBar);
         }
+        DisplayUtils.INSTANCE.setCustomDensity(this,getApplication());
         super.onCreate(savedInstanceState);
     }
 

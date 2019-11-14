@@ -10,5 +10,5 @@ package org.lsque.tusdkevademo
  *
  */
 enum class EditType {
-    Image,Video,Text
+    Image,Video,Text,Alpha
 }

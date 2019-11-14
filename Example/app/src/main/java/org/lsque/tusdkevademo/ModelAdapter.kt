@@ -11,13 +11,14 @@
 package org.lsque.tusdkevademo
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import org.lasque.tusdk.core.view.TuSdkViewHelper
 import java.util.*
 
 
@@ -29,18 +30,24 @@ class ModelAdapter(context:Context,modelList: ArrayList<ModelItem>) : RecyclerVi
 
     private var mItemClickListener : OnItemClickListener? = null
 
-    override fun onCreateViewHolder(p0: ViewGroup?, p1: Int): ViewHolder {
-        return ViewHolder(mInflater.inflate(R.layout.model_list_item,p0,false))
+    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
+        return ViewHolder(mInflater.inflate(R.layout.model_list_item,parent,false))
     }
 
     override fun getItemCount(): Int {
         return mModelList.size
     }
 
-    override fun onBindViewHolder(p0: ViewHolder?, p1: Int) {
-        p0!!.mTextView.text = mModelList[p1].modelName
-        p0.itemView.setOnClickListener { mItemClickListener?.onClick(p0.itemView,mModelList[p1],p1) }
-        Glide.with(mContext).load("file:///android_asset/${mModelList[p1].modelDir}/cover.jpg").into(p0.mImageView)
+    override fun onBindViewHolder(holder: ViewHolder, p1: Int) {
+        holder!!.mTextView.text = mModelList[p1].modelName
+        holder.itemView.setOnClickListener ( object : TuSdkViewHelper.OnSafeClickListener(1000){
+            override fun onSafeClick(v: View?) {
+                mItemClickListener?.onClick(holder.itemView,mModelList[p1],p1)
+            }
+        } )
+        Glide.with(mContext)
+                .load("file:///android_asset/${mModelList[p1].modelDir}/cover.jpg")
+                .into(holder.mImageView)
     }
 
     public fun setOnItemClickListener(onItemClickListener: OnItemClickListener){
