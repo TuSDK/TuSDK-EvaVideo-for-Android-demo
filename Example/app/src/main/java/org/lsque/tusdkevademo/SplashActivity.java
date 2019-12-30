@@ -20,7 +20,7 @@ public class SplashActivity extends Activity
         setContentView(R.layout.activity_splash);
 
         TextView mVersion = findViewById(R.id.lsq_version);
-        mVersion.setText(String.format("TuSDK Video %s", "TUEVA "+ BuildConfig.VERSION_NAME));
+        mVersion.setText(String.format("TuSDK Video %s", "TUEVA 1.2.1"));
 
         ThreadHelper.postDelayed(new Runnable() {
             @Override

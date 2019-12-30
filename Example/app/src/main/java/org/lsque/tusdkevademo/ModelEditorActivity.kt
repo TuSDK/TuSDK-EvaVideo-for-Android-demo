@@ -44,10 +44,8 @@ import org.lasque.tusdk.core.api.extend.TuSdkMediaProgress
 import org.lasque.tusdk.core.media.codec.video.TuSdkVideoQuality
 import org.lasque.tusdk.core.seles.output.SelesView
 import org.lasque.tusdk.core.struct.TuSdkMediaDataSource
-import org.lasque.tusdk.core.utils.AssetsHelper
-import org.lasque.tusdk.core.utils.FileHelper
-import org.lasque.tusdk.core.utils.TLog
-import org.lasque.tusdk.core.utils.ThreadHelper
+import org.lasque.tusdk.core.utils.*
+import org.lasque.tusdk.core.utils.image.BitmapHelper
 import org.lasque.tusdk.core.view.TuSdkViewHelper
 import org.lasque.tusdk.eva.*
 import org.lasque.tusdk.eva.structure.TuSdkEvaEntityCompari
@@ -67,20 +65,27 @@ class ModelEditorActivity : ScreenAdapterActivity() {
     }
 
     /**  Eva播放器 */
-    private var mEvaPlayer: TuSdkEvaPlayerImpl? = null;
+    private var mEvaPlayer: TuSdkEvaPlayerImpl? = null
     /**  Eva AssetManager */
     private var mEvaAssetManager: TuSdkEvaAssetManager? = null
     /** 是否已经销毁 **/
     private var isRelease = false
 
     /**  Eva播放器进度监听 */
-    private var mPlayerProcessListener: TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener = TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener { progress, currentTimeNN, durationNN ->
-        lsq_seek.progress = (progress * 100).toInt()
-        if (currentTimeNN == durationNN) {
-            ThreadHelper.post({
-                mEvaPlayer!!.pause()
-                lsq_player_img.visibility = View.VISIBLE
-            })
+    private var mPlayerProcessListener: TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener = object : TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener {
+
+
+        override fun onProgressWithRange(progress: Float, currentTimeNN: Long, durationNN: Long) {
+        }
+
+        override fun onProgress(progress: Float, currentTimeNN: Long, durationNN: Long) {
+            lsq_seek.progress = (progress * 100).toInt()
+            if (currentTimeNN == durationNN) {
+                ThreadHelper.post({
+                    mEvaPlayer!!.pause()
+                    lsq_player_img.visibility = View.VISIBLE
+                })
+            }
         }
     }
 
@@ -106,6 +111,8 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
     private var mFrameDurationNN = 0L
 
+    private var mTargetProgress = 0f
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data == null) return
         when (requestCode) {
@@ -114,6 +121,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 val rectArray = data!!.extras.getFloatArray("zoom")
                 mCurrentImageEntity!!.setCropRectF(RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3]))
                 mCurrentImageEntity!!.setImagePath(data!!.getStringExtra("imagePath"))
+                mTargetProgress = (mCurrentImageEntity!!.weight / mEvaPlayer!!.evaReceiver.totalFrames)
             }
             /** 视频裁剪回调 */
             ALBUM_REQUEST_CODE_VIDEO -> {
@@ -134,6 +142,8 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                         mCurrentVideoEntity!!.videoPath = data!!.getStringExtra("videoPath")
                     }
                 }
+                mTargetProgress = (mCurrentVideoEntity!!.weight / mEvaPlayer!!.evaReceiver.totalFrames)
+
             }
             /** 音频选择回调 */
             AUDIO_REQUEST_CODE -> {
@@ -165,7 +175,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
     }
 
     private fun playerReplay() {
-        mEvaPlayer!!.seek(0f)
+        mEvaPlayer!!.seek(mTargetProgress)
         mEvaPlayer!!.pause()
         playerPlaying()
     }
@@ -229,6 +239,9 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                     mEvaPlayer!!.setDisplayContent(lsq_model_seles)
                     mEvaPlayer!!.selesView.fillMode = SelesView.SelesFillModeType.PreserveAspectRatioAndFill
                     lsq_seek.visibility = View.VISIBLE
+                    mEvaPlayer!!.assetManager.setErrorCallback {
+                        TLog.e(it)
+                    }
                     mEvaPlayer!!.play()
                 }
             }
@@ -274,15 +287,17 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             override fun onClick(view: View, item: TuSdkEvaVideoEntity, position: Int, type: EditType) {
                 if (!isEnable) return
                 var isOnlyVideo = false
+                var isOnlyImage = false
                 mCurrentEditPostion = position
                 when (item.assetType) {
                     EvaAsset.TuSdkEvaAssetType.EvaOnlyVideo -> isOnlyVideo = true
                     EvaAsset.TuSdkEvaAssetType.EvaVideoImage -> isOnlyVideo = false
+                    EvaAsset.TuSdkEvaAssetType.EvaOnlyImage -> isOnlyImage = true
                 }
                 mFrameDurationNN = mEvaPlayer!!.evaReceiver.frameDuration
                 var videoDuration = (item.endFrame - item.weight) * mFrameDurationNN / 1000L
                 mCurrentVideoEntity = item
-                startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_VIDEO, "videoDuration" to videoDuration, "onlyImage" to false, "onlyVideo" to isOnlyVideo, "width" to mEvaPlayer!!.assetManager.inputSize.width, "height" to mEvaPlayer!!.assetManager.inputSize.height , "isAlpha" to item.isAlpha)
+                startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_VIDEO, "videoDuration" to videoDuration, "onlyImage" to isOnlyImage, "onlyVideo" to isOnlyVideo, "width" to mEvaPlayer!!.assetManager.inputSize.width, "height" to mEvaPlayer!!.assetManager.inputSize.height , "isAlpha" to item.isAlpha)
             }
 
             /** 文字修改项点击事件 */
@@ -360,7 +375,6 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
         lsq_reset_assets.setOnClickListener {
             if (mEvaAssetManager != null) {
-                //todo reset() 方法目前有问题 无法重置 并且会使音频消失
                 mEvaAssetManager!!.reset()
                 editorAdapter.notifyItemMoved(0, editorAdapter.itemCount - 1)
             }
@@ -372,6 +386,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             editorAdapter.notifyItemChanged(mCurrentEditPostion)
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(lsq_editor_replace_text.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            mTargetProgress = (mCurrentTextEntity!!.weight / mEvaPlayer!!.evaReceiver.totalFrames)
             playerReplay()
         }
 
@@ -393,7 +408,9 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             var options = TuSdkEvaSaver
                     .TuSdkEvaSaverOptions.getOption()
                     .setOutputSize(mEvaPlayer!!.assetManager.inputSize)
-                    .setQuality(TuSdkVideoQuality.RECORD_HIGH1)
+                    .setQuality(TuSdkVideoQuality.RECORD_HIGH3)
+                    .setFps((1000000000/mEvaPlayer!!.evaReceiver.frameDuration).toInt())
+                    .setWaterImage(BitmapHelper.getRawBitmap(this, R.raw.sample_watermark), TuSdkWaterMarkOption.WaterMarkPosition.TopRight,0.12f)
             saver.setSaveOptions(options)
 
             try {
@@ -486,6 +503,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         super.onDestroy()
         if(!isRelease) {
             mEvaPlayer!!.release()
+            lsq_model_seles.removeAllViews()
         }
         TuSdk.getAppTempPath().deleteOnExit()
     }

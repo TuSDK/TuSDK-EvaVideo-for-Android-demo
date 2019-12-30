@@ -23,11 +23,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DemoEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
-        <activity
             android:name=".ModelDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"

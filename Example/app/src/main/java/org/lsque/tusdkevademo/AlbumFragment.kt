@@ -64,7 +64,7 @@ class AlbumFragment  : Fragment(){
                 getImageList(albumList)
             }
         }
-        albumList.sortBy { it.createDate }
+        albumList.sortedByDescending { it.createDate }
         return albumList
     }
 

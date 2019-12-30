@@ -45,12 +45,15 @@ class ModelDetailActivity : ScreenAdapterActivity() {
     private var mEvaPlayer:TuSdkEvaPlayerImpl? = null
     private var mEvaAssetManager: TuSdkEvaAssetManager? = null
     private var isRelease = false
-    private var mPlayerProcessListener: TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener = TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener {
-        progress, currentTimeNN, durationNN ->
+    private var mPlayerProcessListener: TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener = object : TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener {
+        override fun onProgressWithRange(progress: Float, currentTimeNN: Long, durationNN: Long) {
+            TLog.e("[Debug] Progress = $progress currentTime = $currentTimeNN duration = $durationNN")
+        }
 
-        lsq_seek.progress = (progress * 100).toInt()
-        val currentVideoHour = currentTimeNN /3600000000000
-        val currentVideoMinute = (currentTimeNN % 3600000000000) /60000000000
+        override fun onProgress(progress: Float, currentTimeNN: Long, durationNN: Long) {
+            lsq_seek.progress = (progress * 100).toInt()
+            val currentVideoHour = currentTimeNN /3600000000000
+            val currentVideoMinute = (currentTimeNN % 3600000000000) /60000000000
 
         val currentVideoSecond = (currentTimeNN %60000000000 /1000000000)
 
@@ -64,10 +67,11 @@ class ModelDetailActivity : ScreenAdapterActivity() {
             lsq_video_playing_time.text = "$currentVideoHour:$currentVideoMinute:$currentVideoSecond/$durationVideoHour:$durationVideoMinute:$durationVideoSecond"
         }
 
-        if (currentTimeNN == durationNN){
-            ThreadHelper.post({
-                playerPause()
-            })
+            if (currentTimeNN == durationNN){
+                ThreadHelper.post({
+                    playerPause()
+                })
+            }
         }
     }
 

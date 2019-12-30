@@ -111,13 +111,21 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
                     showText = mContext.getString(R.string.lsq_editor_item_video)
                 } else if (currentItem.assetType == EvaAsset.TuSdkEvaAssetType.EvaAlphaVideo){
                     showText = "Alpha"
+                } else if (currentItem.assetType == EvaAsset.TuSdkEvaAssetType.EvaOnlyImage){
+                    showText = mContext.getString(R.string.lsq_editor_item_image)
                 }
 
                 (holder as ImageViewHolder).textView.text = showText
 
-                if (!StringHelper.isBlank(currentItem.videoPath)) {
+                if (StringHelper.isBlank(currentItem.imagePath)) {
 
-                    if (currentItem.videoPath.startsWith(STORAGE)) {
+                    if (StringHelper.isBlank(currentItem.videoPath)){
+                        val loadImage = currentItem.loadImageAssetBitmap()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            loadImage.isPremultiplied = true
+                        }
+                        holder.imageView.setImageBitmap(loadImage)
+                    } else if (currentItem.videoPath.startsWith(STORAGE)) {
                         Glide.with(mContext).asBitmap().load(currentItem.videoPath).into((holder.imageView))
                     } else {
                         Glide.with(mContext).asBitmap().load("file:///android_asset/${currentItem.videoPath}").into((holder.imageView))

@@ -14,6 +14,8 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
+import org.lsque.tusdkevademo.BuildConfig;
+
 /**
  * 运行时权限授权工具类
  */
@@ -62,7 +64,9 @@ public class PermissionUtils
     {
         if (permissions != null && permissions.length > 0)
         {
-            activity.requestPermissions(permissions, REQUEST_PERMISSION_CODE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                activity.requestPermissions(permissions, REQUEST_PERMISSION_CODE);
+            }
         }
     }
 

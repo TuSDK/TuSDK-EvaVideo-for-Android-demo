@@ -13,6 +13,7 @@ package org.lsque.tusdkevademo
 import android.Manifest
 import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.SparseArray
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
@@ -27,10 +28,20 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import kotlinx.android.synthetic.main.demo_entry_activity.lsq_model_list
 import kotlinx.android.synthetic.main.network_model_example_activity.*
 import org.jetbrains.anko.startActivity
+import org.json.JSONArray
+import org.lasque.tusdk.core.TuSdkContext
+import org.lasque.tusdk.core.utils.AssetsHelper
+import org.lasque.tusdk.core.utils.FileHelper
 import org.lasque.tusdk.core.utils.TLog
 import org.lasque.tusdk.core.utils.ThreadHelper
+import org.lasque.tusdk.impl.view.widget.TuProgressHub
 import org.lsque.tusdkevademo.utils.DownloadManagerUtil
+import org.lsque.tusdkevademo.utils.EVAItem
 import org.lsque.tusdkevademo.utils.PermissionUtils
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileReader
+import java.io.StringReader
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -51,9 +62,43 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
         },500)
     }
 
+    override fun onEVAJsonDownloadFile() {
+
+    }
+
+    override fun onEVAJsonDownloadComplete() {
+        TLog.e("[Debug] onEVAJsonDownloadComplete")
+        mEVAItemList.clear()
+        getList()
+    }
+
+    private fun getList() {
+        try {
+            val jsonReader: FileReader = FileReader(File(applicationContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE).getString("evaJson", "")))
+            var jsonArray = JSONArray(jsonReader.readText())
+            for (i in 0 until jsonArray.length()) {
+                val nm = jsonArray.getJSONObject(i).getString("nm")
+                val id = jsonArray.getJSONObject(i).getInt("id")
+                val vid = jsonArray.getJSONObject(i).getString("v")
+                mEVAItemList.add(EVAItem(nm, id,vid))
+            }
+
+            refreshAdapterData()
+        } catch (e : FileNotFoundException){
+            e.printStackTrace()
+        }
+
+    }
+
+    private fun refreshAdapterData() {
+        val modelList = ModelItemFactory.getModelItem(mEVAItemList)
+//        modelList.addAll(0,ModelItemFactory.getModelItem(MODEL_LIST,NAME_LIST,TEMPLATES_LIST,ID_LIST))
+        modelAdapter?.setModelList(modelList)
+    }
+
     override fun onComplete(path: String, requestId: Long, mRequestUrl: String) {
         if (mDownloadItemMap.get(mRequestUrl) == null) return
-        applicationContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE).edit().putString(mDownloadItemMap[mRequestUrl]!!.modelDownloadUrl,path).commit()
+        applicationContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE).edit().putString(mDownloadItemMap[mRequestUrl]!!.modelDownloadUrl,path).apply()
         isDownloadComplete = true
         mDownloadItemMap[mRequestUrl]?.modelDownloadFilePath = path
         ThreadHelper.postDelayed({
@@ -69,7 +114,6 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
             modelAdapter!!.notifyItemChanged(mDownloadMap[mRequestUrl]!!, -1)
             mDownloadMap.remove(mRequestUrl)
             mDownloadItemMap.remove(mRequestUrl)
-            TLog.d("[Debug] Path : $path")
         }
     }
 
@@ -84,33 +128,20 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
     var mDownloadUtil : DownloadManagerUtil? = null
 
     val MODEL_LIST: ArrayList<String> = arrayListOf(
-            "11-shuoaini","12-zimushan","13-hufupin",
-            "14-shipmv","15-shipmv","16-tongqu",
-            "17-jiandanship","18-renyuanjieshao","19-qichejieshao",
-             "02-jiugongge","04-quweixiatian","03-shilitaohua",
-            "05-xinhunkuaile-lan","06-xinhunkuaile-fen","08-weddingday",
-           "10-shishagnqianyan","11-dianyingjiaopian","09-tutujieshao"
+            "32-meihaoshike"
             )
 
 
-    val NAME_LIST : ArrayList<String> = arrayListOf("" +
-            "说爱你","字幕快闪","产品推广",
-            "视频MV","照片展示","童趣",
-            "简单视频展示","人员介绍","汽车介绍",
-            "九宫格","趣味夏天","十里桃花",
-            "HappyWedding","HappyWedding","婚礼纪念日",
-            "时尚潮流","电影胶片","涂图视频融合介绍"
+    val NAME_LIST : ArrayList<String> = arrayListOf(
+            "美好时刻"
             )
 
 
     val TEMPLATES_LIST : ArrayList<String> = arrayListOf(
-            "lsq_eva_42.eva","lsq_eva_43.eva","lsq_eva_44.eva",
-            "lsq_eva_45.eva","lsq_eva_46.eva","lsq_eva_47.eva",
-            "lsq_eva_48.eva","lsq_eva_49.eva","lsq_eva_50.eva",
-            "lsq_eva_24.eva","lsq_eva_26.eva","lsq_eva_25.eva",
-            "lsq_eva_27.eva","lsq_eva_28.eva","lsq_eva_29.eva",
-            "lsq_eva_30.eva","lsq_eva_31.eva","lsq_eva_23.eva"
+            "lsq_eva_142.eva"
             )
+
+    val ID_LIST : ArrayList<Int> = arrayListOf(142)
 
     var modelAdapter: NetworkModelAdapter? = null
 
@@ -128,12 +159,15 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
     var mDownloadItemMap : HashMap<String,ModelItem> = HashMap()
     var mDownLoadItemHolderMap : HashMap<String,NetworkModelAdapter.ViewHolder> = HashMap()
 
+    var mEVAItemList  = java.util.ArrayList<EVAItem>()
+
     private var isDownloadComplete = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
         mDownloadUtil = DownloadManagerUtil(this,this)
+        mDownloadUtil!!.downLoadEVAJson()
         initView()
     }
 
@@ -146,7 +180,7 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
     }
 
     private fun setModelView() {
-        modelAdapter = NetworkModelAdapter(this, ModelItemFactory.getModelItem(MODEL_LIST,NAME_LIST,TEMPLATES_LIST),downloadMap,mDownloadMap)
+        modelAdapter = NetworkModelAdapter(this, ModelItemFactory.getModelItem(MODEL_LIST,NAME_LIST,TEMPLATES_LIST,ID_LIST),downloadMap,mDownloadMap)
         modelAdapter!!.setHasStableIds(false)
         modelAdapter!!.setOnItemClickListener(object : ModelAdapter.OnItemClickListener, NetworkModelAdapter.OnItemClickListener {
             override fun onDownloadClick(holder: NetworkModelAdapter.ViewHolder, progressView: ImageView, item: ModelItem, position: Int) {
@@ -168,7 +202,14 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
                         mDownloadMap[mCurrentModel!!.modelDownloadUrl] = position
                         mDownloadItemMap[item.modelDownloadUrl] = item
                         mDownLoadItemHolderMap[item.modelDownloadUrl] = holder
+                        val filePath = applicationContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE).getString(
+                            mCurrentModel!!.modelDownloadUrl,"")
+                        val locVer = applicationContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE).getString("${mCurrentModel!!.modelId}_ver","")
+                        if (!TextUtils.isEmpty(filePath) && !TextUtils.isEmpty(locVer) && !TextUtils.equals(mCurrentModel!!.modelVer,locVer)){
+                            FileHelper.delete(File(filePath))
+                        }
                         mDownloadUtil!!.createRuquest(item.modelDownloadUrl,"${item.modelName}模板",item.templateName)
+                        applicationContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE).edit().putString("${item.modelId}_ver",item.modelVer).apply()
                     }
                 }
                 /**
@@ -178,6 +219,10 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
             }
 
             override fun onClick(view: View, item: ModelItem, position: Int) {
+                if (AssetsHelper.getAssetPath(TuSdkContext.context(),item.templateName) == null && TextUtils.isEmpty(item.modelDownloadFilePath)){
+                    Toast.makeText(this@NetworkModelExampleActivity,"模板正在下载中,请稍后",Toast.LENGTH_SHORT).show()
+                    return
+                }
                 if (downloadMap[position]){
                     startActivity<ModelDetailActivity>("model" to item)
                 } else {
@@ -192,5 +237,6 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
         lsq_model_list.setHasFixedSize(true)
         (lsq_model_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         lsq_model_list.adapter = modelAdapter
+        getList()
     }
 }
