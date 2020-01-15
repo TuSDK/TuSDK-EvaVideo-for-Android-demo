@@ -7,13 +7,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.text.TextUtils
-import org.lasque.tusdk.core.utils.FileHelper
+import org.lasque.tusdk.core.utils.TLog
 import org.lasque.tusdk.core.utils.ThreadHelper
-import java.io.File
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.HashMap
@@ -38,8 +37,6 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
 
     var mDownloadReceiver : DownloadReceiver? = null
 
-    var mJsonReceiver : EVAJsonDownloadReceiver? = null
-
     var mEVAJsonRequestId = -1L
 
 
@@ -57,7 +54,15 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
         /** 创建DownloadManger使用的Request对象 */
         val request = DownloadManager.Request(Uri.parse(url))
         /** 1. 设置Request的下载环境 */
-        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
+        val connectivityManager : ConnectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val info = connectivityManager.activeNetworkInfo
+        if (info.type == ConnectivityManager.TYPE_WIFI){
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
+        } else if (info.type == ConnectivityManager.TYPE_MOBILE){
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE)
+        }
+        request.setAllowedOverMetered(true)
+        request.setAllowedOverRoaming(true)
         /** 2. 设置在下载过程中 是否在通知栏显示进度 */
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         /** 3. 设置通知栏显示标题 */
@@ -74,22 +79,23 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
 
     public fun downLoadEVAJson(){
 
-        if (mJsonReceiver == null){
-            mJsonReceiver = EVAJsonDownloadReceiver(this)
+        val mEVAJsonReceiver = EVAJsonDownloadReceiver(this)
 
-            val intentFilter = IntentFilter()
-            intentFilter.addAction(DownloadManager.ACTION_NOTIFICATION_CLICKED)
-
-            intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-            mContext.registerReceiver(mJsonReceiver,intentFilter)
-        }
-
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        mContext.registerReceiver(mEVAJsonReceiver,intentFilter)
 
         val jsonRequest = DownloadManager.Request(Uri.parse("http://files.tusdk.com/eva/eva.json"))
 
-        jsonRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE)
-
-        jsonRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
+        val connectivityManager : ConnectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val info = connectivityManager.activeNetworkInfo
+        if (info.type == ConnectivityManager.TYPE_WIFI){
+            jsonRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
+        } else if (info.type == ConnectivityManager.TYPE_MOBILE){
+            jsonRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE)
+        }
+        jsonRequest.setAllowedOverMetered(true)
+        jsonRequest.setAllowedOverRoaming(true)
 
 
         jsonRequest.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN)
@@ -158,7 +164,6 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
                 }
 
             }
-            context?.unregisterReceiver(this)
         }
 
         fun getPath(context: Context?,uri: Uri) : String{
@@ -208,7 +213,6 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
                 }
 
             }
-            context?.unregisterReceiver(this)
         }
 
         fun getPath(context: Context?,uri: Uri) : String{

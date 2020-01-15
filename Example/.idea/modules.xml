@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Example.iml" filepath="$PROJECT_DIR$/Example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/Example-app.iml" filepath="$PROJECT_DIR$/app/Example-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tusdk-evavideo-for-android-demo-Example.iml" filepath="$PROJECT_DIR$/tusdk-evavideo-for-android-demo-Example.iml" />
     </modules>
   </component>
 </project>

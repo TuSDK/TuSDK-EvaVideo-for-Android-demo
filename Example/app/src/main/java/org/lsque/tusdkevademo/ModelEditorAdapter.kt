@@ -121,10 +121,12 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
 
                     if (StringHelper.isBlank(currentItem.videoPath)){
                         val loadImage = currentItem.loadImageAssetBitmap()
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            loadImage.isPremultiplied = true
+                        if (loadImage != null){
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                loadImage.isPremultiplied = true
+                            }
+                            holder.imageView.setImageBitmap(loadImage)
                         }
-                        holder.imageView.setImageBitmap(loadImage)
                     } else if (currentItem.videoPath.startsWith(STORAGE)) {
                         Glide.with(mContext).asBitmap().load(currentItem.videoPath).into((holder.imageView))
                     } else {

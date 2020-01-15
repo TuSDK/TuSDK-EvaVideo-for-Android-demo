@@ -32,7 +32,7 @@ public class TuApplication extends TuSdkApplication {
          *  @param appkey 应用秘钥 (请前往 http://tusdk.com 申请秘钥)
          */
         TuSdk.setResourcePackageClazz(org.lsque.tusdkevademo.R.class);
-        this.initPreLoader(this.getApplicationContext(), "88ac0898a18d73d0-04-ewdjn1");
+        this.initPreLoader(this.getApplicationContext(), "5eeb9bb79d9bd9df-04-ewdjn1");
 
     }
 
