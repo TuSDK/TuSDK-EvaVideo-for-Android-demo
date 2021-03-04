@@ -17,6 +17,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            ndk{
+                abiFilters('armeabi-v7a')
+            }
         }
     }
 }
@@ -34,10 +38,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version")
     implementation("org.jetbrains.anko:anko:$anko_version")
     implementation('com.github.bumptech.glide:glide:4.9.0')
-//    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     implementation('com.github.jakob-grabner:Circle-Progress-View:v1.3')
 
@@ -45,6 +50,9 @@ dependencies {
 
     //multidex支持依赖
     api 'androidx.multidex:multidex:2.0.0'
+
+    api 'junit:junit:4.13'
+
 }
 repositories {
     mavenCentral()

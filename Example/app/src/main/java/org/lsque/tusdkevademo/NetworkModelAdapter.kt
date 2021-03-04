@@ -100,15 +100,13 @@ class NetworkModelAdapter(
             Glide.with(mContext)
                 .asBitmap()
                 .load("file:///android_asset/${mModelList[p1].modelDir}/cover.jpg")
-                .override(TuSdkContext.dip2px(170f), SIZE_ORIGINAL)
                 .placeholder(R.drawable.logo_set)
                 .into(holder.mImageView)
         } else {
             Glide.with(mContext)
                 .asBitmap()
                 .load("http://files.tusdk.com/eva/${mModelList[p1].iconName}")
-                .override(TuSdkContext.dip2px(170f), SIZE_ORIGINAL)
-                .placeholder(R.drawable.logo_set)
+                .placeholder(R.drawable.logo_set).error(R.drawable.logo_set)
                 .into(holder.mImageView)
         }
         if (!TextUtils.isEmpty(mModelPath) && mModelVer == mModelList[p1].modelVer) {

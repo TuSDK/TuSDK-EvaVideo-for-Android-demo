@@ -14,6 +14,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.RectF
+import android.graphics.Typeface
 import android.media.MediaCodecInfo
 import android.media.MediaExtractor
 import android.media.MediaFormat
@@ -25,10 +26,14 @@ import android.view.View
 import android.widget.RelativeLayout
 import com.alexvasilkov.gestures.GestureController
 import com.alexvasilkov.gestures.State
-import kotlinx.android.synthetic.main.activity_image_cuter.*
+import com.tusdk.pulse.Producer
+import com.tusdk.pulse.Transcoder
 import kotlinx.android.synthetic.main.activity_movie_editor_cut.*
 import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_change_media
 import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_cutRegionView
+import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_editor_cut_load
+import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_editor_cut_load_parogress
+import kotlinx.android.synthetic.main.model_editor_activity.*
 import kotlinx.android.synthetic.main.title_item_layout.*
 import org.jetbrains.anko.textColor
 import org.lasque.tusdk.core.TuSdk
@@ -36,8 +41,9 @@ import org.lasque.tusdk.core.api.extend.TuSdkMediaPlayerListener
 import org.lasque.tusdk.core.api.extend.TuSdkMediaProgress
 import org.lasque.tusdk.core.media.codec.extend.TuSdkMediaFormat
 import org.lasque.tusdk.core.media.codec.extend.TuSdkMediaTimeSlice
+import org.lasque.tusdk.core.media.codec.extend.TuSdkMediaUtils
+import org.lasque.tusdk.core.media.codec.suit.TuSdkMediaFilePlayer
 import org.lasque.tusdk.core.media.codec.suit.mutablePlayer.TuSdkMediaFilesCuterImpl
-import org.lasque.tusdk.core.media.codec.suit.mutablePlayer.TuSdkMediaMutableFilePlayer
 import org.lasque.tusdk.core.media.codec.suit.mutablePlayer.TuSdkMediaMutableFilePlayerImpl.TuSdkMediaPlayerStatus.Playing
 import org.lasque.tusdk.core.media.codec.suit.mutablePlayer.TuSdkVideoImageExtractor
 import org.lasque.tusdk.core.media.codec.video.TuSdkVideoQuality
@@ -45,10 +51,12 @@ import org.lasque.tusdk.core.media.suit.TuSdkMediaSuit
 import org.lasque.tusdk.core.seles.output.SelesView
 import org.lasque.tusdk.core.struct.TuSdkMediaDataSource
 import org.lasque.tusdk.core.struct.TuSdkSize
+import org.lasque.tusdk.core.struct.TuSdkSizeF
 import org.lasque.tusdk.core.utils.StringHelper
 import org.lasque.tusdk.core.utils.TLog
 import org.lasque.tusdk.core.utils.ThreadHelper
 import org.lasque.tusdk.core.utils.ThreadHelper.postDelayed
+import org.lasque.tusdk.core.utils.image.ImageOrientation
 import org.lasque.tusdk.core.view.widget.TuMaskRegionView
 import org.lsque.tusdkevademo.playview.TuSdkRangeSelectionBar
 import java.io.File
@@ -62,7 +70,7 @@ import kotlin.math.min
 class MovieCuterActivity : ScreenAdapterActivity() {
 
     //播放器
-    private var mVideoPlayer: TuSdkMediaMutableFilePlayer? = null
+    private var mVideoPlayer: TuSdkMediaFilePlayer? = null
 
     //播放视图
     private var mVideoView: SelesView? = null
@@ -70,16 +78,22 @@ class MovieCuterActivity : ScreenAdapterActivity() {
 
     /** 当前剪裁后的持续时间   微秒  */
     private var mDurationTimeUs: Long = 0
+
     /** 左边控件选择的时间     微秒  */
     private var mLeftTimeRangUs: Long = 0
+
     /** 右边控件选择的时间     微秒 */
     private var mRightTimeRangUs: Long = 0
+
     /** 最小裁切时间  */
     private val mMinCutTimeUs = (1 * 1000000).toLong()
+
     /** 裁切工具  */
     private var cuter: TuSdkMediaFilesCuterImpl? = null
+
     /** 是否已经设置总时间  */
     private var isSetDuration = false
+
     /** 是否正在裁剪中  */
     private var isCutting = false
 
@@ -96,12 +110,15 @@ class MovieCuterActivity : ScreenAdapterActivity() {
 
     private var isFirstSetRightBarPercent = true
 
+    private var isFirstOnResume = true
+
 
     //播放器回调
     private val mMediaPlayerListener = object : TuSdkMediaPlayerListener {
         override fun onStateChanged(state: Int) {
-            if (!isCutting) lsq_play_btn.setVisibility(if (state == Playing.ordinal) View.GONE else View.VISIBLE)
-            mDurationTimeUs = mVideoPlayer!!.durationUs()
+            runOnUiThread {
+                lsq_play_btn.setVisibility(if (state == 0) View.GONE else View.VISIBLE)
+            }
         }
 
         override fun onFrameAvailable() {
@@ -121,10 +138,12 @@ class MovieCuterActivity : ScreenAdapterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_editor_cut)
-        initView()
     }
 
+
+
     private fun initView() {
+        lsq_title_item_title.text = "编辑"
         lsq_range_line.setType(1)
         lsq_range_line.isShowSelectBar = true
         lsq_range_line.setNeedShowCursor(true)
@@ -172,7 +191,10 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         })
 
         lsq_back.setOnClickListener { finish() }
+        lsq_next.text = "确定"
         lsq_next.textColor = Color.parseColor("#007aff")
+        lsq_next.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+        lsq_next.textSize = 17f
         lsq_next.setOnClickListener {
             setEnable(false)
             mVideoPlayer!!.pause()
@@ -190,96 +212,38 @@ class MovieCuterActivity : ScreenAdapterActivity() {
             }
             if (mVideoPlayer!!.isPause()) {
                 mVideoPlayer!!.resume()
+                lsq_play_btn.visibility = View.GONE
             } else {
                 mVideoPlayer!!.pause()
+                lsq_play_btn.visibility = View.VISIBLE
             }
         }
 
-        lsq_scroll_wrap.controller.addOnStateChangeListener(object : GestureController.OnStateChangeListener {
-            override fun onStateReset(oldState: State?, newState: State?) {
-                TLog.e("oldState = $oldState newState = $newState")
-
+        lsq_scroll_wrap.setOnClickListener {
+            if (mVideoPlayer!!.isPause) {
+                mVideoPlayer!!.resume()
+                lsq_play_btn.visibility = View.GONE
+            } else {
+                mVideoPlayer!!.pause()
+                lsq_play_btn.visibility = View.VISIBLE
             }
-
-            override fun onStateChanged(state: State?) {
-                TLog.e("state = " + state.toString())
-                if (mVideoView!!.width == 0 || mVideoView!!.height == 0) return
-                if (state?.zoom!! >1f && mCurrentZoom != state.zoom) {
-                    var top = mDefaultCropRect.top
-                    var left = mDefaultCropRect.left
-                    var bottom = mDefaultCropRect.bottom
-                    var right = mDefaultCropRect.right
-                    val zoom = (state.zoom - 1) / 4
-                    //放大
-                    if (mCurrentZoom > state.zoom) {
-                        top += (zoom)
-                        left += (zoom)
-                        bottom -= (zoom)
-                        right -= (zoom)
-                    } else
-                    //缩小
-                        if (mCurrentZoom < state.zoom) {
-                            top += zoom
-                            left += zoom
-                            bottom -= zoom
-                            right -= zoom
-                        }
-                    mCurrentCropRect .set(left, top, right, bottom)
-                    mCurrentZoom = state.zoom
-                } else
-                //移动
-                    if (mCurrentZoom == state.zoom) {
-                        var top = mCurrentCropRect.top
-                        var left = mCurrentCropRect.left
-                        var bottom = mCurrentCropRect.bottom
-                        var right = mCurrentCropRect.right
-                        //横向移动
-                        if (abs(mCurrentX) > abs(state.x)) {
-                            left += abs((abs(mCurrentX) - abs(state.x)) / state.zoom / mVideoView!!.width)
-                            left = max(0f,left)
-                            right += abs((abs(mCurrentX) - abs(state.x)) / state.zoom / mVideoView!!.width)
-                            right = min(1f,right)
-
-                        } else if (abs(mCurrentX) < abs(state.x)) {
-                            left -= abs((abs(mCurrentX) - abs(state.x)) / state.zoom /mVideoView!!.width)
-                            left = max(0f,left)
-                            right -= abs((abs(mCurrentX) - abs(state.x)) /state.zoom / mVideoView!!.width)
-                            right = min(1f,right)
-                        }
-                        //竖向移动
-                        if (abs(mCurrentY) > abs(state.y)) {
-                            top -= abs((abs(mCurrentY) - abs(state.y)) / state.zoom /mVideoView!!.height)
-                            top = max(0f,top)
-                            bottom -= abs((abs(mCurrentY) - abs(state.y)) / state.zoom /mVideoView!!.height)
-                            bottom = min(1f,bottom)
-                        } else if (abs(mCurrentY) < abs(state.y)) {
-                            top += abs((abs(mCurrentY) - abs(state.y)) / state.zoom /mVideoView!!.height)
-                            top = max(0f,top)
-                            bottom += abs((abs(mCurrentY) - abs(state.y)) / state.zoom /mVideoView!!.height)
-                            bottom = min(1f,bottom)
-                        }
-                        mCurrentCropRect = RectF(left, top, right, bottom)
-                    } else {
-                        mCurrentCropRect = RectF(mDefaultCropRect)
-                    }
-                mCurrentX = state.x
-                mCurrentY = state.y
-
-                TLog.e("currentCrop = $mCurrentCropRect videoViewHeight = ${mVideoView?.height} videoViewWidth = ${mVideoView?.width}")
-            }
-
-        })
+        }
         val width = intent.getIntExtra("width", 0)
         val height = intent.getIntExtra("height", 0)
-        getCutRegionView()
+        val videoPath = intent.getStringExtra("videoPath")
+        val maxDurationUs = intent.getFloatExtra("videoDuration", 0f)
+        mDurationTimeUs = getVideoFormat(videoPath)!!.getLong(MediaFormat.KEY_DURATION)
         initPlayer()
+        setStateChangedListener()
+        loadVideoThumbList()
+        getCutRegionView()
         lsq_range_line.selectRange.viewTreeObserver.addOnGlobalLayoutListener {
-            if (isFirstSetRightBarPercent && lsq_range_line.selectRange.measuredWidth != 0){
-            lsq_range_line.setRightBarPosition(maxPercent)
-            isFirstSetRightBarPercent = false
+            if (isFirstSetRightBarPercent && lsq_range_line.selectRange.measuredWidth != 0) {
+                lsq_range_line.setRightBarPosition(maxPercent)
+                isFirstSetRightBarPercent = false
                 val globalLayoutListener = this
                 lsq_range_line.selectRange.viewTreeObserver.removeOnGlobalLayoutListener { globalLayoutListener }
-        }
+            }
         }
         val regionRatio = lsq_cutRegionView.regionRatio
         val regionRect = lsq_cutRegionView.regionRect
@@ -293,14 +257,48 @@ class MovieCuterActivity : ScreenAdapterActivity() {
             params.height = lsq_cutRegionView.regionRect.height()
             params.topToBottom = R.id.lsq_title
             params.bottomToTop = R.id.lsq_range_line
-            lsq_scroll_wrap.layoutParams  = params
+            lsq_scroll_wrap.layoutParams = params
             var percent = lsq_cutRegionView.regionRect.height().toFloat() / mVideoView!!.height.toFloat()
             mCurrentCropRect.bottom = percent
             TLog.e("mDefaultCropRect = $mDefaultCropRect")
-//            TuSdkViewHelper.setViewWidth(mVideoView,lsq_cutRegionView.regionRect.width())
-//            TuSdkViewHelper.setViewHeight(mVideoView,lsq_cutRegionView.regionRect.height() * w_h_p.toInt())
-        },1000)
-        loadVideoThumbList()
+        }, 1000)
+    }
+
+    private fun setStateChangedListener() {
+        lsq_scroll_wrap.controller.addOnStateChangeListener(object : GestureController.OnStateChangeListener {
+            override fun onStateReset(oldState: State?, newState: State?) {
+                TLog.e("oldState = $oldState newState = $newState")
+            }
+
+            override fun onStateChanged(state: State?) {
+                TLog.e("state = " + state.toString())
+                if (mVideoView!!.width == 0 || mVideoView!!.height == 0) return
+
+                var top:Float = 0.0f
+                var left : Float = 0.0f
+                var bottom : Float = 1.0f
+                var right : Float = 1.0f
+
+                val videoViewSize = TuSdkSize.create(mVideoView!!.width,mVideoView!!.height)
+                val regionSize = TuSdkSize.create(lsq_cutRegionView.regionRect.width(),lsq_cutRegionView.regionRect.height())
+                val currentVideoViewSize = videoViewSize.scale(state!!.zoom)
+                val regionSizePercent = TuSdkSizeF.create(regionSize.width.toFloat()  / currentVideoViewSize.width.toFloat(),regionSize.height.toFloat()/ currentVideoViewSize.height.toFloat())
+                left = if (regionSize.width >= currentVideoViewSize.width){
+                    0.0f
+                } else {
+                    max(0.0f, abs(state.x) / currentVideoViewSize.width)
+                }
+                top = if (regionSize.height >= currentVideoViewSize.height){
+                    0.0f
+                } else {
+                    max(0.0f,abs(state.y) / currentVideoViewSize.height)
+                }
+                bottom = min(1.0f,top + regionSizePercent.height)
+                right = min(1.0f,left + regionSizePercent.width)
+                mCurrentCropRect.set(left, top, right, bottom)
+            }
+
+        })
     }
 
     override fun onResume() {
@@ -308,85 +306,77 @@ class MovieCuterActivity : ScreenAdapterActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (isFirstOnResume){
+            initView()
+            isFirstOnResume = false
+        }
+    }
+
 
     private fun startCompound() {
-        if (cuter != null) {
-            return
-        }
 
+        mVideoPlayer!!.pause()
+        isDestory = true
 
         val videoPath = intent.getStringExtra("videoPath")
         isCutting = true
 
-        val sourceList = ArrayList<TuSdkMediaDataSource>()
-        sourceList.add(TuSdkMediaDataSource(videoPath))
+        val transcoder : Transcoder = Transcoder()
+        val outputPath = getOutputTempFilePath().path
 
-        // 准备切片时间
-        val tuSdkMediaTimeSlice = TuSdkMediaTimeSlice((mLeftTimeRangUs).toLong(), (mRightTimeRangUs).toLong())
-        tuSdkMediaTimeSlice.speed = mVideoPlayer!!.speed()
-
-        // 准备裁剪对象
-        cuter = TuSdkMediaFilesCuterImpl()
-        // 设置裁剪切片时间
-        cuter!!.setTimeSlice(tuSdkMediaTimeSlice)
-        // 设置数据源
-        cuter!!.setMediaDataSources(sourceList)
-        // 设置文件输出路径
-        cuter!!.setOutputFilePath(getOutputTempFilePath().path)
-
-        if (cuter!!.preferredOutputSize() == null) {
-            TuSdk.messageHub().showToast(this,"无效的视频文件");
-            return;
-        }
-
-        // 准备视频格式
-        val videoFormat = TuSdkMediaFormat.buildSafeVideoEncodecFormat(cuter!!.preferredOutputSize()!!.width, cuter!!.preferredOutputSize()!!.height,
-                30, TuSdkVideoQuality.RECORD_MEDIUM2.bitrate, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface, 0, 0)
-
-        // 设置视频输出格式
-        cuter!!.setOutputVideoFormat(videoFormat)
-        // 设置音频输出格式
-        cuter!!.setOutputAudioFormat(TuSdkMediaFormat.buildSafeAudioEncodecFormat())
-
-        // 开始裁剪
-        cuter!!.run(object : TuSdkMediaProgress {
-            /**
-             * 裁剪进度回调
-             * @param progress        进度百分比 0-1
-             * @param mediaDataSource 当前处理的视频媒体源
-             * @param index           当前处理的视频索引
-             * @param total           总共需要处理的文件数
-             */
-            override fun onProgress(progress: Float, mediaDataSource: TuSdkMediaDataSource?, index: Int, total: Int) {
-                ThreadHelper.post {
+        transcoder.setListener { state, ts ->
+            if (state == Producer.State.kWRITING){
+                runOnUiThread {
                     lsq_editor_cut_load.setVisibility(View.VISIBLE)
-                    lsq_editor_cut_load_parogress.setValue(progress * 100)
+                    lsq_editor_cut_load_parogress.setValue((ts / transcoder.duration.toFloat()) * 100f)
                 }
-            }
-
-            /**
-             * 裁剪结束回调
-             * @param e 如果成功则为Null
-             * @param outputFile 输出文件路径
-             * @param total 处理文件总数
-             */
-            override fun onCompleted(e: Exception?, outputFile: TuSdkMediaDataSource?, total: Int) {
-                isCutting = false
-                ThreadHelper.post {
+            } else if (state == Producer.State.kEND){
+                runOnUiThread {
+                    transcoder.release()
                     setEnable(true)
                     lsq_editor_cut_load.setVisibility(View.GONE)
                     lsq_editor_cut_load_parogress.setValue(0f)
-                    lsq_play_btn.setVisibility(if (mVideoPlayer!!.isPause()) View.VISIBLE else View.GONE)
+                    val intent = Intent()
+                    val rectf = mCurrentCropRect
+                    TLog.e("current rect = ${rectf}")
+                    intent.putExtra("videoPath", outputPath)
+                    intent.putExtra("zoom", floatArrayOf(rectf.left, rectf.top, min(1f, rectf.right), min(1f, rectf.bottom)))
+                    setResult(ModelEditorActivity.ALBUM_REQUEST_CODE_VIDEO, intent)
+                    finish()
                 }
-                var intent = Intent()
-                var rectf = mCurrentCropRect
-                intent.putExtra("videoPath", outputFile?.path)
-                intent.putExtra("zoom", floatArrayOf(rectf.left, rectf.top, rectf.right, rectf.bottom))
-                setResult(ModelEditorActivity.ALBUM_REQUEST_CODE_VIDEO, intent)
-                cuter = null
-                finish()
             }
-        })
+        }
+        var size = TuSdkMediaFormat.getVideoKeySize(getVideoFormat(videoPath))
+        val rotation = ImageOrientation.getValue(TuSdkMediaFormat.getVideoKeyRotation(getVideoFormat(videoPath)),false)
+        size = size.transforOrientation(rotation)
+        val width = intent.getIntExtra("width", 0)
+        val height = intent.getIntExtra("height", 0)
+        val rangeStartTs = mLeftTimeRangUs / 1000
+        val rangeEndTs = mRightTimeRangUs / 1000
+        val targetSize = TuSdkSize(width,height)
+        val config = Producer.OutputConfig()
+        if (size.maxSide() > targetSize.maxSide()){
+            val scale = size.maxSide().toFloat() / targetSize.maxSide().toFloat()
+            size = size.scale(scale)
+        }
+        if (size.maxSide() > 1080){
+            val scale = 1080f / size.maxSide().toFloat()
+            size = size.scale(scale)
+        }
+        config.width = size.width
+        config.height = size.height
+        config.rangeStart = rangeStartTs
+        config.rangeDuration = rangeEndTs - rangeStartTs
+        config.keyint = 0
+        transcoder.setOutputConfig(config)
+
+        if (!transcoder.init(outputPath,videoPath)){
+            return
+        }
+        transcoder.start()
+        setEnable(false)
     }
 
     private var w_h_p = 0f
@@ -394,18 +384,16 @@ class MovieCuterActivity : ScreenAdapterActivity() {
     /** 初始化播放器  */
     fun initPlayer() {
         val videoPath = intent.getStringExtra("videoPath")
-        val maxDurationUs = intent.getFloatExtra("videoDuration",0f)
+        val maxDurationUs = intent.getFloatExtra("videoDuration", 0f)
+        mDurationTimeUs = getVideoFormat(videoPath)!!.getLong(MediaFormat.KEY_DURATION)
         val sourceList = ArrayList<TuSdkMediaDataSource>()
 
         val video = TuSdkMediaDataSource(videoPath)
         sourceList.add(video)
 
-        mDurationTimeUs = getVideoFormat(videoPath)!!.getLong(MediaFormat.KEY_DURATION)
-        maxPercent = min ((maxDurationUs / mDurationTimeUs),1f)
+        maxPercent = min((maxDurationUs / mDurationTimeUs), 1f)
         lsq_range_line.setMaxWidth(maxPercent)
         lsq_range_tips.text = "需截取视频的时长范围为 : 1.0s 至 ${maxDurationUs / 1000f / 1000f}s"
-
-
 
         val duration = mDurationTimeUs / 1000000.0f
         mRightTimeRangUs = (mDurationTimeUs * maxPercent).toLong()
@@ -415,7 +403,7 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         mVideoView = SelesView(this)
         mVideoView!!.fillMode = SelesView.SelesFillModeType.PreserveAspectRatioAndFill
 
-        mVideoPlayer = TuSdkMediaSuit.playMedia(sourceList, false, mMediaPlayerListener) as TuSdkMediaMutableFilePlayer
+        mVideoPlayer = TuSdkMediaSuit.playMedia(video, true, mMediaPlayerListener) as TuSdkMediaFilePlayer
         if (mVideoPlayer == null) {
             TLog.e("%s directorPlayer create failed.", "TAG")
             return
@@ -495,6 +483,8 @@ class MovieCuterActivity : ScreenAdapterActivity() {
     }
 
 
+    private var imageThumbExtractor: TuSdkVideoImageExtractor? = null
+
     /** 加载视频缩略图  */
     private fun loadVideoThumbList() {
         val videoPath = intent.getStringExtra("videoPath")
@@ -502,8 +492,8 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         sourceList.add(TuSdkMediaDataSource(videoPath))
 
         /** 准备视频缩略图抽取器  */
-        val imageThumbExtractor = TuSdkVideoImageExtractor(sourceList)
-        imageThumbExtractor
+        imageThumbExtractor = TuSdkVideoImageExtractor(sourceList)
+        imageThumbExtractor!!
                 //.setOutputImageSize(TuSdkSize.create(50,50)) // 设置抽取的缩略图大小
                 .setExtractFrameCount(20) // 设置抽取的图片数量
                 .setImageListener(object : TuSdkVideoImageExtractor.TuSdkVideoImageExtractorListener {
@@ -515,6 +505,7 @@ class MovieCuterActivity : ScreenAdapterActivity() {
                      * @since v3.2.1
                      */
                     override fun onOutputFrameImage(videoImage: TuSdkVideoImageExtractor.VideoImage) {
+                        if (isDestory) return
                         ThreadHelper.post {
                             lsq_range_line.addBitmap(videoImage.bitmap)
                             lsq_range_line.setMinWidth((mMinCutTimeUs / mDurationTimeUs).toFloat())
@@ -528,7 +519,10 @@ class MovieCuterActivity : ScreenAdapterActivity() {
                      */
                     override fun onImageExtractorCompleted(videoImagesList: List<TuSdkVideoImageExtractor.VideoImage>) {
                         /** 注意： videoImagesList 需要开发者自己释放 bitmap  */
-                        imageThumbExtractor.release()
+                        imageThumbExtractor!!.release()
+                        imageThumbExtractor = null
+
+
                     }
                 })
                 .extractImages() // 抽取图片
@@ -576,8 +570,11 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         mVideoPlayer?.pause()
     }
 
+    var isDestory = false
+
     override fun onDestroy() {
         super.onDestroy()
+        isDestory = true
         mVideoPlayer?.release()
     }
 }

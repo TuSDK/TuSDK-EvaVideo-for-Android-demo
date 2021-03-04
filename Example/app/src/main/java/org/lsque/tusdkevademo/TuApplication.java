@@ -2,11 +2,11 @@ package org.lsque.tusdkevademo;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.tusdk.pulse.Engine;
+import com.tusdk.pulse.eva.TuSDKEva;
 
 import org.lasque.tusdk.core.TuSdk;
 import org.lasque.tusdk.core.TuSdkApplication;
-import org.lasque.tusdk.core.TuSdkContext;
-import org.lasque.tusdk.utils.TuSdkEva;
 
 /**
  * @author MirsFang
@@ -22,8 +22,6 @@ public class TuApplication extends TuSdkApplication {
         super.onCreate();
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
-
-        TuSdkEva.register();
         // 设置输出状态，建议在接入阶段开启该选项，以便定位问题。
         this.setEnableLog(true);
         /**
@@ -34,7 +32,7 @@ public class TuApplication extends TuSdkApplication {
         TuSdk.setResourcePackageClazz(org.lsque.tusdkevademo.R.class);
         this.initPreLoader(this.getApplicationContext(), "5eeb9bb79d9bd9df-04-ewdjn1");
 
+        TuSDKEva.register();
+
     }
-
-
 }

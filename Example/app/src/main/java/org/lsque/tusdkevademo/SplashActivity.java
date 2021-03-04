@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.tusdk.pulse.eva.TuSDKEva;
+
 import org.lasque.tusdk.core.utils.ThreadHelper;
 
 /**
@@ -20,7 +22,7 @@ public class SplashActivity extends Activity
         setContentView(R.layout.activity_splash);
 
         TextView mVersion = findViewById(R.id.lsq_version);
-        mVersion.setText(String.format("TuSDK Video %s", "TUEVA 1.2.1"));
+        mVersion.setText(String.format("TuSDK Video %s", "TUEVA "+ TuSDKEva.SDK_VERSION));
 
         ThreadHelper.postDelayed(new Runnable() {
             @Override

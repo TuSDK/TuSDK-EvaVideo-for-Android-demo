@@ -12,4 +12,4 @@ package org.lsque.tusdkevademo
 
 import android.os.Parcelable
 
-data class EditorModelItem(var modelItem: Any, var modelType:EditType)
+data class EditorModelItem(var modelItem: Any, var modelType:EditType,var startPos : Long)

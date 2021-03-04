@@ -1,5 +1,6 @@
 package org.lsque.tusdkevademo;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -23,6 +24,7 @@ public class ScreenAdapterActivity extends FragmentActivity {
             setTheme(android.R.style.Theme_NoTitleBar);
         }
         DisplayUtils.INSTANCE.setCustomDensity(this,getApplication());
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
     }
 

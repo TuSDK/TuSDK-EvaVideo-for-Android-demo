@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -88,11 +89,13 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
         val jsonRequest = DownloadManager.Request(Uri.parse("http://files.tusdk.com/eva/eva.json"))
 
         val connectivityManager : ConnectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val info = connectivityManager.activeNetworkInfo
-        if (info.type == ConnectivityManager.TYPE_WIFI){
-            jsonRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
-        } else if (info.type == ConnectivityManager.TYPE_MOBILE){
-            jsonRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE)
+        val info: NetworkInfo? = connectivityManager.activeNetworkInfo
+        if (info != null){
+            if (info.type == ConnectivityManager.TYPE_WIFI){
+                jsonRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
+            } else if (info.type == ConnectivityManager.TYPE_MOBILE){
+                jsonRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE)
+            }
         }
         jsonRequest.setAllowedOverMetered(true)
         jsonRequest.setAllowedOverRoaming(true)
@@ -167,6 +170,9 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
         }
 
         fun getPath(context: Context?,uri: Uri) : String{
+            if (uri.toString().startsWith("file:")){
+                return uri.toString().replace("file:///","")
+            }
             var path = ""
             var fileName = ""
             val filePathColumn = arrayOf(MediaStore.MediaColumns.DATA,MediaStore.MediaColumns.DISPLAY_NAME)
@@ -216,6 +222,9 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
         }
 
         fun getPath(context: Context?,uri: Uri) : String{
+            if (uri.toString().startsWith("file:")){
+                return uri.toString().replace("file:///","")
+            }
             var path = ""
             var fileName = ""
             val filePathColumn = arrayOf(MediaStore.MediaColumns.DATA,MediaStore.MediaColumns.DISPLAY_NAME)

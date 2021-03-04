@@ -17,41 +17,42 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.RectF
 import android.media.AudioManager
+import android.media.MediaFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DCIM
-import android.os.Environment.DIRECTORY_MOVIES
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
 import android.widget.Toast
-import kotlinx.android.synthetic.main.model_detail_activity.lsq_model_seles
-import kotlinx.android.synthetic.main.model_detail_activity.lsq_player_img
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.tusdk.pulse.Engine
+import com.tusdk.pulse.Player
+import com.tusdk.pulse.Producer
+import com.tusdk.pulse.eva.EvaDirector
+import com.tusdk.pulse.eva.EvaModel
+import com.tusdk.pulse.eva.EvaReplaceConfig
+import com.tusdk.pulse.utils.AssetsMapper
 import kotlinx.android.synthetic.main.model_editor_activity.*
 import kotlinx.android.synthetic.main.title_item_layout.*
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.textColor
 import org.lasque.tusdk.core.TuSdk
-import org.lasque.tusdk.core.TuSdkContext
-import org.lasque.tusdk.core.api.extend.TuSdkMediaProgress
-import org.lasque.tusdk.core.media.codec.video.TuSdkVideoQuality
-import org.lasque.tusdk.core.seles.output.SelesView
-import org.lasque.tusdk.core.struct.TuSdkMediaDataSource
-import org.lasque.tusdk.core.utils.*
+import org.lasque.tusdk.core.struct.TuSdkSize
+import org.lasque.tusdk.core.utils.AssetsHelper
+import org.lasque.tusdk.core.utils.TLog
 import org.lasque.tusdk.core.utils.image.BitmapHelper
-import org.lasque.tusdk.core.view.TuSdkViewHelper
-import org.lasque.tusdk.eva.*
-import org.lasque.tusdk.eva.structure.TuSdkEvaEntityCompari
-import org.lasque.tusdk.eva.structure.TuSdkEvaEntityQueue
+import org.lsque.tusdkevademo.utils.ProduceOutputUtils
 import java.io.File
 import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.math.min
 
 
@@ -64,27 +65,36 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         public const val ALBUM_REQUEST_CODE_ALPHA_VIDEO = 4
     }
 
+    private var mEvaDirector : EvaDirector? = null
     /**  Eva播放器 */
-    private var mEvaPlayer: TuSdkEvaPlayerImpl? = null
-    /**  Eva AssetManager */
-    private var mEvaAssetManager: TuSdkEvaAssetManager? = null
+    private var mEvaPlayer: EvaDirector.Player? = null
+    /**  Eva Model */
+    private var mEvaModel: EvaModel? = null
     /** 是否已经销毁 **/
     private var isRelease = false
 
+    private var mEvaPlayerCurrentState : Player.State? = null
+
+    private var mEvaThreadPool : ExecutorService = Executors.newSingleThreadScheduledExecutor()
+
+    private var mCurrentTs = 0L
+
+
     /**  Eva播放器进度监听 */
-    private var mPlayerProcessListener: TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener = object : TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener {
-
-
-        override fun onProgressWithRange(progress: Float, currentTimeNN: Long, durationNN: Long) {
-        }
-
-        override fun onProgress(progress: Float, currentTimeNN: Long, durationNN: Long) {
-            lsq_seek.progress = (progress * 100).toInt()
-            if (currentTimeNN == durationNN) {
-                ThreadHelper.post({
-                    mEvaPlayer!!.pause()
-                    lsq_player_img.visibility = View.VISIBLE
-                })
+    private var mPlayerProcessListener: Player.Listener = Player.Listener { state, ts ->
+        mEvaPlayerCurrentState = state
+        if (state == Player.State.kEOS){
+            mEvaPlayer!!.seekTo(0)
+            runOnUiThread {
+                playerPause()
+            }
+        } else if (state == Player.State.kPLAYING || state == Player.State.kDO_PREVIEW){
+            runOnUiThread {
+                mCurrentTs = ts
+                lsq_seek.progress = ts.toInt()
+//                debug_time.text = "总时长(TS) : ${mEvaPlayer!!.duration} \n" +
+//                        "当前视频播放时间(TS) : ${ts} \n"+
+//                        "剩余时长 : ${mEvaPlayer!!.duration - ts}"
             }
         }
     }
@@ -93,11 +103,21 @@ class ModelEditorActivity : ScreenAdapterActivity() {
     private var mEditorList = LinkedList<EditorModelItem>()
 
     /**  当前图片修改项 */
-    private var mCurrentImageEntity: TuSdkEvaImageEntity? = null
+    private var mCurrentImageItem: EvaModel.VideoReplaceItem? = null
     /**  当前视频修改项 */
-    private var mCurrentVideoEntity: TuSdkEvaVideoEntity? = null
+    private var mCurrentVideoItem: EvaModel.VideoReplaceItem? = null
     /**  当前文字修改项 */
-    private var mCurrentTextEntity: TuSdkEvaTextEntity? = null
+    private var mCurrentTextItem: EvaModel.TextReplaceItem? = null
+
+    private var mCurrentAudiItem: EvaModel.AudioReplaceItem? = null
+
+    private var mCurrentImageItems : Array<EvaModel.VideoReplaceItem>? = null
+    private var mCurrentVideoItems : Array<EvaModel.VideoReplaceItem>? = null
+    private var mCurrentTextItems : Array<EvaModel.TextReplaceItem>? = null
+    private var mCurrentAudioItems : Array<EvaModel.AudioReplaceItem>? = null
+
+    private var mDiffMap : HashMap<Any,Boolean> = HashMap()
+    private var mConfigMap : HashMap<Any,Any> = HashMap()
 
     /**  当前修改位置 */
     private var mCurrentEditPostion = 0
@@ -111,44 +131,100 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
     private var mFrameDurationNN = 0L
 
-    private var mTargetProgress = 0f
+    private var mTargetProgress = 0L
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (data == null) return
         when (requestCode) {
             /**  图片裁剪回调*/
             ALBUM_REQUEST_CODE_IMAGE -> {
                 val rectArray = data!!.extras.getFloatArray("zoom")
-                mCurrentImageEntity!!.setCropRectF(RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3]))
-                mCurrentImageEntity!!.setImagePath(data!!.getStringExtra("imagePath"))
-                mTargetProgress = (mCurrentImageEntity!!.weight / mEvaPlayer!!.evaReceiver.totalFrames)
+                mCurrentImageItem!!.resPath = data!!.getStringExtra("imagePath")
+                val config = EvaReplaceConfig.ImageOrVideo()
+                config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
+                config.audioMixWeight = 1F
+                mEvaThreadPool.execute {
+                    mDiffMap[mCurrentImageItem!!.id] = true
+                    mConfigMap[mCurrentImageItem!!.id] = config
+                    mEvaDirector!!.updateImage(mCurrentImageItem,config)
+                }
+                mTargetProgress = mCurrentImageItem!!.startTime
             }
             /** 视频裁剪回调 */
             ALBUM_REQUEST_CODE_VIDEO -> {
                 when (resultCode) {
                     ALBUM_REQUEST_CODE_VIDEO -> {
-                        var rectArray = data!!.getFloatArrayExtra("zoom")
-                        mCurrentVideoEntity!!.setCropRectF(RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3]))
-                        mCurrentVideoEntity!!.setVideoPath(data!!.getStringExtra("videoPath"))
+                        val rectArray = data!!.getFloatArrayExtra("zoom")
+                        mCurrentVideoItem!!.resPath = data!!.getStringExtra("videoPath")
+                        val config = EvaReplaceConfig.ImageOrVideo()
+                        config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
+                        config.repeat = 2
+                        config.audioMixWeight = 0.5F
+                        mEvaThreadPool.execute {
+                            mDiffMap[mCurrentVideoItem!!.id] = true
+                            mConfigMap[mCurrentVideoItem!!.id] = config
+                            if (mCurrentVideoItem!!.isVideo){
+                                TLog.e("xxxxxxxxxxxxxxxxxxxxxxxxx 1 current Update Item id ${mCurrentVideoItem!!.id}")
+                                if (!mEvaDirector!!.updateVideo(mCurrentVideoItem,config)){
+                                    TLog.e("updateVideo error")
+                                }
+                            } else {
+                                TLog.e("xxxxxxxxxxxxxxxxxxxxxxxxx 2 current Update Item id ${mCurrentVideoItem!!.id}")
+                                if (!mEvaDirector!!.updateImage(mCurrentVideoItem,config)){
+                                    TLog.e("updateVideo error")
+                                }
+                            }
+
+                        }
                     }
 
                     ALBUM_REQUEST_CODE_IMAGE -> {
                         var rectArray = data!!.getFloatArrayExtra("zoom")
-                        mCurrentVideoEntity!!.setCropRectF(RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3]))
-                        mCurrentVideoEntity!!.setImagePath(data!!.getStringExtra("imagePath"))
+                        mCurrentVideoItem!!.resPath = data!!.getStringExtra("imagePath")
+                        val config = EvaReplaceConfig.ImageOrVideo()
+                        config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
+                        config.audioMixWeight = 1F
+                        mEvaThreadPool.execute {
+                            mDiffMap[mCurrentVideoItem!!.id] = true
+                            mConfigMap[mCurrentVideoItem!!.id] = config
+                            if (mCurrentVideoItem!!.isVideo){
+                                TLog.e("xxxxxxxxxxxxxxxxxxxxxxxxx 3 current Update Item id ${mCurrentVideoItem!!.id}")
+
+                                if (!mEvaDirector!!.updateVideo(mCurrentVideoItem,config)){
+                                    TLog.e("updateVideo error")
+                                }
+                            } else {
+                                TLog.e("xxxxxxxxxxxxxxxxxxxxxxxxx 4 current Update Item id ${mCurrentVideoItem!!.id}")
+
+                                if (!mEvaDirector!!.updateImage(mCurrentVideoItem,config)){
+                                    TLog.e("updateImage error")
+                                }
+                            }
+                        }
                     }
 
                     ALBUM_REQUEST_CODE_ALPHA_VIDEO -> {
-                        mCurrentVideoEntity!!.videoPath = data!!.getStringExtra("videoPath")
+                        // Mask 坑位正常不应该允许替换
                     }
                 }
-                mTargetProgress = (mCurrentVideoEntity!!.weight / mEvaPlayer!!.evaReceiver.totalFrames)
-
+                mTargetProgress = mCurrentVideoItem!!.startTime
             }
             /** 音频选择回调 */
             AUDIO_REQUEST_CODE -> {
-                if (mEvaPlayer!!.assetManager.replaceAudioList.size() > 0)
-                    mEvaPlayer!!.assetManager.replaceAudioList.queue.peek().audioPath = data!!.extras.getString("audioPath")
+                if (mCurrentAudiItem != null){
+                    val audpath = AssetsMapper(this).mapAsset(data!!.extras.getString("audioPath"))
+                    mCurrentAudiItem!!.resPath = audpath
+                    val config = EvaReplaceConfig.Audio()
+                    config.audioMixWeight = 1f
+                    config.repeat = 2
+                    mEvaThreadPool.execute {
+                        mDiffMap[mCurrentAudiItem!!.id] = true
+                        mConfigMap[mCurrentAudiItem!!.id] = config
+                        mEvaDirector!!.updateAudio(mCurrentAudiItem,config)
+                    }
+                    mTargetProgress = mCurrentAudiItem!!.startTime
+                }
             }
         }
         mEditorAdapter?.notifyItemChanged(mCurrentEditPostion)
@@ -175,141 +251,65 @@ class ModelEditorActivity : ScreenAdapterActivity() {
     }
 
     private fun playerReplay() {
-        mEvaPlayer!!.seek(mTargetProgress)
-        mEvaPlayer!!.pause()
-        playerPlaying()
+        mEvaThreadPool.execute {
+            mEvaPlayer!!.seekTo(mTargetProgress.toLong())
+            playerPlaying()
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun initView() {
         lsq_title_item_title.text = "融合预览"
         lsq_back.setOnClickListener {
-            if(!isRelease) {
-                isRelease = true
-                mEvaPlayer!!.release()
+            mEvaThreadPool.execute {
+                mEvaPlayer!!.pause()
+                finish()
             }
-            finish()
         }
         val modelItem = intent.getParcelableExtra<ModelItem>("model")
-        mEvaPlayer = TuSdkEvaPlayerImpl(
-                if (AssetsHelper.getAssetPath(TuSdkContext.context(), modelItem.templateName) == null) {
-                    modelItem.modelDownloadFilePath
-                } else {
-                    AssetsHelper.getAssetPath(TuSdkContext.context(), modelItem.templateName)
-                })
 
-        /** 资源加载进度监听 */
-        mEvaPlayer!!.assetManager.setAssetLoadCallback(object : TuSdkEvaAssetManager.TuSdkEvaAssetLoadCallback {
-            override fun onPrepareLoad() {
-                /**  加载可替换项资源完成时回调 */
-                ThreadHelper.post {
-                    TuSdk.messageHub().dismiss()
-                    mEvaAssetManager = mEvaPlayer!!.assetManager
-                    setEditorList(mEvaPlayer!!.assetManager.replaceImageList, mEvaPlayer!!.assetManager.replaceVideoList, mEvaPlayer!!.assetManager.replaceTextList, mEvaPlayer!!.assetManager.replaceAlphaVideoList)
-                    mEditorAdapter!!.setEditorModelList(mEditorList)
-                    /** 如果没有音频可替换项,则隐藏音频替换按钮 */
-                    if (mEvaPlayer!!.assetManager.replaceAudioList.size() == 0) {
-                        isCanChangeAudio = false
-                    }
+        lsq_model_seles.init(Engine.getInstance().mainGLContext)
 
-                    var metrics = DisplayMetrics()
-                    windowManager.defaultDisplay.getRealMetrics(metrics)
-                    val displayArea = Rect()
-                    lsq_model_seles.getGlobalVisibleRect(displayArea)
-                    val videoHeight = mEvaPlayer!!.assetManager.inputSize.height.toFloat()
-                    val videoWidth = mEvaPlayer!!.assetManager.inputSize.width.toFloat()
-                    val whp = videoHeight / videoWidth
-                    val hwp = videoWidth / videoHeight
-                    if (videoWidth > videoHeight) {
-                        (lsq_model_seles.layoutParams as ConstraintLayout.LayoutParams).height = (metrics.widthPixels * whp).toInt()
-                    } else {
-                        if (videoHeight < lsq_model_seles.layoutParams.height) {
-                            lsq_model_seles.layoutParams.height = videoHeight.toInt()
-                            lsq_model_seles.layoutParams.width = min(metrics.widthPixels, videoWidth.toInt())
-                        } else {
-                            if (videoWidth > metrics.widthPixels) {
-                                lsq_model_seles.layoutParams.height = (metrics.widthPixels * whp * 0.5).toInt()
-                                lsq_model_seles.layoutParams.width = (metrics.widthPixels * 0.5).toInt()
-                            } else {
-                                lsq_model_seles.layoutParams.width = (displayArea.height() * hwp).toInt()
-                            }
-                        }
-                    }
-                    (lsq_model_seles.layoutParams as ConstraintLayout.LayoutParams).topToBottom = R.id.lsq_title
-                    mEvaPlayer!!.setDisplayContent(lsq_model_seles)
-                    mEvaPlayer!!.selesView.fillMode = SelesView.SelesFillModeType.PreserveAspectRatioAndFill
-                    lsq_seek.visibility = View.VISIBLE
-                    mEvaPlayer!!.assetManager.setErrorCallback {
-                        TLog.e(it)
-                    }
-                    mEvaPlayer!!.play()
-                }
-            }
-
-            override fun onLoadProgerssChanged(progress: Float) {
-                ThreadHelper.post {
-                    lsq_editor_cut_load.setVisibility(View.VISIBLE)
-                    lsq_editor_cut_load_parogress.setValue(progress * 100)
-                }
-            }
-
-            override fun onLoaded() {
-                ThreadHelper.post {
-                    lsq_editor_cut_load.setVisibility(View.GONE)
-                    lsq_editor_cut_load_parogress.setValue(0f)
-                }
-            }
-
-        })
-        /** 加载资源 */
-        mEvaPlayer!!.load()
-
-
-        var editorAdapter = ModelEditorAdapter(this, mEditorList)
+        var editorAdapter = ModelEditorAdapter(this, mEditorList,mConfigMap)
         editorAdapter.setOnItemClickListener(object : ModelEditorAdapter.OnItemClickListener {
 
-            /** 图片修改项点击事件 */
-            override fun onClick(view: View, item: TuSdkEvaImageEntity, position: Int, type: EditType) {
+            override fun onImageItemClick(view: View, item: EvaModel.VideoReplaceItem, position: Int, type: EditType) {
                 if (!isEnable) return
                 var isOnlyImage = false
                 mCurrentEditPostion = position
-                when (item.assetType) {
-                    EvaAsset.TuSdkEvaAssetType.EvaOnlyImage -> isOnlyImage = true
-                    EvaAsset.TuSdkEvaAssetType.EvaVideoImage -> isOnlyImage = false
+                when (item.type) {
+                    EvaModel.AssetType.kIMAGE_ONLY -> isOnlyImage = true
+                    EvaModel.AssetType.kIMAGE_VIDEO -> isOnlyImage = false
                 }
-                mFrameDurationNN = mEvaPlayer!!.evaReceiver.frameDuration
-                var videoDuration = (item.endFrame - item.weight) * mFrameDurationNN / 1000
-                mCurrentImageEntity = item
-                startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_IMAGE, "videoDuration" to videoDuration, "onlyImage" to isOnlyImage, "onlyVideo" to false, "width" to item.evaImageAsset.width(), "height" to item.evaImageAsset.height())
+                val videoDuration = (item.endTime - item.startTime) * 1000
+                mCurrentImageItem = item
+                startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_IMAGE, "videoDuration" to videoDuration, "onlyImage" to isOnlyImage, "onlyVideo" to false, "width" to item.width, "height" to item.height)
             }
 
-            /** 视频修改项点击时间 */
-            override fun onClick(view: View, item: TuSdkEvaVideoEntity, position: Int, type: EditType) {
+            override fun onVideoItemClick(view: View, item: EvaModel.VideoReplaceItem, position: Int, type: EditType) {
                 if (!isEnable) return
                 var isOnlyVideo = false
                 var isOnlyImage = false
                 mCurrentEditPostion = position
-                when (item.assetType) {
-                    EvaAsset.TuSdkEvaAssetType.EvaOnlyVideo -> isOnlyVideo = true
-                    EvaAsset.TuSdkEvaAssetType.EvaVideoImage -> isOnlyVideo = false
-                    EvaAsset.TuSdkEvaAssetType.EvaOnlyImage -> isOnlyImage = true
+                when (item.type) {
+                    EvaModel.AssetType.kIMAGE_VIDEO -> isOnlyVideo = false
+                    EvaModel.AssetType.kVIDEO_ONLY -> isOnlyVideo = true
+                    EvaModel.AssetType.kIMAGE_ONLY-> isOnlyImage = true
                 }
-                mFrameDurationNN = mEvaPlayer!!.evaReceiver.frameDuration
-                var videoDuration = (item.endFrame - item.weight) * mFrameDurationNN / 1000L
-                mCurrentVideoEntity = item
-                startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_VIDEO, "videoDuration" to videoDuration, "onlyImage" to isOnlyImage, "onlyVideo" to isOnlyVideo, "width" to mEvaPlayer!!.assetManager.inputSize.width, "height" to mEvaPlayer!!.assetManager.inputSize.height , "isAlpha" to item.isAlpha)
+                val videoDuration = (item.endTime - item.startTime) * 1000f
+                mCurrentVideoItem = item
+                startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_VIDEO, "videoDuration" to videoDuration, "onlyImage" to isOnlyImage, "onlyVideo" to isOnlyVideo, "width" to item.width, "height" to item.height , "isAlpha" to (item.type == EvaModel.AssetType.kMASK))
             }
 
-            /** 文字修改项点击事件 */
-            override fun onClick(view: View, item: TuSdkEvaTextEntity, position: Int, type: EditType) {
+            override fun onTextItemClick(view: View, item: EvaModel.TextReplaceItem, position: Int, type: EditType) {
                 if (!isEnable) return
-                mCurrentTextEntity = item
-                lsq_editor_replace_text.setText(item.displayText)
+                mCurrentTextItem = item
+                lsq_editor_replace_text.setText(item.text)
                 lsq_text_editor_layout.visibility = View.VISIBLE
                 lsq_editor_replace_text.requestFocus()
                 mCurrentEditPostion = position
-                var inputManager: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputManager.showSoftInput(lsq_editor_replace_text, 0);
+                val inputManager: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.showSoftInput(lsq_editor_replace_text, 0)
             }
 
         })
@@ -321,8 +321,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         lsq_seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (!fromUser) return
-                /** seek 到指定位置 播放器内范围(0-1) */
-                mEvaPlayer!!.seek((progress.toFloat() / 100f))
+                /** seek 到指定位置 播放器内范围(视频时长 ms) */
+                mEvaThreadPool.execute {
+                    mEvaPlayer!!.previewFrame(progress.toLong())
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -330,19 +332,32 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                playerPlaying()
+//                playerPlaying()
             }
 
         })
         lsq_model_seles.setOnClickListener {
-            if (mEvaPlayer!!.isPause!!) {
-                lsq_player_img.visibility = View.GONE; mEvaPlayer!!.play()
+            if (mEvaPlayerCurrentState == null) return@setOnClickListener
+            if (mEvaPlayerCurrentState != Player.State.kPLAYING) {
+                lsq_player_img.visibility = View.GONE;
+                mEvaThreadPool.execute {
+                    mEvaPlayer!!.play()
+                }
             } else {
-                lsq_player_img.visibility = View.VISIBLE; mEvaPlayer!!.pause()
+                lsq_player_img.visibility = View.VISIBLE
+                mEvaThreadPool.execute {
+                    mEvaPlayer!!.pause()
+                }
             }
         }
         lsq_player_img.setOnClickListener {
-            if (mEvaPlayer!!.isPause!!) {
+            if (mEvaPlayerCurrentState == null) return@setOnClickListener
+            if (mEvaPlayerCurrentState == Player.State.kEOS){
+                mEvaThreadPool.execute {
+                    mEvaPlayer!!.seekTo(0)
+                    playerPlaying()
+                }
+            } else if (mEvaPlayerCurrentState != Player.State.kPLAYING) {
                 playerPlaying()
             } else {
                 playerPause()
@@ -354,7 +369,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         lsq_voice_seek.progress = (volume * 10)
         lsq_voice_seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                mEvaPlayer!!.setVolume((progress / 10).toFloat())
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress / 10,AudioManager.FLAG_PLAY_SOUND)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -369,112 +384,243 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 Toast.makeText(this, "此资源不支持替换背景音乐", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            mCurrentAudiItem = mCurrentAudioItems!![0]
             startActivityForResult<AudioListActivity>(AUDIO_REQUEST_CODE)
             this.overridePendingTransition(R.anim.activity_open_from_bottom_to_top, R.anim.activity_keep_status)
         }
 
         lsq_reset_assets.setOnClickListener {
-            if (mEvaAssetManager != null) {
-                mEvaAssetManager!!.reset()
-                editorAdapter.notifyItemMoved(0, editorAdapter.itemCount - 1)
+            if (mDiffMap.isEmpty()) return@setOnClickListener
+            mEvaThreadPool.execute {
+                val b = mEvaPlayer!!.pause()
+                mEvaPlayer!!.previewFrame(0)
+                runOnUiThread {
+                    lsq_player_img.visibility = View.VISIBLE
+                    lsq_seek.progress = 0
+                }
+                setEditorList(mEvaModel!!.listReplaceableImageAssets(),mEvaModel!!.listReplaceableVideoAssets(),mEvaModel!!.listReplaceableTextAssets())
+                mCurrentAudioItems = mEvaModel!!.listReplaceableAudioAssets()
+                mCurrentImageItem = null
+                mCurrentVideoItem = null
+                mCurrentTextItem = null
+                mCurrentAudiItem = null
+                for (item in mCurrentImageItems!!){
+                    if (mDiffMap[item.id] != null){
+                        if (item.isVideo){
+                            mEvaDirector!!.updateVideo(item,EvaReplaceConfig.ImageOrVideo())
+                        } else {
+                            mEvaDirector!!.updateImage(item,EvaReplaceConfig.ImageOrVideo())
+                        }
+                    }
+                }
+                for (item in mCurrentVideoItems!!){
+                    if (mDiffMap[item.id] != null){
+                        if (item.isVideo){
+                            mEvaDirector!!.updateVideo(item,mConfigMap[item.id] as EvaReplaceConfig.ImageOrVideo)
+                        } else {
+                            mEvaDirector!!.updateImage(item,mConfigMap[item.id] as EvaReplaceConfig.ImageOrVideo)
+                        }
+                    }
+                }
+                for (item in mCurrentTextItems!!){
+                    if (mDiffMap[item.id] != null)
+                        mEvaDirector!!.updateText(item)
+                }
+                for (item in mCurrentAudioItems!!){
+                    if (mDiffMap[item.id] != null){
+                        val config = mConfigMap[item.id] as EvaReplaceConfig.Audio
+                        mEvaDirector!!.updateAudio(item,config)
+                    }
+                }
+                mDiffMap.clear()
+                mConfigMap.clear()
+
+                runOnUiThread {
+                    editorAdapter.notifyDataSetChanged()
+                }
+                mEvaPlayer!!.previewFrame(0)
             }
+            //todo 坑位重置
+
         }
 
         lsq_editor_text_commit.setOnClickListener {
-            mCurrentTextEntity!!.setReplaceText(lsq_editor_replace_text.text.toString())
+            mCurrentTextItem!!.text = lsq_editor_replace_text.text.toString()
+            mEvaThreadPool.execute {
+                mDiffMap[mCurrentTextItem!!] = true
+                mEvaDirector!!.updateText(mCurrentTextItem)
+            }
             lsq_text_editor_layout.visibility = View.GONE
             editorAdapter.notifyItemChanged(mCurrentEditPostion)
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(lsq_editor_replace_text.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-            mTargetProgress = (mCurrentTextEntity!!.weight / mEvaPlayer!!.evaReceiver.totalFrames)
             playerReplay()
         }
 
         lsq_next.text = "保存"
         lsq_next.textColor = Color.parseColor("#007aff")
 
-
         lsq_next.setOnClickListener {
+            lsq_editor_cut_load.visibility = View.VISIBLE
+            lsq_editor_cut_load_parogress.setValue(0f)
             setEnable(false)
             /** 保存时必须把播放停止 */
             mEvaPlayer!!.pause()
             lsq_player_img.visibility = View.VISIBLE
-            /** 保存功能 */
-            val saver = TuSdkEvaSaverImpl()
-            /**  设置保存路径 */
-            saver.setOutputFilePath("${Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM).path}/eva_output${System.currentTimeMillis()}.mp4")
 
-            /** 设置保存属性 **/
-            var options = TuSdkEvaSaver
-                    .TuSdkEvaSaverOptions.getOption()
-                    .setOutputSize(mEvaPlayer!!.assetManager.inputSize)
-                    .setQuality(TuSdkVideoQuality.RECORD_HIGH3)
-                    .setFps((1000000000/mEvaPlayer!!.evaReceiver.frameDuration).toInt())
-                    .setWaterImage(BitmapHelper.getRawBitmap(this, R.raw.sample_watermark), TuSdkWaterMarkOption.WaterMarkPosition.TopRight,0.12f)
-            saver.setSaveOptions(options)
+            mEvaThreadPool.execute {
+                val producer = mEvaDirector!!.newProducer()
 
-            try {
-                /**  设置当前要保存的AssetManager */
-                saver.setAssetManager(mEvaPlayer!!.assetManager)
-            } catch (e: CloneNotSupportedException) {
-                e.printStackTrace()
+                val outputFilePath = "${Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM).path}/eva_output${System.currentTimeMillis()}.mp4"
+
+                val config : Producer.OutputConfig = Producer.OutputConfig()
+                config.watermarkPosition = 1
+                config.watermark = BitmapHelper.getRawBitmap(applicationContext,R.raw.sample_watermark)
+                val supportSize = ProduceOutputUtils.getSupportSize(MediaFormat.MIMETYPE_VIDEO_AVC)
+                val outputSize = TuSdkSize.create(mEvaModel!!.width,mEvaModel!!.height)
+                if (supportSize.maxSide() < outputSize.maxSide()){
+                    config.scale = supportSize.maxSide().toDouble() / outputSize.maxSide().toDouble()
+                }
+                producer.setOutputConfig(config)
+
+                producer.setListener { state, ts ->
+                    if (state == Producer.State.kEND){
+                        mEvaThreadPool.execute {
+                            producer.cancel()
+                            //producer.waitComplete()
+                            producer.release()
+                            mEvaDirector!!.resetProducer()
+                            mEvaPlayer!!.seekTo(mCurrentTs)
+                            TLog.e("ts : $mCurrentTs")
+                        }
+                        sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(File(outputFilePath))))
+                        runOnUiThread {
+                            setEnable(true)
+                            lsq_editor_cut_load.setVisibility(View.GONE)
+                            lsq_editor_cut_load_parogress.setValue(0f)
+                            Toast.makeText(applicationContext, "保存成功", Toast.LENGTH_SHORT).show()
+                        }
+                    } else if (state == Producer.State.kWRITING){
+                        runOnUiThread {
+                            lsq_editor_cut_load.setVisibility(View.VISIBLE)
+                            lsq_editor_cut_load_parogress.setValue((ts / producer.duration.toFloat()) * 100f)
+                        }
+                    }
+                }
+
+                if (!producer.init(outputFilePath)){
+                    TLog.e("producer init error")
+                    return@execute
+                }
+
+                if (!producer.start()){
+                    TLog.e("[Error] EvaProducer Start failed")
+                }
             }
 
 
-            saver.run(object : TuSdkMediaProgress {
-                override fun onProgress(progress: Float, mediaDataSource: TuSdkMediaDataSource, index: Int, total: Int) {
-                    TLog.e("[debug] progress : %s", progress)
-                    ThreadHelper.post {
-                        lsq_editor_cut_load.setVisibility(View.VISIBLE)
-                        lsq_editor_cut_load_parogress.setValue(progress * 100)
-                    }
-                }
+        }
 
-                override fun onCompleted(e: Exception?, outputFile: TuSdkMediaDataSource, total: Int) {
-                    TLog.e("[debug] save completed !!! : %s", outputFile.path)
-                    sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(File(outputFile.path))))
-                    ThreadHelper.post {
-                        setEnable(true)
-                        lsq_editor_cut_load.setVisibility(View.GONE)
-                        lsq_editor_cut_load_parogress.setValue(0f)
+        mEvaThreadPool.execute {
+            mEvaDirector = EvaDirector()
+
+            mEvaModel = EvaModel()
+            if (AssetsHelper.hasAssets(this,modelItem.templateName)){
+                mEvaModel!!.createFromAsset(this,modelItem.templateName)
+            } else {
+                mEvaModel!!.create(modelItem.modelDownloadFilePath)
+            }
+            val ret = mEvaDirector!!.open(mEvaModel)
+            if (!ret){
+                mEvaModel!!.debugDump()
+                TLog.e("[Error] EvaPlayer Open Failed")
+                //todo 失败提醒
+                return@execute
+            }
+
+            mEvaPlayer = mEvaDirector!!.newPlayer()
+            mEvaPlayer!!.setListener(mPlayerProcessListener)
+            if (!mEvaPlayer!!.open()){
+                return@execute
+            }
+            val seekMax = mEvaPlayer!!.duration.toInt()
+
+            setEditorList(mEvaModel!!.listReplaceableImageAssets(),mEvaModel!!.listReplaceableVideoAssets(),mEvaModel!!.listReplaceableTextAssets())
+            runOnUiThread {
+                var metrics = DisplayMetrics()
+                windowManager.defaultDisplay.getRealMetrics(metrics)
+                val displayArea = Rect()
+                lsq_model_seles.getGlobalVisibleRect(displayArea)
+                val videoHeight = mEvaModel!!.height.toFloat()
+                val videoWidth = mEvaModel!!.width.toFloat()
+                val hwp = videoWidth / videoHeight
+                if (videoHeight < lsq_model_seles.layoutParams.height) {
+                    lsq_seek.layoutParams.width = min(metrics.widthPixels, videoWidth.toInt())
+                } else {
+                    if (videoWidth > metrics.widthPixels) {
+                        lsq_seek.layoutParams.width = (metrics.widthPixels * 0.5).toInt()
+                    } else {
+                        lsq_seek.layoutParams.width = (displayArea.height() * hwp).toInt()
                     }
-                    finish()
                 }
-            })
+                lsq_seek.visibility = View.VISIBLE
+            }
+            lsq_model_seles.attachPlayer(mEvaPlayer)
+            mCurrentAudioItems = mEvaModel!!.listReplaceableAudioAssets()
+            if (mCurrentAudioItems.isNullOrEmpty()){
+                isCanChangeAudio = false
+            }
+
+            mEvaPlayer!!.play()
+            mEvaPlayer!!.pause()
+            mEvaPlayer!!.previewFrame(1)
+            runOnUiThread {
+                lsq_seek.max = seekMax
+            }
+
+
         }
 
         TuSdk.messageHub().setStatus(this, R.string.lsq_assets_loading)
     }
 
-    private fun setEditorList(replaceImageList: TuSdkEvaEntityQueue<TuSdkEvaImageEntity>, replaceVideoList: TuSdkEvaEntityQueue<TuSdkEvaVideoEntity>, replaceTextList: TuSdkEvaEntityQueue<TuSdkEvaTextEntity>, replaceAlphaVideoList: TuSdkEvaEntityQueue<TuSdkEvaVideoEntity>) {
+    private fun setEditorList(replaceImageList: Array<EvaModel.VideoReplaceItem> , replaceVideoList: Array<EvaModel.VideoReplaceItem>, replaceTextList: Array<EvaModel.TextReplaceItem>) {
         mEditorList.clear()
-        val editorList = TuSdkEvaEntityQueue<TuSdkEvaEntityCompari>()
+        mCurrentImageItems = replaceImageList
+        mCurrentVideoItems = replaceVideoList
+        mCurrentTextItems = replaceTextList
+        val editorList = ArrayList<Any>()
         /**  遍历可替换图片项列表 */
         for (compari in replaceImageList) {
+            TLog.e("xxxxxxxxxxxxxxxxxxxxx image List id ${compari.id} ")
             editorList.add(compari)
         }
         /**  遍历可替换视频项列表 */
         for (compari in replaceVideoList) {
+            TLog.e("xxxxxxxxxxxxxxxxxxxxx video List id ${compari.id} ")
+
             editorList.add(compari)
         }
         /**  遍历可替换文字项列表 */
         for (compari in replaceTextList) {
             editorList.add(compari)
         }
-        for (compari in replaceAlphaVideoList) {
-            editorList.add(compari)
-        }
         for (compari in editorList) {
-            if (compari is TuSdkEvaImageEntity) {
-                mEditorList.add(EditorModelItem(compari, EditType.Image))
-            } else if (compari is TuSdkEvaVideoEntity) {
-                if (compari.isAlpha) mEditorList.add(EditorModelItem(compari, EditType.Alpha))
-                else mEditorList.add(EditorModelItem(compari, EditType.Video))
-            } else if (compari is TuSdkEvaTextEntity) {
-                mEditorList.add(EditorModelItem(compari, EditType.Text))
+            if (compari is EvaModel.VideoReplaceItem) {
+                if (compari.isVideo)
+                    mEditorList.add(EditorModelItem(compari, EditType.Image,compari.startTime))
+                else
+                    mEditorList.add(EditorModelItem(compari,EditType.Video,compari.startTime))
+            }  else if (compari is EvaModel.TextReplaceItem) {
+                mEditorList.add(EditorModelItem(compari, EditType.Text,compari.startTime))
             }
         }
-
+        mEditorList.sortBy {
+            it.startPos
+        }
+        runOnUiThread {
+            mEditorAdapter!!.setEditorModelList(mEditorList)
+        }
     }
 
     private fun setEnable(b: Boolean) {
@@ -485,36 +631,65 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         lsq_back.isEnabled = b
         lsq_model_seles.isEnabled = b
         lsq_player_img.isEnabled = b
-        isEnable = false
+        isEnable = b
     }
 
     override fun onResume() {
         super.onResume()
-        /**  设置播放进度回调 */
-        mEvaPlayer!!.setProgressListener(mPlayerProcessListener)
+        mEvaThreadPool.execute {
+            mEvaPlayer!!.pause()
+        }
+        lsq_player_img.visibility = View.VISIBLE
     }
 
     override fun onPause() {
         super.onPause()
-        playerPause()
+        mEvaThreadPool.execute {
+            mEvaPlayer!!.pause()
+        }
+        lsq_player_img.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(!isRelease) {
-            mEvaPlayer!!.release()
-            lsq_model_seles.removeAllViews()
+        mEvaThreadPool.execute {
+            if(!isRelease) {
+                mEvaPlayer!!.close()
+                mEvaDirector!!.resetPlayer()
+                mEvaDirector!!.close()
+            }
+            runOnUiThread {
+                lsq_model_seles.release()
+                lsq_edit_content.removeView(lsq_model_seles)
+            }
+
+            for (item in mCurrentVideoItems!!){
+                item.thumbnail.recycle()
+            }
+            for (item in mCurrentImageItems!!){
+                item.thumbnail.recycle()
+            }
         }
+        mEvaThreadPool.shutdown()
         TuSdk.getAppTempPath().deleteOnExit()
     }
 
     private fun playerPause() {
-        mEvaPlayer!!.pause()
-        lsq_player_img.visibility = View.VISIBLE
+        mEvaThreadPool.execute {
+            if (mEvaPlayerCurrentState == Player.State.kPLAYING)
+                mEvaPlayer!!.pause()
+        }
+        runOnUiThread {
+            lsq_player_img.visibility = View.VISIBLE
+        }
     }
 
     private fun playerPlaying() {
-        lsq_player_img.visibility = View.GONE
-        mEvaPlayer!!.play()
+        mEvaThreadPool.execute {
+            mEvaPlayer!!.play()
+        }
+        runOnUiThread {
+            lsq_player_img.visibility = View.GONE
+        }
     }
 }

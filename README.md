@@ -1,10 +1,12 @@
-# 涂图视频融合 TuSDK Eva 产品介绍
+# 涂图·视频融合 SDK 产品介绍
 
-涂图·视频融合 SDK 服务是涂图推出的一款适用于 Android 平台的 SDK，主要功能为基于 Adobe After Effects 生成的视频模板，通过 Eva SDK 使其可以在移动端显示，并在此基础上支持对模板中的素材进行替换（编辑），当前支持的素材替换（编辑）包括视频、图片、文字、音频。Eva SDK 支持 Adobe After Effects 制作的绝大多数动画效果，解决了 Designer、Engineer、Product Manager们对于跨平台后引起的效果还原问题。
+## 概述
 
-## 1. 功能介绍
+涂图·视频融合 SDK 服务是涂图推出的一款适用于 Android 和 iOS 平台的 SDK，主要功能为基于 Adobe After Effects 生成的视频模板，通过 Eva SDK 使其可以在移动端显示，并在此基础上支持对模板中的素材进行替换（编辑），当前支持的素材替换（编辑）包括视频、图片、文字、音频。Eva SDK 支持 Adobe After Effects 制作的绝大多数动画效果，解决了 Designer、Engineer、Product Manager们对于跨平台后引起的效果还原问题。
 
-### 1.1 界面
+## 功能介绍
+
+### 界面
 
 <table cellpadding="0" cellspacing="0"  style="width:720px;border-collapse: collapse;">
 	<thead>
@@ -24,7 +26,7 @@
 </table>
 
 
-### 1.2 SDK 主要功能
+### SDK 主要功能
 
 <table cellpadding="0" cellspacing="0"  style="width:720px;border-collapse: collapse;">
 	<thead>
@@ -73,23 +75,20 @@
 		</tbody>
 </table>
 
-## 2. 设备以及系统要求
+## 设备及系统要求
+
+设备要求：搭载 Android 和 iOS 系统的手机设备
+
+系统要求：Android 5.0 和 iOS 9.0 及其以上
 
 
-* 设备要求：搭载 Android 系统的手机设备
-* 系统要求：Android 4.4 及其以上
 
-## 3. 使用
+## 商务合作
 
-* [示例项目源码](https://github.com/TuSDK/TuSDK-EvaVideo-for-Android-demo)
+电话：177-6716-7529
 
-## 4. 关注
+邮箱：sales@tusdk.com
 
-* 博客 [blog.tusdk.com](https://blog.tusdk.com/)
-* 微博 [@TuSDK](https://weibo.com/tusdk)
-* 微信 [TuSDK-HQ](https://tutucloud.com/img/tusdk-wechat-qrcode.png)
-* 客服电话：177-6716-7529
-* 客服邮箱：sales@tusdk.com
-* 客服 QQ： 2969573855
+QQ：2969573855
 
-更多信息请访问 [tutucloud.com](https://tutucloud.com/)，欢迎通过 [sales@tusdk.com](mailto:sales@tusdk.com) 与我们联系。
+联系地址：浙江省杭州市西湖区 西斗门路 9号 福地创业园1号楼3楼

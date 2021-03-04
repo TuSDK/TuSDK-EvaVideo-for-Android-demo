@@ -91,7 +91,9 @@ class ImageCuterActivity : ScreenAdapterActivity() {
         val imagePath = intent.getStringExtra("imagePath")
         val width = intent.getIntExtra("width", 0)
         val height = intent.getIntExtra("height", 0)
-        getImageView()!!.setImageBitmap(BitmapHelper.getBitmap(File(imagePath)))
+        var bitmap = BitmapHelper.getBitmap(File(imagePath))
+        bitmap = BitmapHelper.imageRotaing(bitmap,BitmapHelper.getImageOrientation(imagePath))
+        getImageView()!!.setImageBitmap(bitmap)
         // 选取范围
         val regionRect = this.getCutRegionView()?.setRegionRatio(TuSdkSize(width, height).ratioFloat)
         TLog.e("regionRect = ${regionRect}")

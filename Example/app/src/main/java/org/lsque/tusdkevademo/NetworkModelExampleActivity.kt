@@ -15,16 +15,16 @@ import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.SparseArray
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.tusdk.pulse.Engine
 import kotlinx.android.synthetic.main.demo_entry_activity.lsq_model_list
 import kotlinx.android.synthetic.main.network_model_example_activity.*
 import org.jetbrains.anko.startActivity
@@ -34,16 +34,13 @@ import org.lasque.tusdk.core.utils.AssetsHelper
 import org.lasque.tusdk.core.utils.FileHelper
 import org.lasque.tusdk.core.utils.TLog
 import org.lasque.tusdk.core.utils.ThreadHelper
-import org.lasque.tusdk.impl.view.widget.TuProgressHub
 import org.lsque.tusdkevademo.utils.DownloadManagerUtil
 import org.lsque.tusdkevademo.utils.EVAItem
 import org.lsque.tusdkevademo.utils.PermissionUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileReader
-import java.io.StringReader
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
@@ -63,13 +60,15 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
     }
 
     override fun onEVAJsonDownloadFile() {
-
+        Toast.makeText(this,"列表更新失败,请稍后重试",Toast.LENGTH_SHORT).show()
+        lsq_refresh_layout.isRefreshing = false
     }
 
     override fun onEVAJsonDownloadComplete() {
         TLog.e("[Debug] onEVAJsonDownloadComplete")
         mEVAItemList.clear()
         getList()
+        lsq_refresh_layout.isRefreshing = false
     }
 
     private fun getList() {
@@ -92,7 +91,6 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
 
     private fun refreshAdapterData() {
         val modelList = ModelItemFactory.getModelItem(mEVAItemList)
-//        modelList.addAll(0,ModelItemFactory.getModelItem(MODEL_LIST,NAME_LIST,TEMPLATES_LIST,ID_LIST))
         modelAdapter?.setModelList(modelList)
     }
 
@@ -138,7 +136,7 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
 
 
     val TEMPLATES_LIST : ArrayList<String> = arrayListOf(
-            "lsq_eva_142.eva"
+            ""
             )
 
     val ID_LIST : ArrayList<Int> = arrayListOf(142)
@@ -166,6 +164,8 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
+        val mEngine = Engine.getInstance()
+        mEngine.init(null)
         mDownloadUtil = DownloadManagerUtil(this,this)
         mDownloadUtil!!.downLoadEVAJson()
         initView()
@@ -175,6 +175,9 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE)
         PermissionUtils.requestRequiredPermissions(this, permissions)
         setModelView()
+        lsq_refresh_layout.setOnRefreshListener {
+            mDownloadUtil!!.downLoadEVAJson()
+        }
         lsq_back.setOnClickListener { finish() }
         lsq_model_list.visibility= View.VISIBLE
     }
@@ -238,5 +241,11 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
         (lsq_model_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         lsq_model_list.adapter = modelAdapter
         getList()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val mEngine = Engine.getInstance()
+        mEngine.release()
     }
 }

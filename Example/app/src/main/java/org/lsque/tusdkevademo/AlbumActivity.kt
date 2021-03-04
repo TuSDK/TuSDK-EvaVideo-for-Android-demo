@@ -53,8 +53,10 @@ class AlbumActivity : ScreenAdapterActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-        setResult(resultCode, data)
-        finish()
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == ModelEditorActivity.ALBUM_REQUEST_CODE_IMAGE || resultCode == ModelEditorActivity.ALBUM_REQUEST_CODE_VIDEO){
+            setResult(resultCode, data)
+            finish()
+        }
     }
 }

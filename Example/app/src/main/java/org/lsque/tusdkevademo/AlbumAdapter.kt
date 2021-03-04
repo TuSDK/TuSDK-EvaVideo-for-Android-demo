@@ -19,9 +19,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.jetbrains.anko.find
-import org.lasque.tusdk.eva.TuSdkEvaImageEntity
-import org.lasque.tusdk.eva.TuSdkEvaTextEntity
-import org.lasque.tusdk.eva.TuSdkEvaVideoEntity
+import org.lasque.tusdk.core.view.TuSdkViewHelper
 
 class AlbumAdapter(context: Context, albumList: List<AlbumInfo>) : RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
 
@@ -36,17 +34,18 @@ class AlbumAdapter(context: Context, albumList: List<AlbumInfo>) : RecyclerView.
         return mAlbumList.size
     }
 
-    public fun getAlbumList() : List<AlbumInfo>{
+    public fun getAlbumList(): List<AlbumInfo> {
         return mAlbumList;
     }
 
-    public fun setAlbumList(albumList: List<AlbumInfo>){
+    public fun setAlbumList(albumList: List<AlbumInfo>) {
         mAlbumList = albumList
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = mInflater.inflate(R.layout.lsq_album_select_video_item, parent, false)
-        return ViewHolder(itemView)    }
+        return ViewHolder(itemView)
+    }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val currentItem = mAlbumList[position]
@@ -60,7 +59,12 @@ class AlbumAdapter(context: Context, albumList: List<AlbumInfo>) : RecyclerView.
             }
         }
         Glide.with(mContext).load(currentItem.path).into(viewHolder.imageView)
-        viewHolder.itemView.setOnClickListener { mItemClickListener!!.onClick(viewHolder.itemView, currentItem, position) }    }
+        viewHolder.itemView.setOnClickListener(object : TuSdkViewHelper.OnSafeClickListener(1000) {
+            override fun onSafeClick(v: View?) {
+                mItemClickListener!!.onClick(viewHolder.itemView, currentItem, position)
+            }
+        })
+    }
 
 
     public fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

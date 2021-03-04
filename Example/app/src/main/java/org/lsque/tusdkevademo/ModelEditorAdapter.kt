@@ -11,10 +11,8 @@
 package org.lsque.tusdkevademo
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.ColorSpace
+import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.TextUtils
 import androidx.recyclerview.widget.RecyclerView
@@ -24,25 +22,32 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.CustomViewTarget
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
+import com.tusdk.pulse.eva.EvaModel
+import com.tusdk.pulse.eva.EvaReplaceConfig
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
+import org.lasque.tusdk.core.struct.TuSdkSize
+import org.lasque.tusdk.core.utils.AssetsHelper
 import org.lasque.tusdk.core.utils.StringHelper
-import org.lasque.tusdk.eva.EvaAsset
-import org.lasque.tusdk.eva.TuSdkEvaImageEntity
-import org.lasque.tusdk.eva.TuSdkEvaTextEntity
-import org.lasque.tusdk.eva.TuSdkEvaVideoEntity
+import org.lasque.tusdk.core.utils.image.BitmapHelper
+import org.lasque.tusdk.core.utils.image.ImageOrientation
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import java.util.*
 
 
-class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem>) : RecyclerView.Adapter<ModelEditorAdapter.ViewHolder>() {
+class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem>,configMap : HashMap<Any,Any>) : RecyclerView.Adapter<ModelEditorAdapter.ViewHolder>() {
 
     protected val STORAGE = "/storage/"
 
     private val mContext = context
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
     private var mModelList: LinkedList<EditorModelItem> = modelList
+    private var mConfigMap = configMap
 
     private var mItemClickListener: OnItemClickListener? = null
 
@@ -79,66 +84,96 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
             EditType.Image -> {
                 val item = mModelList[position]
                 (holder as ImageViewHolder).textView.text = mContext.getString(R.string.lsq_editor_item_image)
-                holder!!.itemView.setOnClickListener { mItemClickListener!!.onClick(holder.itemView, mModelList[position].modelItem as TuSdkEvaImageEntity, position, EditType.Image) }
+                holder!!.itemView.setOnClickListener { mItemClickListener!!.onImageItemClick(holder.itemView, mModelList[position].modelItem as EvaModel.VideoReplaceItem, position, EditType.Image) }
 
-                var imageEntriy = (item.modelItem as TuSdkEvaImageEntity)
-                val loadImage = imageEntriy.loadImage()
+                var imageEntriy = (item.modelItem as EvaModel.VideoReplaceItem)
+                val loadImage = imageEntriy.thumbnail
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     loadImage.isPremultiplied = true
                 }
-                holder.imageView.setImageBitmap(loadImage)
+                var result = loadImage
+                if (mConfigMap[imageEntriy.id] != null){
+                    val size = TuSdkSize.create(loadImage)
+                    val config = mConfigMap[imageEntriy.id] as EvaReplaceConfig.ImageOrVideo
+                    val targetCrop : Rect = Rect(
+                            config.crop.left.times(size.width).toInt(),config.crop.top.times(size.height).toInt(),config.crop.right.times(size.width).toInt(),config.crop.bottom.times(size.height).toInt()
+                    )
+                    result = BitmapHelper.imgCorp(loadImage,targetCrop,0f,ImageOrientation.Up)
+                }
+                holder.imageView.setImageBitmap(result)
             }
 
             EditType.Text -> {
                 val item = mModelList[position]
-                val textEntity = item.modelItem as TuSdkEvaTextEntity
+                val textEntity = item.modelItem as EvaModel.TextReplaceItem
                 val itemTextView = (holder as TextViewHolder).textView
-                itemTextView.text = (item.modelItem as TuSdkEvaTextEntity).displayText
-                itemTextView.textColor = if(TextUtils.isEmpty(textEntity.replaceText)) Color.parseColor("#555555") else Color.parseColor("#ffffff")
-                holder!!.itemView.setOnClickListener { mItemClickListener!!.onClick(holder.itemView, mModelList[position].modelItem as TuSdkEvaTextEntity, position, EditType.Text) }
+                itemTextView.text = textEntity.text
+                itemTextView.textColor = if(TextUtils.isEmpty(textEntity.text)) Color.parseColor("#555555") else Color.parseColor("#ffffff")
+                holder!!.itemView.setOnClickListener { mItemClickListener!!.onTextItemClick(holder.itemView, mModelList[position].modelItem as EvaModel.TextReplaceItem, position, EditType.Text) }
             }
 
 
             EditType.Video,EditType.Alpha-> {
-                holder!!.itemView.setOnClickListener { mItemClickListener!!.onClick(holder.itemView, mModelList[position].modelItem as TuSdkEvaVideoEntity, position, EditType.Video) }
+                holder!!.itemView.setOnClickListener { mItemClickListener!!.onVideoItemClick(holder.itemView, mModelList[position].modelItem as EvaModel.VideoReplaceItem, position, EditType.Video) }
                 val item = mModelList[position]
-                val currentItem = item.modelItem as TuSdkEvaVideoEntity
+                val currentItem = item.modelItem as EvaModel.VideoReplaceItem
 
                 var showText = ""
-                if (currentItem.assetType == EvaAsset.TuSdkEvaAssetType.EvaVideoImage) {
+                if (currentItem.type == EvaModel.AssetType.kIMAGE_VIDEO) {
                     showText =mContext.getString(R.string.lsq_editor_item_video_image)
-                } else if (currentItem.assetType == EvaAsset.TuSdkEvaAssetType.EvaOnlyVideo) {
+                } else if (currentItem.type == EvaModel.AssetType.kVIDEO_ONLY) {
                     showText = mContext.getString(R.string.lsq_editor_item_video)
-                } else if (currentItem.assetType == EvaAsset.TuSdkEvaAssetType.EvaAlphaVideo){
-                    showText = "Alpha"
-                } else if (currentItem.assetType == EvaAsset.TuSdkEvaAssetType.EvaOnlyImage){
+                } else if (currentItem.type == EvaModel.AssetType.kMASK){
+                    showText = "MASK"
+                } else if (currentItem.type == EvaModel.AssetType.kIMAGE_ONLY){
                     showText = mContext.getString(R.string.lsq_editor_item_image)
                 }
 
                 (holder as ImageViewHolder).textView.text = showText
 
-                if (StringHelper.isBlank(currentItem.imagePath)) {
+                if (currentItem.resPath.startsWith(STORAGE)) {
+                    val orientation = BitmapHelper.getImageOrientation(currentItem.resPath)
+                    Glide.with(mContext).asBitmap().load(currentItem.resPath)
+                            .into(object : CustomViewTarget<ImageView,Bitmap>(holder.imageView){
+                                override fun onLoadFailed(errorDrawable: Drawable?) {
+                                }
 
-                    if (StringHelper.isBlank(currentItem.videoPath)){
-                        val loadImage = currentItem.loadImageAssetBitmap()
-                        if (loadImage != null){
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                                loadImage.isPremultiplied = true
-                            }
-                            holder.imageView.setImageBitmap(loadImage)
+                                override fun onResourceCleared(placeholder: Drawable?) {
+                                }
+
+                                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                    var result = resource
+                                    if (mConfigMap[currentItem.id] != null){
+                                        val size = TuSdkSize.create(resource)
+                                        val config = mConfigMap[currentItem.id] as EvaReplaceConfig.ImageOrVideo
+                                        val targetCrop : Rect = Rect(
+                                                config.crop.left.times(size.width).toInt(),config.crop.top.times(size.height).toInt(),config.crop.right.times(size.width).toInt(),config.crop.bottom.times(size.height).toInt()
+                                        )
+                                        result = BitmapHelper.imgCorp(resource,targetCrop,0f,ImageOrientation.Up)
+                                    }
+                                    view.setImageBitmap(result)
+                                }
+
+                            })
+                } else if (AssetsHelper.hasAssets(mContext,currentItem.resPath)){
+                    Glide.with(mContext).asBitmap().load("file:///android_asset/${currentItem.resPath}").into((holder.imageView))
+                } else{
+                    val loadImage = currentItem.thumbnail
+                    if (loadImage != null){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            loadImage.isPremultiplied = true
                         }
-                    } else if (currentItem.videoPath.startsWith(STORAGE)) {
-                        Glide.with(mContext).asBitmap().load(currentItem.videoPath).into((holder.imageView))
-                    } else {
-                        Glide.with(mContext).asBitmap().load("file:///android_asset/${currentItem.videoPath}").into((holder.imageView))
+                        var result = loadImage
+                        if (mConfigMap[currentItem.id] != null){
+                            val size = TuSdkSize.create(loadImage)
+                            val config = mConfigMap[currentItem.id] as EvaReplaceConfig.ImageOrVideo
+                            val targetCrop : Rect = Rect(
+                                    config.crop.left.times(size.width).toInt(),config.crop.top.times(size.height).toInt(),config.crop.right.times(size.width).toInt(),config.crop.bottom.times(size.height).toInt()
+                            )
+                            result = BitmapHelper.imgCorp(loadImage,targetCrop,0f,ImageOrientation.Up)
+                        }
+                        holder.imageView.setImageBitmap(result)
                     }
-
-                } else {
-                    val loadImage = currentItem.loadImageAssetBitmap()
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        loadImage.isPremultiplied = true
-                    }
-                    holder.imageView.setImageBitmap(loadImage)
                 }
             }
         }
@@ -183,9 +218,9 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
 
 
     interface OnItemClickListener {
-        fun onClick(view: View, item: TuSdkEvaImageEntity, position: Int, type: EditType)
-        fun onClick(view: View, item: TuSdkEvaVideoEntity, position: Int, type: EditType)
-        fun onClick(view: View, item: TuSdkEvaTextEntity, position: Int, type: EditType)
+        fun onImageItemClick(view: View, item: EvaModel.VideoReplaceItem, position: Int, type: EditType)
+        fun onVideoItemClick(view: View, item: EvaModel.VideoReplaceItem, position: Int, type: EditType)
+        fun onTextItemClick(view: View, item: EvaModel.TextReplaceItem, position: Int, type: EditType)
     }
 
 

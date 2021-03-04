@@ -18,7 +18,7 @@ public class EVAItem {
     private int id;
     private String vid;
 
-    public EVAItem(String nm, int id, String vid) {
+    public EVAItem(String nm, int id,String vid) {
         this.nm = nm;
         this.id = id;
         this.vid = vid;

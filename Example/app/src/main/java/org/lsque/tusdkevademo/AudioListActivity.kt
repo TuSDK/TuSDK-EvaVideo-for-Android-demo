@@ -24,6 +24,8 @@ class AudioListActivity : ScreenAdapterActivity() {
 
     private var mMediaPlayer : MediaPlayer = MediaPlayer()
 
+    private var mAudioPath : String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_list)
@@ -36,6 +38,7 @@ class AudioListActivity : ScreenAdapterActivity() {
         audioAdapter.setOnItemClickListener(object : AudioListAdapter.OnItemClickListener{
             override fun onSelect(view: View, item: AudioItem, position: Int) {
                 try {
+                    mAudioPath = item.audioPath
                     mMediaPlayer.release()
                     mMediaPlayer = MediaPlayer()
                     val audioFd = assets.openFd(item.audioPath)
@@ -64,6 +67,14 @@ class AudioListActivity : ScreenAdapterActivity() {
     }
 
     override fun finish() {
+        if (mAudioPath != null){
+            val intent = intent
+            val bundle = Bundle()
+            intent.setClass(this@AudioListActivity,ModelEditorActivity.javaClass)
+            bundle.putString("audioPath",mAudioPath)
+            intent.putExtras(bundle)
+            setResult(33,intent)
+        }
         overridePendingTransition(0,R.anim.activity_close_from_top_to_bottom)
         super.finish()
         mMediaPlayer.release()

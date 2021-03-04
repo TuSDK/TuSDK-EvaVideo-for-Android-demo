@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lsq_edit_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -92,7 +93,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lsq_title"/>
 
-        <FrameLayout
+        <com.tusdk.pulse.DisplayView
             android:id="@+id/lsq_model_seles"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -101,14 +102,14 @@
             app:layout_constraintBottom_toBottomOf="@id/lsq_video_display_area"
             app:layout_constraintLeft_toLeftOf="@id/lsq_video_display_area"
             app:layout_constraintRight_toRightOf="@id/lsq_video_display_area"
-            app:layout_constraintTop_toTopOf="@id/lsq_video_display_area"></FrameLayout>
+            app:layout_constraintTop_toTopOf="@id/lsq_video_display_area"></com.tusdk.pulse.DisplayView>
 
         <ImageView
             android:id="@+id/lsq_player_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/lsq_player_img"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@id/lsq_model_seles"
             app:layout_constraintLeft_toLeftOf="@id/lsq_model_seles"
             app:layout_constraintRight_toRightOf="@id/lsq_model_seles"
@@ -207,6 +208,18 @@
             app:cpv_rimWidth="2dp"
             app:cpv_textColor="@color/lsq_color_transparent" />
     </FrameLayout>
+
+    <TextView
+        android:visibility="gone"
+        android:background="@color/lsq_color_black"
+        android:textColor="@color/lsq_color_red"
+        android:textSize="14sp"
+        android:id="@+id/debug_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lsq_title" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

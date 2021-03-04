@@ -61,14 +61,14 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <FrameLayout
+        <com.tusdk.pulse.DisplayView
             android:id="@+id/lsq_model_seles"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lsq_title"></FrameLayout>
+            app:layout_constraintTop_toBottomOf="@id/lsq_title"></com.tusdk.pulse.DisplayView>
 
         <ImageView
             android:id="@+id/lsq_player_img"
@@ -93,6 +93,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <at.grabner.circleprogress.CircleProgressView
+        android:visibility="gone"
         android:id="@+id/lsq_editor_cut_load_parogress"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -110,6 +111,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <SeekBar
+        android:paddingRight="1dp"
+        android:paddingLeft="1dp"
         android:id="@+id/lsq_seek"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -34,12 +34,11 @@ object ModelItemFactory {
     }
 
     private fun createModelItem(modelDir: String,modelName : String,templateName: String,id : Int) : ModelItem{
-        return createModelItem(modelDir, modelName, templateName,"${id}.jpg","1.0.0",id)
+        return createModelItem(modelDir, modelName, templateName,"$id.jpg","1.0.0",id)
     }
 
     private fun createModelItem(modelDir: String,modelName : String,templateName: String,iconName : String,ver : String,id : Int) : ModelItem{
-        return ModelItem(modelDir,modelName,
-            templateName,"http://files.tusdk.com/eva/$templateName",templateName,"",iconName,ver,id)
+        return ModelItem(modelDir,modelName, templateName,"http://files.tusdk.com/eva/$templateName",templateName,"",iconName,ver,id)
     }
 
 }

@@ -12,15 +12,16 @@ package org.lsque.tusdkevademo
 
 import android.annotation.TargetApi
 import android.graphics.Rect
-import android.media.TimedText
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.TimeUtils
 import android.view.View
 import android.widget.SeekBar
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
+import com.tusdk.pulse.Engine
+import com.tusdk.pulse.Player
+import com.tusdk.pulse.eva.EvaDirector
+import com.tusdk.pulse.eva.EvaModel
 import kotlinx.android.synthetic.main.include_seek_bar.*
 import kotlinx.android.synthetic.main.model_detail_activity.*
 import kotlinx.android.synthetic.main.model_detail_activity.lsq_editor_cut_load_parogress
@@ -29,55 +30,62 @@ import kotlinx.android.synthetic.main.model_detail_activity.lsq_model_seles
 import kotlinx.android.synthetic.main.model_detail_activity.lsq_player_img
 import kotlinx.android.synthetic.main.title_item_layout.*
 import org.jetbrains.anko.startActivity
-import org.lasque.tusdk.core.TuSdk
-import org.lasque.tusdk.core.TuSdkContext
-import org.lasque.tusdk.core.seles.output.SelesView
 import org.lasque.tusdk.core.utils.AssetsHelper
 import org.lasque.tusdk.core.utils.TLog
-import org.lasque.tusdk.core.utils.ThreadHelper
-import org.lasque.tusdk.eva.TuSdkEvaAssetManager
-import org.lasque.tusdk.eva.TuSdkEvaPlayerImpl
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import kotlin.math.min
 
 
 class ModelDetailActivity : ScreenAdapterActivity() {
 
-    private var mEvaPlayer:TuSdkEvaPlayerImpl? = null
-    private var mEvaAssetManager: TuSdkEvaAssetManager? = null
+    private var mEvaPlayer:EvaDirector.Player? = null
+    private var mEvaModel: EvaModel? = null
+    private var mEvaDirector : EvaDirector? = null
     private var isRelease = false
-    private var mPlayerProcessListener: TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener = object : TuSdkEvaPlayerImpl.TuSdkEvaPlayerProgressListener {
-        override fun onProgressWithRange(progress: Float, currentTimeNN: Long, durationNN: Long) {
-            TLog.e("[Debug] Progress = $progress currentTime = $currentTimeNN duration = $durationNN")
+    private var mEvaPlayerCurrentState : Player.State? = null
+    private var isSeekbarTouch = false
+    private var mPlayerProcessListener: Player.Listener = Player.Listener { state, ts ->
+        mEvaPlayerCurrentState = state
+        if (state == Player.State.kPLAYING || state == Player.State.kDO_PREVIEW){
+            if (!isSeekbarTouch){
+                lsq_seek.progress = ts.toInt()
+            }
+            val currentVideoHour = ts /3600000
+            val currentVideoMinute = (ts % 3600000) /60000
+
+            val currentVideoSecond = (ts %60000 /1000)
+
+            val durationMS = mEvaPlayer!!.duration
+            val durationVideoHour = durationMS /3600000
+
+            val durationVideoMinute = (durationMS %3600000) /60000
+
+            val durationVideoSecond = (durationMS %3600000 / 1000)
+
+            runOnUiThread {
+                lsq_video_playing_time.text = "$currentVideoHour:$currentVideoMinute:$currentVideoSecond/$durationVideoHour:$durationVideoMinute:$durationVideoSecond"
+            }
         }
 
-        override fun onProgress(progress: Float, currentTimeNN: Long, durationNN: Long) {
-            lsq_seek.progress = (progress * 100).toInt()
-            val currentVideoHour = currentTimeNN /3600000000000
-            val currentVideoMinute = (currentTimeNN % 3600000000000) /60000000000
-
-        val currentVideoSecond = (currentTimeNN %60000000000 /1000000000)
-
-        val durationVideoHour = durationNN /3600000000000
-
-        val durationVideoMinute = (durationNN %3600000000000) /60000000000
-
-        val durationVideoSecond = (durationNN %60000000000 / 1000000000)
-
-        lsq_video_playing_time.post {
-            lsq_video_playing_time.text = "$currentVideoHour:$currentVideoMinute:$currentVideoSecond/$durationVideoHour:$durationVideoMinute:$durationVideoSecond"
-        }
-
-            if (currentTimeNN == durationNN){
-                ThreadHelper.post({
-                    playerPause()
-                })
+        if (state == Player.State.kEOS){
+            runOnUiThread {
+                playerPause()
+            }
+            mEvaThreadPool.execute {
+                mEvaPlayer!!.seekTo(0)
             }
         }
     }
 
+    private var mEvaThreadPool : ExecutorService = Executors.newSingleThreadScheduledExecutor()
+
     private fun playerPause() {
-        mEvaPlayer!!.pause()
         lsq_player_img.visibility = View.VISIBLE
+        mEvaThreadPool.execute {
+            if (mEvaPlayerCurrentState == Player.State.kPLAYING)
+                mEvaPlayer!!.pause()
+        }
     }
 
     private var isFirst = true
@@ -96,103 +104,104 @@ class ModelDetailActivity : ScreenAdapterActivity() {
         lsq_back.setOnClickListener { finish() }
         val modelItem = intent.getParcelableExtra<ModelItem>("model")
         mCurrentModelItem = modelItem
+        lsq_model_seles.init(Engine.getInstance().mainGLContext)
 
-        mEvaPlayer = TuSdkEvaPlayerImpl(
-                if(AssetsHelper.getAssetPath(TuSdkContext.context(),modelItem.templateName) == null){modelItem.modelDownloadFilePath} else {AssetsHelper.getAssetPath(TuSdkContext.context(),modelItem.templateName)})
-        /** 资源加载进度回调 */
-        mEvaPlayer!!.assetManager.setAssetLoadCallback(object : TuSdkEvaAssetManager.TuSdkEvaAssetLoadCallback {
+        mEvaThreadPool.execute {
+            mEvaDirector = EvaDirector()
 
-            override fun onLoadProgerssChanged(progress: Float) {
-                ThreadHelper.post {
-                    lsq_editor_cut_load_parogress.setVisibility(View.VISIBLE)
-                    lsq_editor_cut_load_parogress.setValue(progress * 100)
-                }
+            mEvaModel = EvaModel()
+            if (AssetsHelper.hasAssets(this,modelItem.templateName)){
+               if (mEvaModel!!.createFromAsset(this,modelItem.templateName)){
+                   TLog.e("[Error] Assets File not fount")
+               }
+            } else {
+               if (mEvaModel!!.create(modelItem.modelDownloadFilePath)){
+                   TLog.e("[Error]File not fount")
+
+               }
             }
 
-            override fun onLoaded() {
-                ThreadHelper.post {
-                    lsq_editor_cut_load_parogress.setVisibility(View.GONE)
-                    lsq_editor_cut_load_parogress.setValue(0f)
-                }
-            }
-            override fun onPrepareLoad() {
-                ThreadHelper.post {
-                    TuSdk.messageHub().dismiss()
-                    mEvaAssetManager = mEvaPlayer!!.assetManager
-                    lsq_model_replace_info.text =
-                            "文字 ${mEvaPlayer!!.assetManager.replaceTextList.size()}段\n" +
-                            "图片/视频 ${mEvaPlayer!!.assetManager.replaceImageList.size() + mEvaPlayer!!.assetManager.replaceVideoList.size()}个\n" +
-                            "音频 ${mEvaPlayer!!.assetManager.replaceAudioList.size()}个"
-                    var metrics = DisplayMetrics()
-                    windowManager.defaultDisplay.getRealMetrics(metrics)
-                    val displayArea = Rect()
-                    lsq_model_seles.getGlobalVisibleRect(displayArea)
-                    val videoHeight = mEvaPlayer!!.assetManager.inputSize.height.toFloat()
-                    val videoWidth = mEvaPlayer!!.assetManager.inputSize.width.toFloat()
-                    val whp = videoHeight / videoWidth
-                    val hwp = videoWidth/videoHeight
-                    if (videoWidth > videoHeight) {
-                        (lsq_model_seles.layoutParams as ConstraintLayout.LayoutParams).height = (metrics.widthPixels * whp).toInt()
-                    } else {
-                        if (videoHeight < lsq_model_seles.layoutParams.height) {
-                            lsq_model_seles.layoutParams.height = videoHeight.toInt()
-                            lsq_model_seles.layoutParams.width = min(metrics.widthPixels, videoWidth.toInt())
-                        } else {
-                            if (videoWidth > metrics.widthPixels) {
-                                lsq_model_seles.layoutParams.height = (metrics.widthPixels * whp * 0.5).toInt()
-                                lsq_model_seles.layoutParams.width = (metrics.widthPixels * 0.5).toInt()
-                            } else {
-                                lsq_model_seles.layoutParams.width = (displayArea.height() * hwp).toInt()
-                            }
-                        }
-                    }
-                    (lsq_model_seles.layoutParams as ConstraintLayout.LayoutParams).topToBottom = R.id.lsq_title
-                    mEvaPlayer!!.setDisplayContent(lsq_model_seles)
-                    lsq_seek.visibility = View.VISIBLE
-                    mEvaPlayer!!.selesView.fillMode = SelesView.SelesFillModeType.PreserveAspectRatioAndFill
-                    mEvaPlayer!!.play()
-                }
+            val ret = mEvaDirector!!.open(mEvaModel)
+            if (!ret){
+                mEvaModel!!.debugDump()
+                TLog.e("[Error] EvaPlayer Open Failed")
+                //todo 失败提醒
+                return@execute
             }
 
-        })
-        mEvaPlayer!!.load()
+            mEvaPlayer = mEvaDirector!!.newPlayer()
+            mEvaPlayer!!.setListener(mPlayerProcessListener)
+            if (!mEvaPlayer!!.open()){
+                return@execute
+            }
+            lsq_model_seles.attachPlayer(mEvaPlayer)
+
+            mEvaPlayer!!.play()
+            var seekMax = mEvaPlayer!!.duration
+            var textCount = mEvaModel!!.listReplaceableTextAssets().size
+            var imageVideoCount = mEvaModel!!.listReplaceableImageAssets().size + mEvaModel!!.listReplaceableVideoAssets().size
+            var audioCount = mEvaModel!!.listReplaceableAudioAssets().size
+
+            runOnUiThread {
+                lsq_seek.max = seekMax.toInt()
+                lsq_model_replace_info.text =
+                        "文字 ${textCount}段\n" +
+                                "图片/视频 ${imageVideoCount}个\n" +
+                                "音频 ${audioCount}个"
+            }
+
+        }
         lsq_model_name.text = modelItem.modelName
         lsq_seek.progress = 0
         lsq_seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (!fromUser) return
-                mEvaPlayer!!.seek(progress.toFloat() / 100f)
+                mEvaThreadPool.execute {
+                    mEvaPlayer!!.previewFrame(progress.toLong())
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                isSeekbarTouch = true
                 playerPause()
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                playerPlaying()
+                isSeekbarTouch = false
+//                playerPlaying()
             }
 
         })
 
         lsq_model_seles.setOnClickListener {
-            if (mEvaPlayer!!.isPause) {
-                lsq_player_img.visibility = View.GONE; mEvaPlayer!!.play()
-            } else {
-                lsq_player_img.visibility = View.VISIBLE; mEvaPlayer!!.pause()
+            if (mEvaPlayerCurrentState == null) return@setOnClickListener
+            when (mEvaPlayerCurrentState) {
+                Player.State.kEOS -> {
+                    mEvaThreadPool.execute {
+                        mEvaPlayer!!.seekTo(0)
+                        mEvaPlayer!!.play()
+                    }
+                }
+                Player.State.kPLAYING -> {
+                    playerPause()
+                }
+                else -> {
+                    playerPlaying()
+                }
             }
         }
         lsq_player_img.setOnClickListener {
-            if (mEvaPlayer!!.isPause) {
-                playerPlaying()
-            } else {
+            if (mEvaPlayerCurrentState == null) return@setOnClickListener
+            if (mEvaPlayerCurrentState == Player.State.kPLAYING) {
                 playerPause()
+            } else {
+                playerPlaying()
             }
         }
 
         lsq_next_step.setOnClickListener {
-            if(!isRelease) {
-                mEvaPlayer!!.release()
-                isRelease = true
+            mEvaThreadPool.execute {
+                mEvaPlayer!!.pause()
             }
             startActivity<ModelEditorActivity>("model" to modelItem)
             finish()
@@ -200,27 +209,33 @@ class ModelDetailActivity : ScreenAdapterActivity() {
         lsq_next.visibility = View.GONE
 
         lsq_video_to_first_frame.setOnClickListener {
-            mEvaPlayer?.seek(0f)
+            mEvaThreadPool.execute {
+                mEvaPlayer!!.pause()
+                mEvaPlayer?.seekTo(0)
+                mEvaPlayer!!.play()
+
+            }
         }
 
         lsq_video_to_last_frame.setOnClickListener {
-            mEvaPlayer?.seek(1f)
+            mEvaThreadPool.execute {
+                mEvaPlayer!!.pause()
+                mEvaPlayer?.seekTo(mEvaPlayer!!.duration)
+                mEvaPlayer!!.play()
+            }
         }
 
-        TuSdk.messageHub().setStatus(this@ModelDetailActivity,R.string.lsq_assets_loading)
     }
 
     private fun playerPlaying() {
         lsq_player_img.visibility = View.GONE
-        mEvaPlayer!!.play()
+        mEvaThreadPool.execute {
+            mEvaPlayer!!.play()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        mEvaPlayer!!.setProgressListener(mPlayerProcessListener)
-        if (!mEvaPlayer!!.isPause && !isFirst) {
-            playerPlaying()
-        }
     }
 
     override fun onPause() {
@@ -230,7 +245,24 @@ class ModelDetailActivity : ScreenAdapterActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(!isRelease) mEvaPlayer!!.release()
+        mEvaThreadPool.execute {
+            if(!isRelease) {
+                mEvaPlayer!!.close()
+                mEvaDirector!!.close()
+            }
+
+            for (item in mEvaModel!!.listReplaceableImageAssets()){
+                item.thumbnail.recycle()
+            }
+            for (item in mEvaModel!!.listReplaceableVideoAssets()){
+                item.thumbnail.recycle()
+            }
+            runOnUiThread {
+                lsq_model_seles.release()
+                lsq_video_display_area.removeAllViews()
+            }
+        }
+        mEvaThreadPool.shutdown()
     }
 
 }
