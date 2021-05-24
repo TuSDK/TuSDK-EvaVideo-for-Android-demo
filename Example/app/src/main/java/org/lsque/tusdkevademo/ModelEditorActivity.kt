@@ -165,12 +165,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                             mDiffMap[mCurrentVideoItem!!.id] = true
                             mConfigMap[mCurrentVideoItem!!.id] = config
                             if (mCurrentVideoItem!!.isVideo){
-                                TLog.e("xxxxxxxxxxxxxxxxxxxxxxxxx 1 current Update Item id ${mCurrentVideoItem!!.id}")
                                 if (!mEvaDirector!!.updateVideo(mCurrentVideoItem,config)){
                                     TLog.e("updateVideo error")
                                 }
                             } else {
-                                TLog.e("xxxxxxxxxxxxxxxxxxxxxxxxx 2 current Update Item id ${mCurrentVideoItem!!.id}")
                                 if (!mEvaDirector!!.updateImage(mCurrentVideoItem,config)){
                                     TLog.e("updateVideo error")
                                 }
@@ -189,14 +187,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                             mDiffMap[mCurrentVideoItem!!.id] = true
                             mConfigMap[mCurrentVideoItem!!.id] = config
                             if (mCurrentVideoItem!!.isVideo){
-                                TLog.e("xxxxxxxxxxxxxxxxxxxxxxxxx 3 current Update Item id ${mCurrentVideoItem!!.id}")
-
                                 if (!mEvaDirector!!.updateVideo(mCurrentVideoItem,config)){
                                     TLog.e("updateVideo error")
                                 }
                             } else {
-                                TLog.e("xxxxxxxxxxxxxxxxxxxxxxxxx 4 current Update Item id ${mCurrentVideoItem!!.id}")
-
                                 if (!mEvaDirector!!.updateImage(mCurrentVideoItem,config)){
                                     TLog.e("updateImage error")
                                 }
@@ -369,7 +363,8 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         lsq_voice_seek.progress = (volume * 10)
         lsq_voice_seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress / 10,AudioManager.FLAG_PLAY_SOUND)
+//                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress / 10,AudioManager.FLAG_PLAY_SOUND)
+                mEvaDirector!!.updateAudioMixWeightSeparate("", (progress / 10.0).toDouble())
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -486,9 +481,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 producer.setListener { state, ts ->
                     if (state == Producer.State.kEND){
                         mEvaThreadPool.execute {
-                            producer.cancel()
-                            //producer.waitComplete()
-                            producer.release()
+                            mEvaDirector?.producer?.release()
                             mEvaDirector!!.resetProducer()
                             mEvaPlayer!!.seekTo(mCurrentTs)
                             TLog.e("ts : $mCurrentTs")
@@ -537,6 +530,8 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 //todo 失败提醒
                 return@execute
             }
+
+            mEvaDirector!!.updateAudioMixWeight(1.0)
 
             mEvaPlayer = mEvaDirector!!.newPlayer()
             mEvaPlayer!!.setListener(mPlayerProcessListener)
@@ -592,13 +587,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         val editorList = ArrayList<Any>()
         /**  遍历可替换图片项列表 */
         for (compari in replaceImageList) {
-            TLog.e("xxxxxxxxxxxxxxxxxxxxx image List id ${compari.id} ")
             editorList.add(compari)
         }
         /**  遍历可替换视频项列表 */
         for (compari in replaceVideoList) {
-            TLog.e("xxxxxxxxxxxxxxxxxxxxx video List id ${compari.id} ")
-
             editorList.add(compari)
         }
         /**  遍历可替换文字项列表 */
@@ -690,6 +682,16 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         }
         runOnUiThread {
             lsq_player_img.visibility = View.GONE
+        }
+    }
+
+    override fun onBackPressed() {
+        if (mEvaDirector?.producer != null){
+            mEvaThreadPool.execute{
+                mEvaDirector?.producer?.cancel()
+            }
+        } else {
+            super.onBackPressed()
         }
     }
 }

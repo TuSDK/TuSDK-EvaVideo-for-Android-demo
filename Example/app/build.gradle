@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
-        versionName "1.2.2"
+        versionName "2.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -18,9 +18,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            ndk{
-                abiFilters('armeabi-v7a')
-            }
+//            ndk{
+//                abiFilters('armeabi-v7a')
+//            }
         }
     }
 }
