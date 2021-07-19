@@ -12,8 +12,8 @@ import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import org.lasque.tusdk.core.utils.TLog
-import org.lasque.tusdk.core.utils.ThreadHelper
+import org.lasque.tusdkpulse.core.utils.TLog
+import org.lasque.tusdkpulse.core.utils.ThreadHelper
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.HashMap

@@ -16,7 +16,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_audio_list.*
-import org.lasque.tusdk.core.utils.TLog
+import org.lasque.tusdkpulse.core.utils.TLog
 import java.lang.Exception
 
 

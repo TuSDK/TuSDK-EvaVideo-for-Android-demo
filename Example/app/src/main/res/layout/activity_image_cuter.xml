@@ -22,7 +22,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lsq_title" />
 
-    <org.lasque.tusdk.core.view.widget.TuMaskRegionView
+    <org.lsque.tusdkevademo.playview.TuMaskRegionView
         android:id="@+id/lsq_cutRegionView"
         android:layout_width="0dp"
         android:layout_height="0dp"

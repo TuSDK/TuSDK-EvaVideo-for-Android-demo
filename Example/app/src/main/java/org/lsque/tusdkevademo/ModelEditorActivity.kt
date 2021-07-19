@@ -41,11 +41,11 @@ import kotlinx.android.synthetic.main.model_editor_activity.*
 import kotlinx.android.synthetic.main.title_item_layout.*
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.textColor
-import org.lasque.tusdk.core.TuSdk
-import org.lasque.tusdk.core.struct.TuSdkSize
-import org.lasque.tusdk.core.utils.AssetsHelper
-import org.lasque.tusdk.core.utils.TLog
-import org.lasque.tusdk.core.utils.image.BitmapHelper
+import org.lasque.tusdkpulse.core.TuSdk
+import org.lasque.tusdkpulse.core.struct.TuSdkSize
+import org.lasque.tusdkpulse.core.utils.AssetsHelper
+import org.lasque.tusdkpulse.core.utils.TLog
+import org.lasque.tusdkpulse.core.utils.image.BitmapHelper
 import org.lsque.tusdkevademo.utils.ProduceOutputUtils
 import java.io.File
 import java.util.*
@@ -364,7 +364,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         lsq_voice_seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 //                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress / 10,AudioManager.FLAG_PLAY_SOUND)
-                mEvaDirector!!.updateAudioMixWeightSeparate("", (progress / 10.0).toDouble())
+                //mEvaDirector!!.updateAudioMixWeightSeparate("", (progress / 10.0).toDouble())
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -481,7 +481,9 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 producer.setListener { state, ts ->
                     if (state == Producer.State.kEND){
                         mEvaThreadPool.execute {
-                            mEvaDirector?.producer?.release()
+                            producer.cancel()
+                            //producer.waitComplete()
+                            producer.release()
                             mEvaDirector!!.resetProducer()
                             mEvaPlayer!!.seekTo(mCurrentTs)
                             TLog.e("ts : $mCurrentTs")
@@ -682,16 +684,6 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         }
         runOnUiThread {
             lsq_player_img.visibility = View.GONE
-        }
-    }
-
-    override fun onBackPressed() {
-        if (mEvaDirector?.producer != null){
-            mEvaThreadPool.execute{
-                mEvaDirector?.producer?.cancel()
-            }
-        } else {
-            super.onBackPressed()
         }
     }
 }

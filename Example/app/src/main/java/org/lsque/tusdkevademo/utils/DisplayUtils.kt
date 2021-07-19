@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.ComponentCallbacks
 import android.content.res.Configuration
-import org.lasque.tusdk.core.utils.ContextUtils.density
+import org.lasque.tusdkpulse.core.utils.ContextUtils.density
 import androidx.annotation.NonNull
 
 

@@ -30,8 +30,8 @@ import kotlinx.android.synthetic.main.model_detail_activity.lsq_model_seles
 import kotlinx.android.synthetic.main.model_detail_activity.lsq_player_img
 import kotlinx.android.synthetic.main.title_item_layout.*
 import org.jetbrains.anko.startActivity
-import org.lasque.tusdk.core.utils.AssetsHelper
-import org.lasque.tusdk.core.utils.TLog
+import org.lasque.tusdkpulse.core.utils.AssetsHelper
+import org.lasque.tusdkpulse.core.utils.TLog
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.min

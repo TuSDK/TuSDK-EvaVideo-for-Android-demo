@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import org.lasque.tusdk.core.TuSdkContext;
-import org.lasque.tusdk.core.utils.ThreadHelper;
+import org.lasque.tusdkpulse.core.TuSdkContext;
+import org.lasque.tusdkpulse.core.utils.ThreadHelper;
 import org.lsque.tusdkevademo.R;
 import org.lsque.tusdkevademo.playview.rangeselect.TuSdkMovieColorGroupView;
 import org.lsque.tusdkevademo.playview.rangeselect.TuSdkMovieColorRectView;

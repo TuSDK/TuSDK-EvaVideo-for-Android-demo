@@ -9,7 +9,7 @@ import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import org.lasque.tusdk.core.utils.ThreadHelper;
+import org.lasque.tusdkpulse.core.utils.ThreadHelper;
 import org.lsque.tusdkevademo.R;
 import org.lsque.tusdkevademo.playview.rangeselect.TuSdkMovieGrayView;
 

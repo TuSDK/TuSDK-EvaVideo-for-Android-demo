@@ -21,9 +21,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.movie_album_fragment.*
 import org.jetbrains.anko.startActivityForResult
-import org.lasque.tusdk.core.utils.sqllite.ImageSqlHelper
-import org.lasque.tusdk.core.utils.sqllite.ImageSqlInfo
-import org.lasque.tusdk.impl.view.widget.TuProgressHub
+import org.lasque.tusdkpulse.core.utils.sqllite.ImageSqlHelper
+import org.lasque.tusdkpulse.core.utils.sqllite.ImageSqlInfo
+import org.lasque.tusdkpulse.impl.view.widget.TuProgressHub
 import org.lsque.tusdkevademo.ModelEditorActivity.Companion.ALBUM_REQUEST_CODE_ALPHA_VIDEO
 import java.util.*
 import kotlin.collections.ArrayList

@@ -19,7 +19,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.jetbrains.anko.find
-import org.lasque.tusdk.core.view.TuSdkViewHelper
+import org.lasque.tusdkpulse.core.view.TuSdkViewHelper
 
 class AlbumAdapter(context: Context, albumList: List<AlbumInfo>) : RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
 

@@ -5,8 +5,8 @@ import android.media.MediaCodecList;
 import android.os.Build;
 import android.util.SizeF;
 
-import org.lasque.tusdk.core.TuSdkContext;
-import org.lasque.tusdk.core.struct.TuSdkSize;
+import org.lasque.tusdkpulse.core.TuSdkContext;
+import org.lasque.tusdkpulse.core.struct.TuSdkSize;
 
 /**
  * TuSDK

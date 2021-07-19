@@ -11,7 +11,7 @@
     <ImageView
             android:id="@+id/lsq_model_icon"
             android:layout_width="170dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

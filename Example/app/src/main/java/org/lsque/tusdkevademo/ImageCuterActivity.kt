@@ -21,16 +21,15 @@ import android.widget.RelativeLayout
 import kotlinx.android.synthetic.main.activity_image_cuter.*
 import kotlinx.android.synthetic.main.title_item_layout.*
 import org.jetbrains.anko.textColor
-import org.lasque.tusdk.core.struct.TuSdkSize
-import org.lasque.tusdk.core.utils.TLog
-import org.lasque.tusdk.core.utils.image.BitmapHelper
-import org.lasque.tusdk.core.view.TuSdkTouchImageView
-import org.lasque.tusdk.core.view.TuSdkViewHelper
-import org.lasque.tusdk.core.view.widget.TuMaskRegionView
+import org.lasque.tusdkpulse.core.struct.TuSdkSize
+import org.lasque.tusdkpulse.core.utils.TLog
+import org.lasque.tusdkpulse.core.utils.image.BitmapHelper
+import org.lasque.tusdkpulse.core.view.TuSdkTouchImageView
+import org.lasque.tusdkpulse.core.view.TuSdkViewHelper
+import org.lsque.tusdkevademo.playview.TuMaskRegionView
 import java.io.File
 
 class ImageCuterActivity : ScreenAdapterActivity() {
-
     /*************************** view *******************************/
     /** 图片视图  */
     private var mImageView: TuSdkTouchImageView? = null

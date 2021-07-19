@@ -30,11 +30,11 @@ import com.tusdk.pulse.eva.EvaModel
 import com.tusdk.pulse.eva.EvaReplaceConfig
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
-import org.lasque.tusdk.core.struct.TuSdkSize
-import org.lasque.tusdk.core.utils.AssetsHelper
-import org.lasque.tusdk.core.utils.StringHelper
-import org.lasque.tusdk.core.utils.image.BitmapHelper
-import org.lasque.tusdk.core.utils.image.ImageOrientation
+import org.lasque.tusdkpulse.core.struct.TuSdkSize
+import org.lasque.tusdkpulse.core.utils.AssetsHelper
+import org.lasque.tusdkpulse.core.utils.StringHelper
+import org.lasque.tusdkpulse.core.utils.image.BitmapHelper
+import org.lasque.tusdkpulse.core.utils.image.ImageOrientation
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import java.util.*

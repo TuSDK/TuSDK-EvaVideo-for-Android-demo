@@ -18,7 +18,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
-import org.lasque.tusdk.core.view.TuSdkViewHelper
+import org.lasque.tusdkpulse.core.view.TuSdkViewHelper
 import java.util.*
 
 

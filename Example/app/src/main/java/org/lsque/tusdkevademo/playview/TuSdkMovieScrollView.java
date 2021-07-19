@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 
-import org.lasque.tusdk.core.TuSdkContext;
-import org.lasque.tusdk.core.utils.TLog;
+import org.lasque.tusdkpulse.core.TuSdkContext;
+import org.lasque.tusdkpulse.core.utils.TLog;
 import org.lsque.tusdkevademo.playview.rangeselect.TuSdkMovieColorGroupView;
 import org.lsque.tusdkevademo.playview.rangeselect.TuSdkMovieColorRectView;
 

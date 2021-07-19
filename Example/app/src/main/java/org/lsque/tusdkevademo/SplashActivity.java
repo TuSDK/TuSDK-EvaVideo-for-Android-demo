@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.tusdk.pulse.eva.TuSDKEva;
 
-import org.lasque.tusdk.core.utils.ThreadHelper;
+import org.lasque.tusdkpulse.core.utils.ThreadHelper;
 
 /**
  * 启动页

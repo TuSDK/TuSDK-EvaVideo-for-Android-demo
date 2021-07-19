@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
-import org.lasque.tusdk.impl.TuSpecialScreenHelper;
+import org.lasque.tusdkpulse.impl.TuSpecialScreenHelper;
 import org.lsque.tusdkevademo.utils.AppManager;
 import org.lsque.tusdkevademo.utils.DisplayUtils;
 

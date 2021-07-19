@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import org.lasque.tusdk.core.utils.TLog;
+import org.lasque.tusdkpulse.core.utils.TLog;
 
 import java.util.ArrayList;
 import java.util.List;

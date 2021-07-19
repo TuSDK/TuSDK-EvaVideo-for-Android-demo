@@ -29,11 +29,11 @@ import kotlinx.android.synthetic.main.demo_entry_activity.lsq_model_list
 import kotlinx.android.synthetic.main.network_model_example_activity.*
 import org.jetbrains.anko.startActivity
 import org.json.JSONArray
-import org.lasque.tusdk.core.TuSdkContext
-import org.lasque.tusdk.core.utils.AssetsHelper
-import org.lasque.tusdk.core.utils.FileHelper
-import org.lasque.tusdk.core.utils.TLog
-import org.lasque.tusdk.core.utils.ThreadHelper
+import org.lasque.tusdkpulse.core.TuSdkContext
+import org.lasque.tusdkpulse.core.utils.AssetsHelper
+import org.lasque.tusdkpulse.core.utils.FileHelper
+import org.lasque.tusdkpulse.core.utils.TLog
+import org.lasque.tusdkpulse.core.utils.ThreadHelper
 import org.lsque.tusdkevademo.utils.DownloadManagerUtil
 import org.lsque.tusdkevademo.utils.EVAItem
 import org.lsque.tusdkevademo.utils.PermissionUtils

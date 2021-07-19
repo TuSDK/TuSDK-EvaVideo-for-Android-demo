@@ -9,6 +9,8 @@
 
 
     <SeekBar
+        android:min="0"
+        android:max="10"
         android:id="@+id/lsq_voice_seek"
         android:layout_width="0dp"
         android:layout_height="20dp"

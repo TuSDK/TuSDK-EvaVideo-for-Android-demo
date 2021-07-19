@@ -7,11 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".EvaPlayActivity">
 
-    <org.lasque.tusdk.core.seles.output.SelesView
+    <org.lasque.tusdkpulse.core.seles.output.SelesView
         android:id="@+id/lsq_seles"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </org.lasque.tusdk.core.seles.output.SelesView>
+    </org.lasque.tusdkpulse.core.seles.output.SelesView>
 
     <LinearLayout
         android:id="@+id/lsq_control"
