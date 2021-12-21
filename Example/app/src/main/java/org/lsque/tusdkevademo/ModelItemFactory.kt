@@ -45,14 +45,14 @@ object ModelItemFactory {
 
 data class ModelItem(var modelDir:String,var modelName : String,var templateName:String,var modelDownloadUrl : String,var fileName:String,var modelDownloadFilePath:String , var iconName : String,var modelVer : String,var modelId : Int) : Parcelable {
     constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
+            parcel.readString()!!,
+            parcel.readString()!!,
+            parcel.readString()!!,
+            parcel.readString()!!,
+            parcel.readString()!!,
+            parcel.readString()!!,
+            parcel.readString()!!,
+            parcel.readString()!!,
             parcel.readInt()) {
     }
 

@@ -98,6 +98,8 @@ class MovieCuterActivity : ScreenAdapterActivity() {
 
     private var isFirstOnResume = true
 
+    private var mCurrentVideoSize = TuSdkSize.create(0)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_editor_cut)
@@ -188,8 +190,7 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         }
         val width = intent.getIntExtra("width", 0)
         val height = intent.getIntExtra("height", 0)
-        val videoPath = intent.getStringExtra("videoPath")
-        val maxDurationUs = intent.getFloatExtra("videoDuration", 0f)
+        val videoPath = intent.getStringExtra("videoPath")!!
         mDurationTimeUs = getVideoFormat(videoPath)!!.getLong(MediaFormat.KEY_DURATION)
         initPlayer()
         setStateChangedListener()
@@ -237,10 +238,18 @@ class MovieCuterActivity : ScreenAdapterActivity() {
                 var bottom : Float = 1.0f
                 var right : Float = 1.0f
 
-                val videoViewSize = TuSdkSize.create(lsq_media_player!!.width,lsq_media_player!!.height)
+                val videoViewSize = mCurrentVideoSize
                 val regionSize = TuSdkSize.create(lsq_cutRegionView.regionRect.width(),lsq_cutRegionView.regionRect.height())
-                val currentVideoViewSize = videoViewSize.scale(state!!.zoom)
-                val regionSizePercent = TuSdkSizeF.create(regionSize.width.toFloat()  / currentVideoViewSize.width.toFloat(),regionSize.height.toFloat()/ currentVideoViewSize.height.toFloat())
+                var currentVideoViewSize = videoViewSize.scale(state!!.zoom)
+                val regionSizePercent =
+                    if (regionSize.maxSide() > currentVideoViewSize.maxSide()){
+                        val scale = regionSize.maxSide().toFloat() / currentVideoViewSize.maxSide().toFloat()
+                        currentVideoViewSize = currentVideoViewSize.scale(scale)
+                        TuSdkSizeF.create(regionSize.width.toFloat()  / currentVideoViewSize.width.toFloat(),regionSize.height.toFloat()/ currentVideoViewSize.height.toFloat())
+                    } else {
+                        TuSdkSizeF.create(regionSize.width.toFloat()  / currentVideoViewSize.width.toFloat(),regionSize.height.toFloat()/ currentVideoViewSize.height.toFloat())
+
+                    }
                 left = if (regionSize.width >= currentVideoViewSize.width){
                     0.0f
                 } else {
@@ -251,9 +260,13 @@ class MovieCuterActivity : ScreenAdapterActivity() {
                 } else {
                     max(0.0f,abs(state.y) / currentVideoViewSize.height)
                 }
-                bottom = min(1.0f,top + regionSizePercent.height)
-                right = min(1.0f,left + regionSizePercent.width)
+//                bottom = min(1.0f,top + regionSizePercent.height)
+                bottom = top + regionSizePercent.height
+//                right = min(1.0f,left + regionSizePercent.width)
+                right = left + regionSizePercent.width
                 mCurrentCropRect.set(left, top, right, bottom)
+
+                TLog.e("mDefaultCropRect = $mDefaultCropRect current crop rect = $mCurrentCropRect video size $currentVideoViewSize region size $regionSize regionSizePercent = ${regionSizePercent.width}:${regionSizePercent.height}")
             }
 
         })
@@ -346,9 +359,19 @@ class MovieCuterActivity : ScreenAdapterActivity() {
     private var w_h_p = 0f
 
     fun initPlayer() {
-        val videoPath = intent.getStringExtra("videoPath")
+        val videoPath = intent.getStringExtra("videoPath")!!
         val maxDurationUs = intent.getFloatExtra("videoDuration", 0f)
-        mDurationTimeUs = getVideoFormat(videoPath)!!.getLong(MediaFormat.KEY_DURATION)
+
+        val width = intent.getIntExtra("width", 0)
+
+        val format = getVideoFormat(videoPath)!!
+
+        mDurationTimeUs = format.getLong(MediaFormat.KEY_DURATION)
+
+        val videoWidth = format.getInteger(MediaFormat.KEY_WIDTH)
+        val videoHeight = format.getInteger(MediaFormat.KEY_HEIGHT)
+
+        mCurrentVideoSize.set(videoWidth,videoHeight)
 
 
         lsq_media_player.setPlayerCallback(object : TuSDKMediaPlayer.PlayerCallback{
@@ -370,12 +393,18 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         })
         lsq_media_player.startPlay(videoPath)
 
-        maxPercent = min((maxDurationUs / mDurationTimeUs), 1f)
+        maxPercent = min((maxDurationUs.toFloat() / mDurationTimeUs), 1f)
         lsq_range_line.setMaxWidth(maxPercent)
         lsq_range_tips.text = "需截取视频的时长范围为 : 1.0s 至 ${maxDurationUs / 1000f / 1000f}s"
 
         val duration = mDurationTimeUs / 1000000.0f
         mRightTimeRangUs = (mDurationTimeUs * maxPercent).toLong()
+
+        if (width > videoWidth){
+            val scale = width.toFloat() / videoWidth
+            lsq_media_player.scaleX = scale
+            lsq_media_player.scaleY = scale
+        }
 
         mVideoPlayer = lsq_media_player
         mVideoPlayer?.start()
@@ -417,7 +446,7 @@ class MovieCuterActivity : ScreenAdapterActivity() {
 
 
     private fun getMimeTypeFor(format: MediaFormat): String {
-        return format.getString(MediaFormat.KEY_MIME)
+        return format.getString(MediaFormat.KEY_MIME)!!
     }
 
 

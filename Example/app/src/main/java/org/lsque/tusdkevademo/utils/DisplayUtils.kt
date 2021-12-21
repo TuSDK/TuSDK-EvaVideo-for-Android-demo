@@ -33,13 +33,13 @@ object DisplayUtils {
             sNoncompatScaledDensity = appDisplayMetrics.scaledDensity
             // 防止系统切换后不起作用
             application.registerComponentCallbacks(object : ComponentCallbacks {
-                override fun onConfigurationChanged(newConfig: Configuration?) {
+                override fun onConfigurationChanged(newConfig: Configuration) {
                     if (newConfig != null && newConfig!!.fontScale > 0) {
                         sNoncompatScaledDensity = application.getResources().getDisplayMetrics().scaledDensity
                     }
                 }
 
-               override fun onLowMemory() {
+                override fun onLowMemory() {
 
                 }
             })

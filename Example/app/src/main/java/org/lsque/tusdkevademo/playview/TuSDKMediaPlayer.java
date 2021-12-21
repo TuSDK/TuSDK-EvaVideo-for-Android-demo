@@ -300,21 +300,41 @@ public class TuSDKMediaPlayer extends FrameLayout {
     public void setVideoSize(SurfaceView surfaceView, int width, int height) {
         if (surfaceView != null) {
             TuSdkSize tuSdkSize = TuSdkContext.getDisplaySize();
-            int screenWidth = (int) tuSdkSize.width;
-            int screenHeight = (int) (tuSdkSize.height);
+            int screenWidth = surfaceView.getWidth();
+            int screenHeight = surfaceView.getHeight();
 
-            Rect boundingRect = new Rect();
-            boundingRect.left = 0;
-            boundingRect.right = screenWidth;
-            boundingRect.top = 0;
-            boundingRect.bottom = screenHeight;
-            Rect rect = RectHelper.makeRectWithAspectRatioInsideRect(new TuSdkSize(width, height), boundingRect);
 
-            int w = rect.right - rect.left;
-            int h = rect.bottom - rect.top;
+            TuSdkSize videoSize = TuSdkSize.create(width,height);
+
+            int w = 0;
+            int h = 0;
+
+            if (width >= height){
+                h = screenHeight;
+                w = (int) (((float) screenHeight) * ((float) width) / height);
+            } else {
+                w = screenWidth;
+                h = (int) (screenWidth * (((float) height) / width));
+            }
+
+
+
+//            Rect boundingRect = new Rect();
+//            boundingRect.left = 0;
+//            boundingRect.right = screenWidth;
+//            boundingRect.top = 0;
+//            boundingRect.bottom = screenHeight;
+//            Rect rect = RectHelper.makeRectWithAspectRatioInsideRect(new TuSdkSize(width, height), boundingRect);
+
+//            int w = rect.right - rect.left;
+//            int h = rect.bottom - rect.top;
             LayoutParams lp = new LayoutParams(w, h);
-            lp.setMargins(rect.left, rect.top, 0, 0);
+//            lp.setMargins(rect.left, rect.top, 0, 0);
             surfaceView.setLayoutParams(lp);
+
+            getLayoutParams().width = w;
+            getLayoutParams().height = screenHeight;
+            setLayoutParams(getLayoutParams());
         }
     }
 }

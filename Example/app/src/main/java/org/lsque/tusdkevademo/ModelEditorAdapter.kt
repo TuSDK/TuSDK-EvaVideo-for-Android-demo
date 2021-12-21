@@ -33,8 +33,10 @@ import org.jetbrains.anko.textColor
 import org.lasque.tusdkpulse.core.struct.TuSdkSize
 import org.lasque.tusdkpulse.core.utils.AssetsHelper
 import org.lasque.tusdkpulse.core.utils.StringHelper
+import org.lasque.tusdkpulse.core.utils.TLog
 import org.lasque.tusdkpulse.core.utils.image.BitmapHelper
 import org.lasque.tusdkpulse.core.utils.image.ImageOrientation
+import java.io.File
 import java.nio.ByteBuffer
 import java.nio.IntBuffer
 import java.util.*
@@ -87,20 +89,29 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
                 holder!!.itemView.setOnClickListener { mItemClickListener!!.onImageItemClick(holder.itemView, mModelList[position].modelItem as EvaModel.VideoReplaceItem, position, EditType.Image) }
 
                 var imageEntriy = (item.modelItem as EvaModel.VideoReplaceItem)
-                val loadImage = imageEntriy.thumbnail
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    loadImage.isPremultiplied = true
-                }
-                var result = loadImage
-                if (mConfigMap[imageEntriy.id] != null){
-                    val size = TuSdkSize.create(loadImage)
-                    val config = mConfigMap[imageEntriy.id] as EvaReplaceConfig.ImageOrVideo
-                    val targetCrop : Rect = Rect(
-                            config.crop.left.times(size.width).toInt(),config.crop.top.times(size.height).toInt(),config.crop.right.times(size.width).toInt(),config.crop.bottom.times(size.height).toInt()
-                    )
-                    result = BitmapHelper.imgCorp(loadImage,targetCrop,0f,ImageOrientation.Up)
-                }
-                holder.imageView.setImageBitmap(result)
+                TLog.e("current image path ${imageEntriy.resPath}")
+                Glide.with(mContext).asBitmap().load(imageEntriy.resPath).into(object : CustomViewTarget<ImageView,Bitmap>(holder.imageView){
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        TLog.e("image load failed")
+                    }
+
+                    override fun onResourceCleared(placeholder: Drawable?) {
+                    }
+
+                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                        var result = resource
+                        if (mConfigMap[imageEntriy.id] != null){
+                            val size = TuSdkSize.create(result)
+                            val config = mConfigMap[imageEntriy.id] as EvaReplaceConfig.ImageOrVideo
+                            val targetCrop : Rect = Rect(
+                                config.crop.left.times(size.width).toInt(),config.crop.top.times(size.height).toInt(),config.crop.right.times(size.width).toInt(),config.crop.bottom.times(size.height).toInt()
+                            )
+                            result = BitmapHelper.imgCorp(result,targetCrop,0f,ImageOrientation.Up)
+                        }
+                        holder.imageView.setImageBitmap(result)
+                    }
+
+                })
             }
 
             EditType.Text -> {
@@ -134,27 +145,27 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
                 if (currentItem.resPath.startsWith(STORAGE)) {
                     val orientation = BitmapHelper.getImageOrientation(currentItem.resPath)
                     Glide.with(mContext).asBitmap().load(currentItem.resPath)
-                            .into(object : CustomViewTarget<ImageView,Bitmap>(holder.imageView){
-                                override fun onLoadFailed(errorDrawable: Drawable?) {
-                                }
+                        .into(object : CustomViewTarget<ImageView,Bitmap>(holder.imageView){
+                            override fun onLoadFailed(errorDrawable: Drawable?) {
+                            }
 
-                                override fun onResourceCleared(placeholder: Drawable?) {
-                                }
+                            override fun onResourceCleared(placeholder: Drawable?) {
+                            }
 
-                                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                    var result = resource
-                                    if (mConfigMap[currentItem.id] != null){
-                                        val size = TuSdkSize.create(resource)
-                                        val config = mConfigMap[currentItem.id] as EvaReplaceConfig.ImageOrVideo
-                                        val targetCrop : Rect = Rect(
-                                                config.crop.left.times(size.width).toInt(),config.crop.top.times(size.height).toInt(),config.crop.right.times(size.width).toInt(),config.crop.bottom.times(size.height).toInt()
-                                        )
-                                        result = BitmapHelper.imgCorp(resource,targetCrop,0f,ImageOrientation.Up)
-                                    }
-                                    view.setImageBitmap(result)
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                var result = resource
+                                if (mConfigMap[currentItem.id] != null){
+                                    val size = TuSdkSize.create(resource)
+                                    val config = mConfigMap[currentItem.id] as EvaReplaceConfig.ImageOrVideo
+                                    val targetCrop : Rect = Rect(
+                                        config.crop.left.times(size.width).toInt(),config.crop.top.times(size.height).toInt(),config.crop.right.times(size.width).toInt(),config.crop.bottom.times(size.height).toInt()
+                                    )
+                                    result = BitmapHelper.imgCorp(resource,targetCrop,0f,ImageOrientation.Up)
                                 }
+                                view.setImageBitmap(result)
+                            }
 
-                            })
+                        })
                 } else if (AssetsHelper.hasAssets(mContext,currentItem.resPath)){
                     Glide.with(mContext).asBitmap().load("file:///android_asset/${currentItem.resPath}").into((holder.imageView))
                 } else{
@@ -168,7 +179,7 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
                             val size = TuSdkSize.create(loadImage)
                             val config = mConfigMap[currentItem.id] as EvaReplaceConfig.ImageOrVideo
                             val targetCrop : Rect = Rect(
-                                    config.crop.left.times(size.width).toInt(),config.crop.top.times(size.height).toInt(),config.crop.right.times(size.width).toInt(),config.crop.bottom.times(size.height).toInt()
+                                config.crop.left.times(size.width).toInt(),config.crop.top.times(size.height).toInt(),config.crop.right.times(size.width).toInt(),config.crop.bottom.times(size.height).toInt()
                             )
                             result = BitmapHelper.imgCorp(loadImage,targetCrop,0f,ImageOrientation.Up)
                         }

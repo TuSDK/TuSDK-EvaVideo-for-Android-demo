@@ -78,7 +78,7 @@ class NetworkModelAdapter(
     override fun onBindViewHolder(holder: ViewHolder, p1: Int) {
         if (mDownloadMap[p1] == null) mDownloadMap.put(p1, false)
         val mModelPath = mContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE)
-            .getString(mModelList[p1]!!.modelDownloadUrl, "")
+            .getString(mModelList[p1]!!.modelDownloadUrl, "")!!
         val mModelVer = mContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE)
             .getString("${mModelList[p1].modelId}_ver", "")
         if (!TextUtils.equals(mModelVer, mModelList[p1].modelVer)) mDownloadMap.put(p1, false)
@@ -101,14 +101,14 @@ class NetworkModelAdapter(
                 .asBitmap()
                 .load("file:///android_asset/${mModelList[p1].modelDir}/cover.jpg")
                 .override(TuSdkContext.dip2px(170f), TuSdkContext.dip2px(300f))
-                .placeholder(R.drawable.logo_set)
+//                .placeholder(R.drawable.logo_set)
                 .into(holder.mImageView)
         } else {
             Glide.with(mContext)
                 .asBitmap()
                 .load("http://files.tusdk.com/eva/${mModelList[p1].iconName}")
                 .override(TuSdkContext.dip2px(170f), TuSdkContext.dip2px(300f))
-                .placeholder(R.drawable.logo_set).error(R.drawable.logo_set)
+//                .placeholder(R.drawable.logo_set).error(R.drawable.logo_set)
                 .into(holder.mImageView)
         }
         if (!TextUtils.isEmpty(mModelPath) && mModelVer == mModelList[p1].modelVer) {
@@ -178,7 +178,7 @@ class NetworkModelAdapter(
     private fun isFileExists(filename: String, dirName: String): Boolean {
         val assetManager = mContext.assets
         try {
-            val names = assetManager.list(dirName)
+            val names = assetManager.list(dirName)!!
             for (i in names.indices) {
                 if (names[i] == filename.trim { it <= ' ' }) {
                     return true

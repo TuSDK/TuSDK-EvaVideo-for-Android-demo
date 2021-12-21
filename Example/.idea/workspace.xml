@@ -14,96 +14,114 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="40061123-fa58-4bce-9a42-e13fd4b05602" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulseCore_4_0_3_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulseEva_3_0_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulse_2_0_4_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_junit_4_12.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/libs/TuSDKPulse-2.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/libs/TuSDKPulseCore-4.0.3.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/libs/TuSDKPulseEva-3.0.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulseCore_4_1_1_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulse_2_0_8_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_activity_activity_1_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_1_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_experimental_1_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_1_1_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_resources_1_1_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_common_2_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cardview_cardview_1_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_collection_collection_1_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_coordinatorlayout_coordinatorlayout_1_1_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_1_3_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_ktx_1_3_2_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_1_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_1_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_1_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_1_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_recyclerview_recyclerview_1_1_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_savedstate_savedstate_1_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_transition_transition_1_2_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_1_1_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_1_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_1_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_viewpager2_viewpager2_1_0_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_afollestad_material_dialogs_core_3_3_0_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_material_material_1_2_1_aar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_3_71.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_71.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_3_61.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/libs/TuSDKPulseEva-3.0.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/aidl/org/lsque/tusdkevademo/EVASaverCallback.aidl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/aidl/org/lsque/tusdkevademo/IEVARenderServer.aidl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/server/EVARenderServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/MD5Util.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ReleaseNote/Release-Notes-3.0.1-Android.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKCore_4_0_0_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulseEva_2_0_0_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulse_2_0_0_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulseCore_4_0_3_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulseEva_3_0_0_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulseEva_3_0_1_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulse_2_0_4_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_1_0_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_1_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_common_2_0_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_collection_collection_1_0_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_coordinatorlayout_coordinatorlayout_1_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_1_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_0_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_recyclerview_recyclerview_1_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_1_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_0_0_aar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_0_0_aar.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_alexvasilkov_gesture_views_2_5_2_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_alexvasilkov_gesture_views_2_5_2_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_gifdecoder_4_9_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_gifdecoder_4_9_0_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_glide_4_9_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_glide_4_9_0_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_jakob_grabner_Circle_Progress_View_v1_3_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_jakob_grabner_Circle_Progress_View_v1_3_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_junit_4_13.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_0_10_8_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_coroutines_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_coroutines_0_10_8_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_support_v4_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_support_v4_0_10_8_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_appcompatV7_base_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_appcompatV7_base_0_10_8_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_commons_base_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_commons_base_0_10_8_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_supportV4_base_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_supportV4_base_0_10_8_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_3_40.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_40.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_3_40.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKCore-4.0.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKPulse-2.0.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKPulseEva-2.0.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/arm64-v8a/libtusdk-core.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/arm64-v8a/libtusdk-eva.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/arm64-v8a/libtusdk-pulse.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/armeabi-v7a/libtusdk-core.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/armeabi-v7a/libtusdk-eva.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/armeabi-v7a/libtusdk-pulse.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/x86/libtusdk-core.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/x86/libtusdk-eva.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/x86/libtusdk-pulse.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/x86_64/libtusdk-core.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/x86_64/libtusdk-eva.so" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/x86_64/libtusdk-pulse.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKPulse-2.0.4.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/libs/TuSDKPulse-2.0.8.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKPulseCore-4.0.3.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/libs/TuSDKPulseCore-4.1.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKPulseEva-3.0.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDK.bundle/others/lsq_tusdk_configs.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/TuSDKPulse.bundle/others/lsq_tusdk_configs.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/TuSDKPulse.bundle/others/lsq_tusdk_configs.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/assets/lsq_eva_142.eva" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/lsq_eva_142.eva" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AudioListActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AudioListActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ImageCuterActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ImageCuterActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelAdapter.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelDetailActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelDetailActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelItemFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelItemFactory.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/MovieCuterActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/MovieCuterActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/NetworkModelAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/NetworkModelAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/NetworkModelExampleActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/NetworkModelExampleActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ScreenAdapterActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ScreenAdapterActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/SplashActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/SplashActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/TuApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/TuApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieCoverListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieCoverListView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieScrollContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieScrollContent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieScrollView.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkMovieScrollView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkRangeSelectionBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSdkRangeSelectionBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSDKMediaPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSDKMediaPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/DisplayUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/DisplayUtils.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/DownloadManagerUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/DownloadManagerUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/ProduceOutputUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/ProduceOutputUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/views/TouchSelesView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-core.so" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-eva.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-eva.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-pulse.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-pulse.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/armeabi-v7a/libtusdk-core.so" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/armeabi-v7a/libtusdk-eva.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/armeabi-v7a/libtusdk-eva.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/armeabi-v7a/libtusdk-pulse.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/armeabi-v7a/libtusdk-pulse.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/x86/libtusdk-core.so" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/x86/libtusdk-eva.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/x86/libtusdk-eva.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/x86/libtusdk-pulse.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/x86/libtusdk-pulse.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/x86_64/libtusdk-core.so" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/x86_64/libtusdk-eva.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/x86_64/libtusdk-eva.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/x86_64/libtusdk-pulse.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/x86_64/libtusdk-pulse.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_eva_play.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_eva_play.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_image_cuter.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_image_cuter.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_movie_editor_cut.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_movie_editor_cut.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/model_editor_activity.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/model_editor_activity.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/network_model_list_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/network_model_list_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[SerialNumber@8UJDU20309001390]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[378031ed]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -117,7 +135,7 @@
     </system>
   </component>
   <component name="GenerateSignedApkSettings">
-    <option name="KEY_STORE_PATH" value="D:\work\droid_tu_sdk_project\droid-sdk-eva\Signature\publish.keystore" />
+    <option name="KEY_STORE_PATH" value="D:\tusdk-work\lasque\android-eva-demo\Signature\publish.keystore" />
     <option name="KEY_ALIAS" value="tusdk" />
     <option name="REMEMBER_PASSWORDS" value="true" />
     <option name="BUILD_TARGET_KEY" value="apk" />
@@ -134,32 +152,44 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="ApkExportedModule" value="app" />
+    <property name="ApkExportedModule" value="Example.app" />
     <property name="DEBUGGABLE_DEVICE" value="xiaomi-redmi_k30_pro-378031ed" />
     <property name="DEBUGGABLE_PROCESS" value="org.lasque.tusdkevademo" />
-    <property name="DEBUGGER_ID" value="Auto" />
+    <property name="DEBUGGER_ID" value="Java" />
     <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="378031ed" />
     <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-05-17T07:38:56.956Z" />
-    <property name="ExportApk.ApkPath" value="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app" />
+    <property name="ExportApk.ApkPath" value="D:\tusdk-work\release\TUSDK-Eva-release\Example\app\release" />
     <property name="ExportApk.BuildVariants" value="release" />
     <property name="ExportApk.SignV1" value="true" />
     <property name="ExportApk.SignV2" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHOW_ALL_PROCESSES" value="true" />
+    <property name="android-custom-viewD:/tusdk-work/release/TUSDK-Eva-release/Example/app/src/main/java/org/lsque/tusdkevademo/playview/TuSDKMediaPlayer.java_SELECTED" value="TuSDKMediaPlayer" />
     <property name="android.project.structure.last.selected" value="SDK Location" />
     <property name="android.project.structure.proportion" value="0.15" />
     <property name="android.sdk.path" value="$PROJECT_DIR$/../../../../sdk" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="device.picker.selection" value="46HDU19306006421" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/res/drawable" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/build.gradle" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/assets/TuSDKPulse.bundle/others" />
     <property name="not.eligible.for.single.variant.sync" value="true" />
+    <property name="project.structure.last.edited" value="Dependencies" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.2893401" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
     <property name="show.do.not.ask.upgrade.gradle.plugin" value="3.1.4" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\tusdk-work\release\TUSDK-Eva-release\Example\app\src\main\assets\TuSDKPulse.bundle\others" />
+      <recent name="D:\tusdk-work\release\TUSDK-Eva-release\Example\app\src\main\assets" />
+      <recent name="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app\src\main\jniLibs" />
+      <recent name="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app\src\main\assets" />
+      <recent name="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app\libs" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\tusdk-work\release\TUSDK-Eva-release\Example\app\src\main\assets" />
       <recent name="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app\src\main\assets" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
@@ -167,13 +197,6 @@
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.lsque.tusdkevademo.utils" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\tusdk-work\release\TUSDK-Eva-release\Example\app\src\main\assets" />
-      <recent name="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app\src\main\jniLibs" />
-      <recent name="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app\src\main\assets" />
-      <recent name="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app\libs" />
-      <recent name="D:\work\droid_tu_sdk-release\tusdk-evavideo-for-android-demo\Example\app\src\main\assets\TuSDK.bundle\others" />
     </key>
   </component>
   <component name="RunManager" selected="Android App.app">
@@ -271,7 +294,7 @@
       <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
       <option name="FORCE_STOP_RUNNING_APP" value="true" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="DEBUGGER_TYPE" value="Auto" />
+      <option name="DEBUGGER_TYPE" value="Java" />
       <Auto>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
         <option name="SHOW_STATIC_VARS" value="true" />
@@ -324,6 +347,10 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Android App.app" />
+      <item itemvalue="Android App.Example-app" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -351,29 +378,46 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
-  <component name="WindowStateProjectService">
-    <state width="2500" height="772" key="GridCell.Tab.0.bottom" timestamp="1625542165231">
-      <screen x="0" y="0" width="2560" height="1410" />
-    </state>
-    <state width="2500" height="772" key="GridCell.Tab.0.bottom/0.0.2560.1410@0.0.2560.1410" timestamp="1625542165231" />
-    <state width="2500" height="772" key="GridCell.Tab.0.center" timestamp="1625542165231">
-      <screen x="0" y="0" width="2560" height="1410" />
-    </state>
-    <state width="2500" height="772" key="GridCell.Tab.0.center/0.0.2560.1410@0.0.2560.1410" timestamp="1625542165231" />
-    <state width="2500" height="772" key="GridCell.Tab.0.left" timestamp="1625542165230">
-      <screen x="0" y="0" width="2560" height="1410" />
-    </state>
-    <state width="2500" height="772" key="GridCell.Tab.0.left/0.0.2560.1410@0.0.2560.1410" timestamp="1625542165230" />
-    <state width="2500" height="772" key="GridCell.Tab.0.right" timestamp="1625542165231">
-      <screen x="0" y="0" width="2560" height="1410" />
-    </state>
-    <state width="2500" height="772" key="GridCell.Tab.0.right/0.0.2560.1410@0.0.2560.1410" timestamp="1625542165231" />
-    <state x="943" y="321" width="672" height="678" key="search.everywhere.popup" timestamp="1621243586660">
-      <screen x="0" y="0" width="2560" height="1410" />
-    </state>
-    <state x="943" y="321" width="672" height="678" key="search.everywhere.popup/0.0.2560.1410@0.0.2560.1410" timestamp="1621243586660" />
-  </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt</url>
+          <line>415</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt</url>
+          <line>402</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt</url>
+          <line>405</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/MovieCuterActivity.kt</url>
+          <line>396</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/MovieCuterActivity.kt</url>
+          <line>362</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorAdapter.kt</url>
+          <line>84</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorAdapter.kt</url>
+          <line>101</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="Remote">
         <watch expression="mModelVer" />
@@ -384,6 +428,7 @@
         <watch expression="mModelList[p1].modelDir" />
         <watch expression="mModelList[p1].iconName" />
         <watch expression="mCurrentVideoItem" />
+        <watch expression="intent" />
       </configuration>
     </watches-manager>
   </component>

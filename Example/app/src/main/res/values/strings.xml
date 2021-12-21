@@ -14,4 +14,7 @@
     <string name="lsq_network_title">网络模板库</string>
 
     <string name="lsq_reset">一键重置</string>
+    
+    <string name="lsq_foreground_save">前台保存</string>
+    <string name="lsq_background_save">后台保存</string>
 </resources>

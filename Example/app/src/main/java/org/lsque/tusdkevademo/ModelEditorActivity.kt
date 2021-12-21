@@ -11,8 +11,10 @@
 package org.lsque.tusdkevademo
 
 import android.annotation.TargetApi
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.RectF
@@ -23,6 +25,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DCIM
+import android.os.IBinder
+import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
@@ -30,6 +34,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.tusdk.pulse.Engine
 import com.tusdk.pulse.Player
 import com.tusdk.pulse.Producer
@@ -39,18 +44,22 @@ import com.tusdk.pulse.eva.EvaReplaceConfig
 import com.tusdk.pulse.utils.AssetsMapper
 import kotlinx.android.synthetic.main.model_editor_activity.*
 import kotlinx.android.synthetic.main.title_item_layout.*
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.textColor
+import org.jetbrains.anko.toast
 import org.lasque.tusdkpulse.core.TuSdk
 import org.lasque.tusdkpulse.core.struct.TuSdkSize
 import org.lasque.tusdkpulse.core.utils.AssetsHelper
 import org.lasque.tusdkpulse.core.utils.TLog
 import org.lasque.tusdkpulse.core.utils.image.BitmapHelper
+import org.lsque.tusdkevademo.server.EVARenderServer
 import org.lsque.tusdkevademo.utils.ProduceOutputUtils
 import java.io.File
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.Semaphore
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.min
@@ -102,6 +111,8 @@ class ModelEditorActivity : ScreenAdapterActivity() {
     /**  可修改项列表 */
     private var mEditorList = LinkedList<EditorModelItem>()
 
+    private var mSavedMap = HashMap<String,String>()
+
     /**  当前图片修改项 */
     private var mCurrentImageItem: EvaModel.VideoReplaceItem? = null
     /**  当前视频修改项 */
@@ -133,21 +144,142 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
     private var mTargetProgress = 0L
 
+    private val mServiceLock = Semaphore(0)
+
+    private var mIEvaRenderServer : IEVARenderServer? = null
+
+    private var mIsModelInit = false
+
+    private val mEVAServerRunnable : Runnable = Runnable {
+        if (mIEvaRenderServer == null) return@Runnable
+        val evaRenderServer = mIEvaRenderServer!!
+
+        val modelItem = getIntent().getParcelableExtra<ModelItem>("model")!!
+        var taskId = ""
+        if (AssetsHelper.hasAssets(applicationContext,modelItem.templateName)){
+            taskId = evaRenderServer.initRenderTask(modelItem.templateName,true)
+        } else {
+            taskId = evaRenderServer.initRenderTask(modelItem.modelDownloadFilePath,false)
+        }
+
+        TLog.e("current render task id : ${taskId}")
+        if (TextUtils.isEmpty(taskId)){
+            runOnUiThread {
+                longToast("当前已经有渲染任务在进行了,请等待当前任务结束后再试")
+            }
+            return@Runnable
+        }
+
+        val outputFilePath =
+            "${Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM).path}/eva_output${System.currentTimeMillis()}.mp4"
+
+        val imageMap = java.util.HashMap<EvaModel.VideoReplaceItem,EvaReplaceConfig.ImageOrVideo>()
+        val videoMap = java.util.HashMap<EvaModel.VideoReplaceItem,EvaReplaceConfig.ImageOrVideo>()
+        val textMap = java.util.ArrayList<EvaModel.TextReplaceItem>()
+        val audioMap = java.util.HashMap<EvaModel.AudioReplaceItem,EvaReplaceConfig.Audio>()
+
+        for (item in mCurrentImageItems!!){
+            if (mDiffMap[item.id] == true){
+                if (item.isVideo){
+                    videoMap[item] = mConfigMap[item.id] as EvaReplaceConfig.ImageOrVideo
+                } else {
+                    imageMap[item] = mConfigMap[item.id] as EvaReplaceConfig.ImageOrVideo
+                }
+            }
+        }
+
+        for (item in mCurrentVideoItems!!){
+            if (mDiffMap[item.id] == true){
+                if (item.isVideo){
+                    videoMap[item] = mConfigMap[item.id] as EvaReplaceConfig.ImageOrVideo
+                } else {
+                    imageMap[item] = mConfigMap[item.id] as EvaReplaceConfig.ImageOrVideo
+                }
+            }
+        }
+
+        for (item in mCurrentAudioItems!!){
+            if (mDiffMap[item.id] == true){
+                audioMap[item] = mConfigMap[item.id] as EvaReplaceConfig.Audio
+            }
+        }
+
+        for (item in mCurrentTextItems!!){
+            if (mDiffMap[item.id] == true){
+                textMap.add(item)
+            }
+        }
+
+        evaRenderServer.updateImage(imageMap,taskId)
+        evaRenderServer.updateVideo(videoMap,taskId)
+        evaRenderServer.updateAudio(audioMap,taskId)
+        evaRenderServer.updateText(textMap,taskId)
+
+        mSavedMap.put(taskId,outputFilePath)
+
+        evaRenderServer.requestSave(taskId,outputFilePath,object : EVASaverCallback.Stub() {
+            override fun progress(p: Double,taskId : String) {
+                // applicationContext.getSharedPreferences("evaRenderService",Context.MODE_PRIVATE).edit().putFloat(taskId,p.toFloat()).apply()
+                runOnUiThread {
+                    TLog.e("当前进度 : "+ p + "当前任务ID : " + taskId)
+                }
+            }
+
+            override fun saveSuccess(taskId : String) {
+                sendBroadcast(
+                    Intent(
+                        Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                        Uri.fromFile(File(outputFilePath))
+                    )
+                )
+                this@ModelEditorActivity.serviceUnbind()
+
+                runOnUiThread {
+                    toast("渲染完成")
+
+
+                }
+            }
+
+            override fun saveFailure(taskId : String) {
+
+            }
+
+        })
+    }
+
+    private val serviceConnection = object : ServiceConnection{
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            mIEvaRenderServer = IEVARenderServer.Stub.asInterface(service)
+            TLog.e("服务连接成功")
+            mServiceLock.release()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            mIEvaRenderServer = null
+        }
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (data == null) return
         when (requestCode) {
             /**  图片裁剪回调*/
             ALBUM_REQUEST_CODE_IMAGE -> {
-                val rectArray = data!!.extras.getFloatArray("zoom")
-                mCurrentImageItem!!.resPath = data!!.getStringExtra("imagePath")
+                val rectArray = data!!.extras!!.getFloatArray("zoom")!!
+                mCurrentImageItem!!.resPath =  data!!.getStringExtra("imagePath")
+                if (TextUtils.isEmpty(mCurrentImageItem!!.resPath)){
+                    mCurrentImageItem!!.resPath =  data!!.getStringExtra("videoPath")
+                }
                 val config = EvaReplaceConfig.ImageOrVideo()
                 config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
                 config.audioMixWeight = 1F
                 mEvaThreadPool.execute {
                     mDiffMap[mCurrentImageItem!!.id] = true
                     mConfigMap[mCurrentImageItem!!.id] = config
-                    mEvaDirector!!.updateImage(mCurrentImageItem,config)
+                    val updateRes = mEvaDirector!!.updateImage(mCurrentImageItem,config)
+                    TLog.e("update image res ${updateRes} path = ${mCurrentImageItem!!.resPath}")
                 }
                 mTargetProgress = mCurrentImageItem!!.startTime
             }
@@ -155,7 +287,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             ALBUM_REQUEST_CODE_VIDEO -> {
                 when (resultCode) {
                     ALBUM_REQUEST_CODE_VIDEO -> {
-                        val rectArray = data!!.getFloatArrayExtra("zoom")
+                        val rectArray = data!!.getFloatArrayExtra("zoom")!!
                         mCurrentVideoItem!!.resPath = data!!.getStringExtra("videoPath")
                         val config = EvaReplaceConfig.ImageOrVideo()
                         config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
@@ -178,7 +310,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                     }
 
                     ALBUM_REQUEST_CODE_IMAGE -> {
-                        var rectArray = data!!.getFloatArrayExtra("zoom")
+                        var rectArray = data!!.getFloatArrayExtra("zoom")!!
                         mCurrentVideoItem!!.resPath = data!!.getStringExtra("imagePath")
                         val config = EvaReplaceConfig.ImageOrVideo()
                         config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
@@ -207,7 +339,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             /** 音频选择回调 */
             AUDIO_REQUEST_CODE -> {
                 if (mCurrentAudiItem != null){
-                    val audpath = AssetsMapper(this).mapAsset(data!!.extras.getString("audioPath"))
+                    val audpath = AssetsMapper(this).mapAsset(data!!.extras!!.getString("audioPath"))!!
                     mCurrentAudiItem!!.resPath = audpath
                     val config = EvaReplaceConfig.Audio()
                     config.audioMixWeight = 1f
@@ -260,7 +392,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 finish()
             }
         }
-        val modelItem = intent.getParcelableExtra<ModelItem>("model")
+        val modelItem = intent.getParcelableExtra<ModelItem>("model")!!
 
         lsq_model_seles.init(Engine.getInstance().mainGLContext)
 
@@ -275,7 +407,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                     EvaModel.AssetType.kIMAGE_ONLY -> isOnlyImage = true
                     EvaModel.AssetType.kIMAGE_VIDEO -> isOnlyImage = false
                 }
-                val videoDuration = (item.endTime - item.startTime) * 1000
+                val videoDuration = (item.endTime - item.startTime) * 1000f
                 mCurrentImageItem = item
                 startActivityForResult<AlbumActivity>(ALBUM_REQUEST_CODE_IMAGE, "videoDuration" to videoDuration, "onlyImage" to isOnlyImage, "onlyVideo" to false, "width" to item.width, "height" to item.height)
             }
@@ -456,61 +588,30 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         lsq_next.textColor = Color.parseColor("#007aff")
 
         lsq_next.setOnClickListener {
-            lsq_editor_cut_load.visibility = View.VISIBLE
-            lsq_editor_cut_load_parogress.setValue(0f)
-            setEnable(false)
-            /** 保存时必须把播放停止 */
+            if (!mIsModelInit){
+                toast("请等待模板加载完成")
+                return@setOnClickListener
+            }
+
+
             mEvaPlayer!!.pause()
+            /** 保存时必须把播放停止 */
             lsq_player_img.visibility = View.VISIBLE
+            MaterialDialog(this).show {
+                title(text = "保存方式")
+                message(text = "请选择保存方式,前台保存或后台保存")
 
-            mEvaThreadPool.execute {
-                val producer = mEvaDirector!!.newProducer()
-
-                val outputFilePath = "${Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM).path}/eva_output${System.currentTimeMillis()}.mp4"
-
-                val config : Producer.OutputConfig = Producer.OutputConfig()
-                config.watermarkPosition = 1
-                config.watermark = BitmapHelper.getRawBitmap(applicationContext,R.raw.sample_watermark)
-                val supportSize = ProduceOutputUtils.getSupportSize(MediaFormat.MIMETYPE_VIDEO_AVC)
-                val outputSize = TuSdkSize.create(mEvaModel!!.width,mEvaModel!!.height)
-                if (supportSize.maxSide() < outputSize.maxSide()){
-                    config.scale = supportSize.maxSide().toDouble() / outputSize.maxSide().toDouble()
-                }
-                producer.setOutputConfig(config)
-
-                producer.setListener { state, ts ->
-                    if (state == Producer.State.kEND){
-                        mEvaThreadPool.execute {
-                            producer.cancel()
-                            //producer.waitComplete()
-                            producer.release()
-                            mEvaDirector!!.resetProducer()
-                            mEvaPlayer!!.seekTo(mCurrentTs)
-                            TLog.e("ts : $mCurrentTs")
-                        }
-                        sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(File(outputFilePath))))
-                        runOnUiThread {
-                            setEnable(true)
-                            lsq_editor_cut_load.setVisibility(View.GONE)
-                            lsq_editor_cut_load_parogress.setValue(0f)
-                            Toast.makeText(applicationContext, "保存成功", Toast.LENGTH_SHORT).show()
-                        }
-                    } else if (state == Producer.State.kWRITING){
-                        runOnUiThread {
-                            lsq_editor_cut_load.setVisibility(View.VISIBLE)
-                            lsq_editor_cut_load_parogress.setValue((ts / producer.duration.toFloat()) * 100f)
-                        }
-                    }
+                positiveButton(R.string.lsq_foreground_save){ dialog ->
+                    dialog.dismiss()
+                    saveVideoSync()
                 }
 
-                if (!producer.init(outputFilePath)){
-                    TLog.e("producer init error")
-                    return@execute
+                negativeButton(R.string.lsq_background_save){dialog->
+                    dialog.dismiss()
+                    saveVideoAsync()
                 }
 
-                if (!producer.start()){
-                    TLog.e("[Error] EvaProducer Start failed")
-                }
+                cancelOnTouchOutside(true)
             }
 
 
@@ -575,10 +676,98 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 lsq_seek.max = seekMax
             }
 
+            mIsModelInit = true
+
 
         }
 
         TuSdk.messageHub().setStatus(this, R.string.lsq_assets_loading)
+    }
+
+    private fun saveVideoAsync() {
+        val intent = Intent(applicationContext,EVARenderServer::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            applicationContext.startForegroundService(intent)
+        } else {
+            applicationContext.startService(intent)
+        }
+        bindService(intent,serviceConnection,Context.BIND_AUTO_CREATE)
+        mEvaThreadPool.submit {
+            if (mIEvaRenderServer == null){
+                mServiceLock.acquire()
+            }
+            mEVAServerRunnable.run()
+        }
+
+    }
+
+    private fun serviceUnbind(){
+        try {
+            applicationContext.unbindService(serviceConnection)
+        } catch (e : Exception){
+
+        }
+    }
+
+    private fun saveVideoSync() {
+        lsq_editor_cut_load.visibility = View.VISIBLE
+        lsq_editor_cut_load_parogress.setValue(0f)
+        setEnable(false)
+        mEvaThreadPool.execute {
+            val producer = mEvaDirector!!.newProducer()
+
+            val outputFilePath =
+                "${Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM).path}/eva_output${System.currentTimeMillis()}.mp4"
+
+            val config: Producer.OutputConfig = Producer.OutputConfig()
+            config.watermarkPosition = 1
+            config.watermark = BitmapHelper.getRawBitmap(applicationContext, R.raw.sample_watermark)
+            val supportSize = ProduceOutputUtils.getSupportSize(MediaFormat.MIMETYPE_VIDEO_AVC)
+            val outputSize = TuSdkSize.create(mEvaModel!!.width, mEvaModel!!.height)
+            if (supportSize.maxSide() < outputSize.maxSide()) {
+                config.scale = supportSize.maxSide().toDouble() / outputSize.maxSide().toDouble()
+            }
+            producer.setOutputConfig(config)
+
+            producer.setListener { state, ts ->
+                if (state == Producer.State.kEND) {
+                    mEvaThreadPool.execute {
+                        producer.cancel()
+                        //producer.waitComplete()
+                        producer.release()
+                        mEvaDirector!!.resetProducer()
+                        mEvaPlayer!!.seekTo(mCurrentTs)
+                        TLog.e("ts : $mCurrentTs")
+                    }
+                    sendBroadcast(
+                        Intent(
+                            Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                            Uri.fromFile(File(outputFilePath))
+                        )
+                    )
+                    runOnUiThread {
+                        setEnable(true)
+                        lsq_editor_cut_load.setVisibility(View.GONE)
+                        lsq_editor_cut_load_parogress.setValue(0f)
+                        Toast.makeText(applicationContext, "保存成功", Toast.LENGTH_SHORT).show()
+                    }
+                } else if (state == Producer.State.kWRITING) {
+                    runOnUiThread {
+                        lsq_editor_cut_load.setVisibility(View.VISIBLE)
+                        lsq_editor_cut_load_parogress.setValue((ts / producer.duration.toFloat()) * 100f)
+                    }
+                }
+            }
+
+            if (!producer.init(outputFilePath)) {
+                TLog.e("producer init error")
+                return@execute
+            }
+
+            if (!producer.start()) {
+                TLog.e("[Error] EvaProducer Start failed")
+            }
+        }
     }
 
     private fun setEditorList(replaceImageList: Array<EvaModel.VideoReplaceItem> , replaceVideoList: Array<EvaModel.VideoReplaceItem>, replaceTextList: Array<EvaModel.TextReplaceItem>) {
@@ -601,7 +790,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         }
         for (compari in editorList) {
             if (compari is EvaModel.VideoReplaceItem) {
-                if (compari.isVideo)
+                if (!compari.isVideo)
                     mEditorList.add(EditorModelItem(compari, EditType.Image,compari.startTime))
                 else
                     mEditorList.add(EditorModelItem(compari,EditType.Video,compari.startTime))
@@ -646,15 +835,13 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        lsq_model_seles.release()
+        lsq_edit_content.removeView(lsq_model_seles)
         mEvaThreadPool.execute {
             if(!isRelease) {
                 mEvaPlayer!!.close()
                 mEvaDirector!!.resetPlayer()
                 mEvaDirector!!.close()
-            }
-            runOnUiThread {
-                lsq_model_seles.release()
-                lsq_edit_content.removeView(lsq_model_seles)
             }
 
             for (item in mCurrentVideoItems!!){

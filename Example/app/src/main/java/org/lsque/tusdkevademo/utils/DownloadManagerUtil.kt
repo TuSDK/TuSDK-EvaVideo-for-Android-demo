@@ -56,7 +56,7 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
         val request = DownloadManager.Request(Uri.parse(url))
         /** 1. 设置Request的下载环境 */
         val connectivityManager : ConnectivityManager = mContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val info = connectivityManager.activeNetworkInfo
+        val info = connectivityManager.activeNetworkInfo!!
         if (info.type == ConnectivityManager.TYPE_WIFI){
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
         } else if (info.type == ConnectivityManager.TYPE_MOBILE){

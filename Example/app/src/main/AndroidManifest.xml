@@ -4,6 +4,7 @@
     package="org.lsque.tusdkevademo">
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:name=".TuApplication"
         android:allowBackup="true"
         android:appComponentFactory="@string/app_name"
@@ -59,6 +60,8 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <service android:name=".server.EVARenderServer" android:process=":render" />
     </application> <!-- 获取WIFI信息 -->
     <uses-feature android:name="android.hardware.camera" /> <!-- 允许应用程序写数据到外部存储设备（主要是SD卡） -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -83,5 +86,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
 </manifest>
