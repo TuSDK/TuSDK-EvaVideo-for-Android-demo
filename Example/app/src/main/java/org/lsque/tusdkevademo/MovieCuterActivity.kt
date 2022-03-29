@@ -10,20 +10,21 @@
  */
 package org.lsque.tusdkevademo
 
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.RectF
 import android.graphics.Typeface
-import android.media.MediaCodecInfo
 import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.os.Bundle
-import androidx.constraintlayout.widget.ConstraintLayout
 import android.text.TextUtils
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.RelativeLayout
+import androidx.appcompat.widget.ViewUtils
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.alexvasilkov.gestures.GestureController
 import com.alexvasilkov.gestures.State
 import com.tusdk.pulse.MediaInspector
@@ -31,18 +32,16 @@ import com.tusdk.pulse.Producer
 import com.tusdk.pulse.ThumbnailMaker
 import com.tusdk.pulse.Transcoder
 import kotlinx.android.synthetic.main.activity_movie_editor_cut.*
-import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_change_media
-import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_cutRegionView
 import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_editor_cut_load
 import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_editor_cut_load_parogress
 import kotlinx.android.synthetic.main.model_editor_activity.*
 import kotlinx.android.synthetic.main.title_item_layout.*
 import org.jetbrains.anko.textColor
 import org.lasque.tusdkpulse.core.TuSdk
-
-
+import org.lasque.tusdkpulse.core.TuSdkContext
 import org.lasque.tusdkpulse.core.struct.TuSdkSize
 import org.lasque.tusdkpulse.core.struct.TuSdkSizeF
+import org.lasque.tusdkpulse.core.struct.ViewSize
 import org.lasque.tusdkpulse.core.utils.StringHelper
 import org.lasque.tusdkpulse.core.utils.TLog
 import org.lasque.tusdkpulse.core.utils.ThreadHelper
@@ -206,21 +205,21 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         }
         val regionRatio = lsq_cutRegionView.regionRatio
         val regionRect = lsq_cutRegionView.regionRect
-        lsq_cutRegionView.visibility = View.VISIBLE
+//        lsq_cutRegionView.visibility = View.VISIBLE
         TLog.e("regionRect = $regionRect regionRatio = $regionRatio width = $width height = $height")
-        lsq_scroll_wrap.visibility = View.INVISIBLE
-        postDelayed({
-            lsq_scroll_wrap.visibility = View.VISIBLE
-            val params = lsq_scroll_wrap.layoutParams as ConstraintLayout.LayoutParams
-            params.width = lsq_cutRegionView.regionRect.width()
-            params.height = lsq_cutRegionView.regionRect.height()
-            params.topToBottom = R.id.lsq_title
-            params.bottomToTop = R.id.lsq_range_line
-            lsq_scroll_wrap.layoutParams = params
-            var percent = lsq_cutRegionView.regionRect.height().toFloat() / lsq_media_player!!.height.toFloat()
-            mCurrentCropRect.bottom = percent
-            TLog.e("mDefaultCropRect = $mDefaultCropRect")
-        }, 1000)
+        lsq_scroll_wrap.visibility = View.VISIBLE
+//        postDelayed({
+//            lsq_scroll_wrap.visibility = View.VISIBLE
+//            val params = lsq_scroll_wrap.layoutParams as ConstraintLayout.LayoutParams
+//            params.width = lsq_cutRegionView.regionRect.width()
+//            params.height = lsq_cutRegionView.regionRect.height()
+//            params.topToBottom = R.id.lsq_title
+//            params.bottomToTop = R.id.lsq_range_line
+//            lsq_scroll_wrap.layoutParams = params
+//            var percent = lsq_cutRegionView.regionRect.height().toFloat() / lsq_media_player!!.height.toFloat()
+//            mCurrentCropRect.bottom = percent
+//            TLog.e("mDefaultCropRect = $mDefaultCropRect")
+//        }, 1000)
     }
 
     private fun setStateChangedListener() {
@@ -265,8 +264,6 @@ class MovieCuterActivity : ScreenAdapterActivity() {
 //                right = min(1.0f,left + regionSizePercent.width)
                 right = left + regionSizePercent.width
                 mCurrentCropRect.set(left, top, right, bottom)
-
-                TLog.e("mDefaultCropRect = $mDefaultCropRect current crop rect = $mCurrentCropRect video size $currentVideoViewSize region size $regionSize regionSizePercent = ${regionSizePercent.width}:${regionSizePercent.height}")
             }
 
         })
@@ -371,8 +368,47 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         val videoWidth = format.getInteger(MediaFormat.KEY_WIDTH)
         val videoHeight = format.getInteger(MediaFormat.KEY_HEIGHT)
 
+//        val rotation = format.getInteger(MediaFormat.KEY_ROTATION)
+
+        var rotation = 0
+
+        if (format.containsKey(MediaFormat.KEY_ROTATION)){
+            rotation = format.getInteger("rotation-degrees")
+        }
+
         mCurrentVideoSize.set(videoWidth,videoHeight)
 
+        mCurrentVideoSize = mCurrentVideoSize.transforOrientation(ImageOrientation.getValue(rotation,false))
+
+        val w = intent.getIntExtra("width", 0)
+        val h = intent.getIntExtra("height", 0)
+
+        val displaySize = TuSdkContext.getScreenSize();
+
+        val viewPortW = displaySize.width
+        val viewPortH = (viewPortW / w.toFloat() * h).toInt()
+
+        val imageW = displaySize.width
+        val imageH = (imageW / mCurrentVideoSize.width.toFloat() * mCurrentVideoSize.height).toInt()
+
+        lsq_scroll_wrap.post {
+            val params = lsq_scroll_wrap.layoutParams as RelativeLayout.LayoutParams
+
+            params.width = viewPortW
+            params.height = viewPortH
+
+            lsq_scroll_wrap.layoutParams = params
+
+
+            lsq_scroll_wrap.controller.settings.setViewport(viewPortW,viewPortH)
+            lsq_scroll_wrap.controller.settings.setImage(imageW,imageH)
+            lsq_scroll_wrap.controller.resetState()
+        }
+
+        var percent = viewPortH.toFloat() / imageH.toFloat()
+        mCurrentCropRect.bottom = percent
+
+        TLog.e("[Debug] view port w : %s h : %s video size w : %s h : %s",viewPortW,viewPortH,imageW,imageH)
 
         lsq_media_player.setPlayerCallback(object : TuSDKMediaPlayer.PlayerCallback{
             override fun setStartPlayer(paramInt: Int) {
@@ -400,11 +436,11 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         val duration = mDurationTimeUs / 1000000.0f
         mRightTimeRangUs = (mDurationTimeUs * maxPercent).toLong()
 
-        if (width > videoWidth){
-            val scale = width.toFloat() / videoWidth
-            lsq_media_player.scaleX = scale
-            lsq_media_player.scaleY = scale
-        }
+//        if (width > videoWidth){
+//            val scale = width.toFloat() / videoWidth
+//            lsq_media_player.scaleX = scale
+//            lsq_media_player.scaleY = scale
+//        }
 
         mVideoPlayer = lsq_media_player
         mVideoPlayer?.start()

@@ -60,6 +60,22 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".EVAModelFileExplorerActivity" />
+        <activity android:name=".EVAFileLoaderActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="*/*"/>
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
+                <data android:host="*"/>
+                <data android:pathPattern=".*\\.eva" />
+                <data android:pathPattern=".*\\..*\\.eva" />
+                <data android:pathPattern=".*\\..*\\..*\\.eva" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.eva" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.eva" />
+            </intent-filter>
+        </activity>
 
         <service android:name=".server.EVARenderServer" android:process=":render" />
     </application> <!-- 获取WIFI信息 -->

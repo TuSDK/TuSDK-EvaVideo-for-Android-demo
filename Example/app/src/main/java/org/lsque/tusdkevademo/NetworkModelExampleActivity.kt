@@ -180,6 +180,9 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
         }
         lsq_back.setOnClickListener { finish() }
         lsq_model_list.visibility= View.VISIBLE
+        lsq_eva_file_explorer.setOnClickListener {
+            startActivity<EVAModelFileExplorerActivity>()
+        }
     }
 
     private fun setModelView() {

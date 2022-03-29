@@ -148,8 +148,6 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
     private var mIEvaRenderServer : IEVARenderServer? = null
 
-    private var mIsModelInit = false
-
     private val mEVAServerRunnable : Runnable = Runnable {
         if (mIEvaRenderServer == null) return@Runnable
         val evaRenderServer = mIEvaRenderServer!!
@@ -293,6 +291,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                         config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
                         config.repeat = 2
                         config.audioMixWeight = 0.5F
+
                         mEvaThreadPool.execute {
                             mDiffMap[mCurrentVideoItem!!.id] = true
                             mConfigMap[mCurrentVideoItem!!.id] = config
@@ -574,7 +573,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         lsq_editor_text_commit.setOnClickListener {
             mCurrentTextItem!!.text = lsq_editor_replace_text.text.toString()
             mEvaThreadPool.execute {
-                mDiffMap[mCurrentTextItem!!] = true
+                mDiffMap[mCurrentTextItem!!.id] = true
                 mEvaDirector!!.updateText(mCurrentTextItem)
             }
             lsq_text_editor_layout.visibility = View.GONE
@@ -588,12 +587,6 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         lsq_next.textColor = Color.parseColor("#007aff")
 
         lsq_next.setOnClickListener {
-            if (!mIsModelInit){
-                toast("请等待模板加载完成")
-                return@setOnClickListener
-            }
-
-
             mEvaPlayer!!.pause()
             /** 保存时必须把播放停止 */
             lsq_player_img.visibility = View.VISIBLE
@@ -626,6 +619,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             } else {
                 mEvaModel!!.create(modelItem.modelDownloadFilePath)
             }
+
             val ret = mEvaDirector!!.open(mEvaModel)
             if (!ret){
                 mEvaModel!!.debugDump()
@@ -675,8 +669,6 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             runOnUiThread {
                 lsq_seek.max = seekMax
             }
-
-            mIsModelInit = true
 
 
         }

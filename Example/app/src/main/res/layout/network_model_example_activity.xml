@@ -23,6 +23,20 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="添加本地模板"
+            android:layout_marginRight="20dp"
+            android:drawableTop="@mipmap/add_locale_model"
+            app:layout_constraintBottom_toBottomOf="@id/lsq_title"
+            app:layout_constraintTop_toTopOf="@id/lsq_title"
+            app:layout_constraintRight_toRightOf="@id/lsq_title"
+            android:id="@+id/lsq_eva_file_explorer"
+            android:translationZ="200dp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lsq_model_list"
             android:layout_width="0dp"

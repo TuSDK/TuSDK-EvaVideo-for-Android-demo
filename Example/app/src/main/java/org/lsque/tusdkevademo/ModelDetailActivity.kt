@@ -30,7 +30,6 @@ import kotlinx.android.synthetic.main.model_detail_activity.lsq_model_seles
 import kotlinx.android.synthetic.main.model_detail_activity.lsq_player_img
 import kotlinx.android.synthetic.main.title_item_layout.*
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
 import org.lasque.tusdkpulse.core.utils.AssetsHelper
 import org.lasque.tusdkpulse.core.utils.TLog
 import java.util.concurrent.ExecutorService
@@ -93,9 +92,6 @@ class ModelDetailActivity : ScreenAdapterActivity() {
 
     private var mCurrentModelItem: ModelItem? = null
 
-    private var mIsModelInit = false
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_detail_activity)
@@ -115,11 +111,11 @@ class ModelDetailActivity : ScreenAdapterActivity() {
 
             mEvaModel = EvaModel()
             if (AssetsHelper.hasAssets(this,modelItem.templateName)){
-               if (mEvaModel!!.createFromAsset(this,modelItem.templateName)){
+               if (!mEvaModel!!.createFromAsset(this,modelItem.templateName)){
                    TLog.e("[Error] Assets File not fount")
                }
             } else {
-               if (mEvaModel!!.create(modelItem.modelDownloadFilePath)){
+               if (!mEvaModel!!.create(modelItem.modelDownloadFilePath)){
                    TLog.e("[Error]File not fount")
 
                }
@@ -145,8 +141,6 @@ class ModelDetailActivity : ScreenAdapterActivity() {
             var textCount = mEvaModel!!.listReplaceableTextAssets().size
             var imageVideoCount = mEvaModel!!.listReplaceableImageAssets().size + mEvaModel!!.listReplaceableVideoAssets().size
             var audioCount = mEvaModel!!.listReplaceableAudioAssets().size
-
-            mIsModelInit = true
 
             runOnUiThread {
                 lsq_seek.max = seekMax.toInt()
@@ -206,10 +200,6 @@ class ModelDetailActivity : ScreenAdapterActivity() {
         }
 
         lsq_next_step.setOnClickListener {
-            if (!mIsModelInit){
-                toast("请等待模板加载完成")
-                return@setOnClickListener
-            }
             mEvaThreadPool.execute {
                 mEvaPlayer!!.pause()
             }
