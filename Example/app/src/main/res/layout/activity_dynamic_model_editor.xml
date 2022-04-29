@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lsq_edit_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <SeekBar
+        android:min="0"
+        android:max="10"
+        android:id="@+id/lsq_voice_seek"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="20dp"
+        android:maxHeight="2dp"
+        android:paddingStart="10dp"
+        android:paddingLeft="10dp"
+        android:progressDrawable="@drawable/lsq_model_voice_seekbar_bg"
+        android:thumb="@drawable/lsq_model_seekbar_thumb_13dp"
+        android:thumbOffset="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/lsq_editor_voice_text"
+        app:layout_constraintLeft_toRightOf="@id/lsq_editor_voice_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/lsq_editor_voice_text" />
+
+    <TextView
+        android:layout_marginTop="33dp"
+        android:id="@+id/lsq_model_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="21dp"
+        android:lineHeight="15dp"
+        android:text="已填充素材"
+        android:textColor="@color/lsq_actionsheet_title_color"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lsq_video_display_area" />
+
+    <TextView
+        android:id="@+id/lsq_editor_voice_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:text="音量"
+        android:textColor="@color/lsq_actionsheet_title_color"
+        android:textSize="14sp"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_model_name"
+        app:layout_constraintTop_toBottomOf="@id/lsq_editor_item_list" />
+
+    <TextView
+        android:id="@+id/lsq_editor_change_bgm"
+        android:layout_width="128dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/lsq_editor_change_voice_bg"
+        android:drawableLeft="@mipmap/lsq_change_bgm"
+        android:gravity="center"
+        android:lineHeight="6dp"
+        android:text="替换背景音乐"
+        android:textColor="#555555"
+        android:textSize="12sp"
+        android:layout_marginBottom="23dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_model_name"
+        app:layout_constraintTop_toBottomOf="@id/lsq_editor_voice_text" />
+
+    <TextView
+        android:id="@+id/lsq_reset_assets"
+        android:layout_width="128dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/lsq_editor_change_voice_bg"
+        android:gravity="center"
+        android:text="@string/lsq_reset"
+        android:textColor="#555555"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/lsq_editor_change_bgm"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/lsq_editor_change_bgm" />
+
+    <View
+        android:background="#000000"
+        android:id="@+id/lsq_video_display_area"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.52"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lsq_title"/>
+
+    <com.tusdk.pulse.DisplayView
+        android:id="@+id/lsq_model_seles"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/lsq_video_display_area"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_video_display_area"
+        app:layout_constraintRight_toRightOf="@id/lsq_video_display_area"
+        app:layout_constraintTop_toTopOf="@id/lsq_video_display_area"></com.tusdk.pulse.DisplayView>
+
+    <ImageView
+        android:id="@+id/lsq_player_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/lsq_player_img"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/lsq_model_seles"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_model_seles"
+        app:layout_constraintRight_toRightOf="@id/lsq_model_seles"
+        app:layout_constraintTop_toTopOf="@id/lsq_model_seles" />
+
+    <SeekBar
+        android:paddingBottom="30dp"
+        android:paddingTop="27dp"
+        android:visibility="gone"
+        android:id="@+id/lsq_seek"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxHeight="4dp"
+        android:thumbOffset="0dp"
+        android:progressDrawable="@drawable/lsq_model_seekbar_bg"
+        android:thumb="@drawable/lsq_model_seekbar_thumb"
+        app:layout_constraintTop_toBottomOf="@id/lsq_model_seles"
+        app:layout_constraintBottom_toBottomOf="@id/lsq_model_seles"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_model_seles"
+        app:layout_constraintRight_toRightOf="@id/lsq_model_seles"
+        />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lsq_editor_item_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_model_name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lsq_model_name"/>
+
+    <!-- 加载进度 -->
+    <include
+        android:id="@+id/lsq_title"
+        layout="@layout/title_item_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lsq_text_editor_layout"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="#333333"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <EditText
+            android:id="@+id/lsq_editor_replace_text"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:background="@drawable/editor_text_bg"
+            android:gravity="center_vertical"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/lsq_editor_text_commit"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/lsq_editor_text_commit"
+            android:layout_width="60dp"
+            android:layout_height="0dp"
+            android:src="@mipmap/lsq_sure_ic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/lsq_editor_cut_load"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:background="@color/lsq_alpha_black_7f"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <at.grabner.circleprogress.CircleProgressView
+            android:id="@+id/lsq_editor_cut_load_parogress"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            app:cpv_barColor="@color/lsq_color_white"
+            app:cpv_barWidth="2dp"
+            app:cpv_maxValue="100"
+            app:cpv_rimColor="@color/lsq_color_transparent"
+            app:cpv_rimWidth="2dp"
+            app:cpv_textColor="@color/lsq_color_transparent" />
+    </FrameLayout>
+
+    <TextView
+        android:visibility="gone"
+        android:background="@color/lsq_color_black"
+        android:textColor="@color/lsq_color_red"
+        android:textSize="14sp"
+        android:id="@+id/debug_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lsq_title" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

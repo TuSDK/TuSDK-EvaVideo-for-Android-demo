@@ -46,6 +46,10 @@ class ModelDetailActivity : ScreenAdapterActivity() {
     private var mEvaPlayerCurrentState : Player.State? = null
     private var isSeekbarTouch = false
     private var mPlayerProcessListener: Player.Listener = Player.Listener { state, ts ->
+
+
+        TLog.e("current state ${state} ts ${ts}")
+
         mEvaPlayerCurrentState = state
         if (state == Player.State.kPLAYING || state == Player.State.kDO_PREVIEW){
             if (!isSeekbarTouch){
@@ -61,7 +65,7 @@ class ModelDetailActivity : ScreenAdapterActivity() {
 
             val durationVideoMinute = (durationMS %3600000) /60000
 
-            val durationVideoSecond = (durationMS %3600000 / 1000)
+            val durationVideoSecond = (durationMS  % 60000) / 1000
 
             runOnUiThread {
                 lsq_video_playing_time.text = "$currentVideoHour:$currentVideoMinute:$currentVideoSecond/$durationVideoHour:$durationVideoMinute:$durationVideoSecond"
@@ -136,7 +140,6 @@ class ModelDetailActivity : ScreenAdapterActivity() {
             }
             lsq_model_seles.attachPlayer(mEvaPlayer)
 
-            mEvaPlayer!!.play()
             var seekMax = mEvaPlayer!!.duration
             var textCount = mEvaModel!!.listReplaceableTextAssets().size
             var imageVideoCount = mEvaModel!!.listReplaceableImageAssets().size + mEvaModel!!.listReplaceableVideoAssets().size
@@ -149,6 +152,8 @@ class ModelDetailActivity : ScreenAdapterActivity() {
                                 "图片/视频 ${imageVideoCount}个\n" +
                                 "音频 ${audioCount}个"
             }
+
+            mEvaPlayer!!.play()
 
         }
         lsq_model_name.text = modelItem.modelName

@@ -78,6 +78,7 @@
         </activity>
 
         <service android:name=".server.EVARenderServer" android:process=":render" />
+        <service android:name=".server.DYNEVARenderServer"  android:process=":dynrender"/>
     </application> <!-- 获取WIFI信息 -->
     <uses-feature android:name="android.hardware.camera" /> <!-- 允许应用程序写数据到外部存储设备（主要是SD卡） -->
     <uses-feature android:name="android.hardware.camera.autofocus" />

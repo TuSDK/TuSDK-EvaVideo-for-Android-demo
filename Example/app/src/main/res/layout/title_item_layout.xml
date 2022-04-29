@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/lsq_title_height"
     android:background="@color/lsq_color_black">
-        <ImageView
-			android:layout_marginLeft="2dp"
-            android:id="@+id/lsq_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-			android:paddingRight="@dimen/lsq_font_space_15"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-			android:src="@mipmap/lsq_nav_bar_back" />
+
+	<ImageView
+		android:id="@+id/lsq_back"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:layout_alignParentLeft="true"
+		android:layout_centerVertical="true"
+		android:layout_marginLeft="2dp"
+		android:paddingRight="@dimen/lsq_font_space_15"
+		android:src="@mipmap/lsq_nav_bar_back" />
 	<TextView
 		android:textSize="17sp"
 		android:gravity="center"

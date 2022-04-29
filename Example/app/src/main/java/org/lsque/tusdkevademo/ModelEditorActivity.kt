@@ -35,6 +35,11 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
+import com.github.mikephil.charting.components.LimitLine
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.tusdk.pulse.Engine
 import com.tusdk.pulse.Player
 import com.tusdk.pulse.Producer
@@ -62,6 +67,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.Semaphore
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.max
 import kotlin.math.min
 
 
@@ -88,11 +94,20 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
     private var mCurrentTs = 0L
 
+    private var mCurrentFrameRate = 0
+
+    private var mDurationFrames = 0
+    
+    private var mCurrentFrame = 0;
+
+    private var mCurrentLine : LineDataSet? = null
+
 
     /**  Eva播放器进度监听 */
     private var mPlayerProcessListener: Player.Listener = Player.Listener { state, ts ->
         mEvaPlayerCurrentState = state
         if (state == Player.State.kEOS){
+            mEvaPlayer!!.pause()
             mEvaPlayer!!.seekTo(0)
             runOnUiThread {
                 playerPause()
@@ -105,6 +120,14 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 //                        "当前视频播放时间(TS) : ${ts} \n"+
 //                        "剩余时长 : ${mEvaPlayer!!.duration - ts}"
             }
+        }
+
+        if (state == Player.State.kDO_SEEK || state == Player.State.kDO_PREVIEW){
+            mCurrentFrame = (ts.toFloat() * mCurrentFrameRate / 1000f ).toInt()
+
+            mCurrentFrame = min(mCurrentFrame,mDurationFrames)
+
+            TLog.e("current frame ${mCurrentFrame} max frame ${mDurationFrames} current ts ${ts} framerate ${mCurrentFrameRate} duration ${mEvaPlayer!!.duration}")
         }
     }
 
@@ -270,9 +293,14 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 if (TextUtils.isEmpty(mCurrentImageItem!!.resPath)){
                     mCurrentImageItem!!.resPath =  data!!.getStringExtra("videoPath")
                 }
+
+
+
                 val config = EvaReplaceConfig.ImageOrVideo()
                 config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
                 config.audioMixWeight = 1F
+
+
                 mEvaThreadPool.execute {
                     mDiffMap[mCurrentImageItem!!.id] = true
                     mConfigMap[mCurrentImageItem!!.id] = config
@@ -287,10 +315,16 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                     ALBUM_REQUEST_CODE_VIDEO -> {
                         val rectArray = data!!.getFloatArrayExtra("zoom")!!
                         mCurrentVideoItem!!.resPath = data!!.getStringExtra("videoPath")
+                        val start = data!!.extras!!.getLong("start",0L)
+                        val duration = data!!.extras!!.getLong("duration",-1L)
                         val config = EvaReplaceConfig.ImageOrVideo()
                         config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
                         config.repeat = 2
                         config.audioMixWeight = 0.5F
+                        config.start = start
+                        config.duration = duration
+
+                        TLog.e("config ${config}")
 
                         mEvaThreadPool.execute {
                             mDiffMap[mCurrentVideoItem!!.id] = true
@@ -373,6 +407,55 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             }
 
         })
+    }
+
+    private fun initRenderTestView() {
+        mDurationFrames = mEvaModel!!.durationFrames
+
+        val entries = ArrayList<Entry>(mDurationFrames + 1)
+        repeat(mDurationFrames + 1) { i -> entries.add(Entry(i.toFloat(), 0f)) }
+        val lineDataSet = LineDataSet(entries,"Render Times")
+        lineDataSet.apply {
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            cubicIntensity = 0.3f
+            setDrawCircles(false)
+            lineWidth = 0.5f
+            color = Color.WHITE
+        }
+
+        mCurrentLine = lineDataSet
+
+        lsq_renderTimesGraph.apply {
+            setTouchEnabled(false)
+            axisRight.isEnabled = false
+            xAxis.isEnabled = false
+            legend.isEnabled = false
+            description = null
+            data = LineData(lineDataSet)
+            axisLeft.setDrawGridLines(false)
+            axisLeft.labelCount = 4
+            axisLeft.textColor = Color.WHITE
+            val ll1 = LimitLine(16f, "60fps")
+            ll1.lineColor = Color.RED
+            ll1.lineWidth = 1.2f
+            ll1.textColor = Color.WHITE
+            ll1.textSize = 8f
+            axisLeft.addLimitLine(ll1)
+
+            val ll2 = LimitLine(32f, "30fps")
+            ll2.lineColor = Color.RED
+            ll2.lineWidth = 1.2f
+            ll2.textColor = Color.WHITE
+            ll2.textSize = 8f
+            axisLeft.addLimitLine(ll2)
+        }
+
+        lsq_back_to_list.setOnClickListener {
+            lsq_editor_render_layer.visibility = View.GONE
+            lsq_editor_layer.visibility = View.VISIBLE
+        }
+
+
     }
 
     private fun playerReplay() {
@@ -610,6 +693,11 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
         }
 
+        lsq_to_render_layer.setOnClickListener {
+            lsq_editor_layer.visibility = View.GONE
+            lsq_editor_render_layer.visibility = View.VISIBLE
+        }
+
         mEvaThreadPool.execute {
             mEvaDirector = EvaDirector()
 
@@ -627,6 +715,34 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 //todo 失败提醒
                 return@execute
             }
+
+            mCurrentFrameRate = mEvaModel!!.frameRate
+            mDurationFrames = mEvaModel!!.durationFrames
+
+
+            var renderTimeGraphRange = 4f
+            mEvaDirector!!.addFrameListener { ms ->
+                if (mCurrentLine == null) return@addFrameListener
+
+                mCurrentLine!!.getEntryForIndex(mCurrentFrame).y = ms
+                renderTimeGraphRange = renderTimeGraphRange.coerceAtLeast(ms * 1.2f)
+                
+                if (mEvaPlayerCurrentState == Player.State.kDO_PREVIEW || mEvaPlayerCurrentState == Player.State.kDO_SEEK){
+                    
+                } else {
+
+                    mCurrentFrame ++;
+                    mCurrentFrame = min(mCurrentFrame,mDurationFrames)
+                }
+
+
+                runOnUiThread {
+                    lsq_renderTimesGraph.setVisibleYRange(0.2f,renderTimeGraphRange, YAxis.AxisDependency.LEFT)
+                    lsq_renderTimesGraph.invalidate()
+                }
+            }
+
+            mEvaDirector!!.setPerformanceTrackingEnable(true)
 
             mEvaDirector!!.updateAudioMixWeight(1.0)
 
@@ -668,6 +784,9 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             mEvaPlayer!!.previewFrame(1)
             runOnUiThread {
                 lsq_seek.max = seekMax
+
+                initRenderTestView()
+
             }
 
 

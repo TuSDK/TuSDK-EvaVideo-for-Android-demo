@@ -45,6 +45,11 @@ public class TuSDKMediaPlayer extends FrameLayout {
     // 记录结束点
     private int position;
 
+    public int viewWidth = -1;
+    public int viewHeight = -1;
+
+    private double mScale = 1.0;
+
     Handler mHandler = new Handler(Looper.getMainLooper())
     {
         public void handleMessage(Message msg)
@@ -328,13 +333,21 @@ public class TuSDKMediaPlayer extends FrameLayout {
 
 //            int w = rect.right - rect.left;
 //            int h = rect.bottom - rect.top;
+            viewWidth = w;
+            viewHeight = h;
+
             LayoutParams lp = new LayoutParams(w, h);
 //            lp.setMargins(rect.left, rect.top, 0, 0);
             surfaceView.setLayoutParams(lp);
 
-            getLayoutParams().width = w;
-            getLayoutParams().height = screenHeight;
+            getLayoutParams().width = (int) (w * mScale);
+            getLayoutParams().height = (int) (screenHeight * mScale);
             setLayoutParams(getLayoutParams());
+            requestLayout();
         }
+    }
+
+    public void setScale(double scale){
+        mScale = scale;
     }
 }

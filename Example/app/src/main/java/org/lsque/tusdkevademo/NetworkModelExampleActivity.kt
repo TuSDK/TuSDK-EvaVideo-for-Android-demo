@@ -11,7 +11,10 @@
 package org.lsque.tusdkevademo
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.SparseArray
@@ -41,7 +44,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileReader
 import java.util.*
-import kotlin.collections.HashMap
 
 
 class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil.DownloadStateListener {
@@ -161,6 +163,54 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
 
     private var isDownloadComplete = true
 
+    private val CONTENT_RESULT_CODE = 100
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CONTENT_RESULT_CODE && resultCode == Activity.RESULT_OK){
+            val uri = data!!.getData()
+            var file : File? = null
+
+            val sp = getSharedPreferences("fileLoader",Context.MODE_PRIVATE)
+            if (sp.contains(uri.toString())){
+                file = File(sp.getString(uri.toString(),""))
+            } else {
+                if (uri != null){
+                    val input = contentResolver.openInputStream(uri)
+                    val path = getTempOutputPath()
+                    file = File(path)
+                    val output = file.outputStream()
+                    FileHelper.copy(input,output)
+                    FileHelper.safeClose(input)
+                    FileHelper.safeClose(output)
+                    sp.edit().putString(uri.toString(),path).apply()
+                }
+            }
+
+            if (file != null) {
+                val item = ModelItem(
+                    file.absolutePath,
+                    uri!!.lastPathSegment!!,
+                    uri!!.lastPathSegment!!,
+                    file.absolutePath,
+                    file.name,
+                    file.absolutePath,
+                    file.name,
+                    "1.0.0",
+                    0
+                )
+                startActivity<ModelDetailActivity>("model" to item)
+            }
+        }
+    }
+
+    private fun getTempOutputPath(): String {
+        return TuSdkContext.getAppCacheDir(
+            "evacache",
+            false
+        ).absolutePath + "/eva_temp" + System.currentTimeMillis() + ".eva"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LAYOUT_ID)
@@ -181,7 +231,12 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
         lsq_back.setOnClickListener { finish() }
         lsq_model_list.visibility= View.VISIBLE
         lsq_eva_file_explorer.setOnClickListener {
-            startActivity<EVAModelFileExplorerActivity>()
+//            startActivity<EVAModelFileExplorerActivity>()
+
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.setType("*/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(intent,CONTENT_RESULT_CODE)
         }
     }
 

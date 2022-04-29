@@ -15,8 +15,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+
     <!--选择框 TuSdkMovieScrollContent-->
     <org.lsque.tusdkevademo.playview.TuSdkMovieScrollContent
+        android:translationZ="50dp"
         android:id="@+id/lsq_range_line"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -24,59 +26,58 @@
         android:layout_marginTop="47dp"
         android:layout_marginRight="19dp"
         android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <TextView
-        android:id="@+id/lsq_range_tips"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:text="可选择时间长度为1.0s 至 "
-        android:textColor="@color/lsq_color_white"
-        android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="@id/lsq_range_line"
-        app:layout_constraintRight_toRightOf="@id/lsq_range_line"
-        app:layout_constraintTop_toBottomOf="@id/lsq_range_line" />
-
-    <RelativeLayout
-        android:id="@+id/lsq_wrap"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@id/lsq_range_line"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lsq_title">
+        app:layout_constraintBottom_toBottomOf="parent" />
+    <TextView
+        android:translationZ="50dp"
+        android:layout_marginTop="5dp"
+        android:text="可选择时间长度为1.0s 至 "
+        android:textSize="12sp"
+        android:textColor="@color/lsq_color_white"
+        android:gravity="center"
+        app:layout_constraintRight_toRightOf="@id/lsq_range_line"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_range_line"
+        app:layout_constraintTop_toBottomOf="@id/lsq_range_line"
+        android:id="@+id/lsq_range_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/lsq_gestureframe_wrap"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lsq_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/lsq_range_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
         <!--播放区域-->
         <com.alexvasilkov.gestures.views.GestureFrameLayout
-            android:id="@+id/lsq_scroll_wrap"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:clipChildren="true"
-            android:visibility="visible">
-
+            android:id="@+id/lsq_scroll_wrap"
+            android:visibility="visible"
+            android:layout_width="0dp"
+            android:layout_height="0dp">
             <org.lsque.tusdkevademo.playview.TuSDKMediaPlayer
+                android:translationZ="-1dp"
                 android:id="@+id/lsq_media_player"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
         </com.alexvasilkov.gestures.views.GestureFrameLayout>
+
     </RelativeLayout>
+
 
 
     <org.lsque.tusdkevademo.playview.TuMaskRegionView
         android:id="@+id/lsq_cutRegionView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/lsq_range_line"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lsq_title" />
+        app:layout_constraintTop_toBottomOf="@id/lsq_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/lsq_range_line" />
 
     <ImageView
         android:id="@+id/lsq_play_btn"
@@ -84,13 +85,17 @@
         android:layout_height="wrap_content"
         android:src="@mipmap/lsq_player_img"
 
-        app:layout_constraintBottom_toBottomOf="@id/lsq_wrap"
-        app:layout_constraintLeft_toLeftOf="@id/lsq_wrap"
-        app:layout_constraintRight_toRightOf="@id/lsq_wrap"
-        app:layout_constraintTop_toTopOf="@id/lsq_wrap" />
+        app:layout_constraintBottom_toBottomOf="@id/lsq_gestureframe_wrap"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_gestureframe_wrap"
+        app:layout_constraintRight_toRightOf="@id/lsq_gestureframe_wrap"
+        app:layout_constraintTop_toTopOf="@id/lsq_gestureframe_wrap" />
+
+
+
 
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/lsq_editor_voice_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -99,11 +104,11 @@
         android:text="音量"
         android:textColor="@color/lsq_actionsheet_title_color"
         android:textSize="14sp"
-        android:visibility="gone"
-        app:layout_constraintLeft_toLeftOf="@id/lsq_wrap"
+        app:layout_constraintLeft_toLeftOf="@id/lsq_gestureframe_wrap"
         app:layout_constraintTop_toBottomOf="@id/lsq_range_line" />
 
     <SeekBar
+        android:visibility="gone"
         android:id="@+id/lsq_voice_seek"
         android:layout_width="0dp"
         android:layout_height="18dp"
@@ -115,7 +120,6 @@
         android:paddingLeft="10dp"
         android:progressDrawable="@drawable/lsq_model_voice_seekbar_bg"
         android:thumb="@drawable/lsq_model_seekbar_thumb"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/lsq_editor_voice_text"
         app:layout_constraintLeft_toRightOf="@id/lsq_editor_voice_text"
         app:layout_constraintRight_toRightOf="parent"
@@ -148,6 +152,7 @@
     </FrameLayout>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/lsq_change_media"
         android:layout_width="128dp"
         android:layout_height="48dp"
@@ -158,7 +163,6 @@
         android:text="@string/lsq_change_video_or_image"
         android:textColor="#666666"
         android:textSize="14sp"
-        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lsq_voice_seek" />

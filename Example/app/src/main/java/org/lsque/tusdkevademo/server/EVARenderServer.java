@@ -210,17 +210,16 @@ public class EVARenderServer extends Service {
                                 currentTask.mRenderQueue.runAsync(new Runnable() {
                                     @Override
                                     public void run() {
+                                        producer.cancel();
+                                        producer.release();
+                                        currentTask.mDirector.resetProducer();
+                                        currentTask.mDirector.close();
+                                        stopForeground(true);
                                         try {
                                             callback.saveSuccess(taskId);
                                         } catch (RemoteException e) {
                                             e.printStackTrace();
                                         }
-                                        producer.cancel();
-                                        producer.release();
-                                        currentTask.mDirector.resetProducer();
-                                        currentTask.mDirector.close();
-
-                                        stopForeground(true);
                                     }
                                 });
 

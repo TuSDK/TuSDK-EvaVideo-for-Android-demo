@@ -11,6 +11,7 @@
     <string name="lsq_assets_loading">资源加载中.....</string>
 
     <string name="lsq_title">模板库</string>
+    <string name="lsq_dynamic_title">动态模板</string>
     <string name="lsq_network_title">网络模板库</string>
 
     <string name="lsq_reset">一键重置</string>

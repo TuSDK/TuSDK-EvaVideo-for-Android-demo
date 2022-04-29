@@ -242,6 +242,29 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
 
     }
 
+    companion object{
+
+        fun getPath(context: Context?,uri: Uri) : String{
+            if (uri.toString().startsWith("file:")){
+                return uri.toString().replace("file:///","")
+            }
+            var path = ""
+            var fileName = ""
+            val filePathColumn = arrayOf(MediaStore.MediaColumns.DATA,MediaStore.MediaColumns.DISPLAY_NAME)
+            val cursor = context?.contentResolver!!.query(uri,filePathColumn,null,null,null,null)
+            if (cursor == null) return path
+            if (cursor.moveToFirst()){
+                try {
+                    path = cursor.getString(cursor.getColumnIndex(filePathColumn[0]))
+                } catch (e:Exception){
+                }
+                fileName = cursor.getString(cursor.getColumnIndex(filePathColumn[1]))
+            }
+            return path
+        }
+
+    }
+
 
 
 

@@ -10,21 +10,21 @@
  */
 package org.lsque.tusdkevademo
 
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Typeface
+import android.media.MediaCodecInfo
 import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.ScaleGestureDetector
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.RelativeLayout
-import androidx.appcompat.widget.ViewUtils
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.alexvasilkov.gestures.GestureController
 import com.alexvasilkov.gestures.State
 import com.tusdk.pulse.MediaInspector
@@ -32,6 +32,8 @@ import com.tusdk.pulse.Producer
 import com.tusdk.pulse.ThumbnailMaker
 import com.tusdk.pulse.Transcoder
 import kotlinx.android.synthetic.main.activity_movie_editor_cut.*
+import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_change_media
+import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_cutRegionView
 import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_editor_cut_load
 import kotlinx.android.synthetic.main.activity_movie_editor_cut.lsq_editor_cut_load_parogress
 import kotlinx.android.synthetic.main.model_editor_activity.*
@@ -39,6 +41,8 @@ import kotlinx.android.synthetic.main.title_item_layout.*
 import org.jetbrains.anko.textColor
 import org.lasque.tusdkpulse.core.TuSdk
 import org.lasque.tusdkpulse.core.TuSdkContext
+
+
 import org.lasque.tusdkpulse.core.struct.TuSdkSize
 import org.lasque.tusdkpulse.core.struct.TuSdkSizeF
 import org.lasque.tusdkpulse.core.struct.ViewSize
@@ -160,11 +164,11 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         lsq_next.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
         lsq_next.textSize = 17f
         lsq_next.setOnClickListener {
-            setEnable(false)
+//            setEnable(false)
             mVideoPlayer!!.pause()
             lsq_play_btn.visibility = View.GONE
             startCompound()
-            lsq_editor_cut_load.visibility = View.VISIBLE
+//            lsq_editor_cut_load.visibility = View.VISIBLE
         }
         lsq_change_media.setOnClickListener { finish() }
         lsq_play_btn.setOnClickListener {
@@ -178,7 +182,7 @@ class MovieCuterActivity : ScreenAdapterActivity() {
             }
         }
 
-        lsq_scroll_wrap.setOnClickListener {
+        lsq_gestureframe_wrap.setOnClickListener {
             if (!mVideoPlayer!!.isPlaying) {
                 mVideoPlayer!!.start()
                 lsq_play_btn.visibility = View.GONE
@@ -205,65 +209,55 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         }
         val regionRatio = lsq_cutRegionView.regionRatio
         val regionRect = lsq_cutRegionView.regionRect
-//        lsq_cutRegionView.visibility = View.VISIBLE
+        lsq_cutRegionView.visibility = View.VISIBLE
         TLog.e("regionRect = $regionRect regionRatio = $regionRatio width = $width height = $height")
-        lsq_scroll_wrap.visibility = View.VISIBLE
-//        postDelayed({
-//            lsq_scroll_wrap.visibility = View.VISIBLE
-//            val params = lsq_scroll_wrap.layoutParams as ConstraintLayout.LayoutParams
-//            params.width = lsq_cutRegionView.regionRect.width()
-//            params.height = lsq_cutRegionView.regionRect.height()
-//            params.topToBottom = R.id.lsq_title
-//            params.bottomToTop = R.id.lsq_range_line
-//            lsq_scroll_wrap.layoutParams = params
-//            var percent = lsq_cutRegionView.regionRect.height().toFloat() / lsq_media_player!!.height.toFloat()
+        lsq_scroll_wrap.visibility = View.INVISIBLE
+        postDelayed({
+            val params = lsq_scroll_wrap.layoutParams
+
+            val screenSize = TuSdkContext.getScreenSize();
+            params.width = screenSize.width
+            params.height = (screenSize.width.toFloat() / width * height).toInt()
+            lsq_scroll_wrap.layoutParams = params
+            lsq_scroll_wrap.visibility = View.VISIBLE
+            var percent = lsq_cutRegionView.regionRect.height().toFloat() / lsq_media_player!!.height.toFloat()
 //            mCurrentCropRect.bottom = percent
-//            TLog.e("mDefaultCropRect = $mDefaultCropRect")
-//        }, 1000)
+            TLog.e("mDefaultCropRect = $mDefaultCropRect")
+        }, 1000)
     }
 
     private fun setStateChangedListener() {
+        lsq_scroll_wrap.controller.settings.minZoom = 1.0f
         lsq_scroll_wrap.controller.addOnStateChangeListener(object : GestureController.OnStateChangeListener {
             override fun onStateReset(oldState: State?, newState: State?) {
                 TLog.e("oldState = $oldState newState = $newState")
+
             }
 
             override fun onStateChanged(state: State?) {
                 TLog.e("state = " + state.toString())
-                if (lsq_media_player!!.width == 0 || lsq_media_player!!.height == 0) return
+                if (lsq_media_player!!.width == 0 || lsq_media_player!!.height == 0 || state == null) return
 
-                var top:Float = 0.0f
-                var left : Float = 0.0f
-                var bottom : Float = 1.0f
-                var right : Float = 1.0f
 
-                val videoViewSize = mCurrentVideoSize
-                val regionSize = TuSdkSize.create(lsq_cutRegionView.regionRect.width(),lsq_cutRegionView.regionRect.height())
-                var currentVideoViewSize = videoViewSize.scale(state!!.zoom)
-                val regionSizePercent =
-                    if (regionSize.maxSide() > currentVideoViewSize.maxSide()){
-                        val scale = regionSize.maxSide().toFloat() / currentVideoViewSize.maxSide().toFloat()
-                        currentVideoViewSize = currentVideoViewSize.scale(scale)
-                        TuSdkSizeF.create(regionSize.width.toFloat()  / currentVideoViewSize.width.toFloat(),regionSize.height.toFloat()/ currentVideoViewSize.height.toFloat())
-                    } else {
-                        TuSdkSizeF.create(regionSize.width.toFloat()  / currentVideoViewSize.width.toFloat(),regionSize.height.toFloat()/ currentVideoViewSize.height.toFloat())
 
-                    }
-                left = if (regionSize.width >= currentVideoViewSize.width){
-                    0.0f
-                } else {
-                    max(0.0f, abs(state.x) / currentVideoViewSize.width)
-                }
-                top = if (regionSize.height >= currentVideoViewSize.height){
-                    0.0f
-                } else {
-                    max(0.0f,abs(state.y) / currentVideoViewSize.height)
-                }
-//                bottom = min(1.0f,top + regionSizePercent.height)
-                bottom = top + regionSizePercent.height
-//                right = min(1.0f,left + regionSizePercent.width)
-                right = left + regionSizePercent.width
-                mCurrentCropRect.set(left, top, right, bottom)
+                val x = state.x
+                val y = state.y
+
+                val viewSize = TuSdkSize.create(lsq_media_player.layoutParams.width,lsq_media_player.layoutParams.height).scale(state.zoom)
+
+                val top = abs(y)
+                val left = abs(x)
+
+                val bottom = abs(top + lsq_scroll_wrap.layoutParams.height)
+                val right = abs(left + lsq_scroll_wrap.layoutParams.width)
+
+                val fTop = top / viewSize.height
+                val fLeft = left / viewSize.width
+                val fBottom = bottom / viewSize.height
+                val fRight = right / viewSize.width
+
+                mCurrentCropRect.set(fLeft,fTop,fRight,fBottom)
+
             }
 
         })
@@ -291,32 +285,6 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         val videoPath = intent.getStringExtra("videoPath")
         isCutting = true
 
-        val transcoder : Transcoder = Transcoder()
-        val outputPath = getOutputTempFilePath().path
-
-        transcoder.setListener { state, ts ->
-            if (state == Producer.State.kWRITING){
-                runOnUiThread {
-                    lsq_editor_cut_load.setVisibility(View.VISIBLE)
-                    lsq_editor_cut_load_parogress.setValue((ts / transcoder.duration.toFloat()) * 100f)
-                }
-            } else if (state == Producer.State.kEND){
-                runOnUiThread {
-                    transcoder.release()
-                    setEnable(true)
-                    lsq_editor_cut_load.setVisibility(View.GONE)
-                    lsq_editor_cut_load_parogress.setValue(0f)
-                    val intent = Intent()
-                    val rectf = mCurrentCropRect
-                    TLog.e("current rect = ${rectf}")
-                    intent.putExtra("videoPath", outputPath)
-                    intent.putExtra("zoom", floatArrayOf(rectf.left, rectf.top, min(1f, rectf.right), min(1f, rectf.bottom)))
-                    setResult(ModelEditorActivity.ALBUM_REQUEST_CODE_VIDEO, intent)
-                    finish()
-                }
-            }
-        }
-
         val mediaInfo = MediaInspector.shared().inspect(videoPath)
         for (info in mediaInfo.streams){
             if (info is MediaInspector.MediaInfo.Video){
@@ -328,7 +296,6 @@ class MovieCuterActivity : ScreenAdapterActivity() {
                 val rangeStartTs = mLeftTimeRangUs / 1000
                 val rangeEndTs = mRightTimeRangUs / 1000
                 val targetSize = TuSdkSize(width,height)
-                val config = Producer.OutputConfig()
                 if (size.maxSide() > targetSize.maxSide()){
                     val scale = size.maxSide().toFloat() / targetSize.maxSide().toFloat()
                     size = size.scale(scale)
@@ -337,18 +304,16 @@ class MovieCuterActivity : ScreenAdapterActivity() {
                     val scale = 1080f / size.maxSide().toFloat()
                     size = size.scale(scale)
                 }
-                config.width = size.width
-                config.height = size.height
-                config.rangeStart = rangeStartTs
-                config.rangeDuration = rangeEndTs - rangeStartTs
-                config.keyint = 0
-                transcoder.setOutputConfig(config)
 
-                if (!transcoder.init(outputPath,videoPath)){
-                    return
-                }
-                transcoder.start()
-                setEnable(false)
+                val intent = Intent()
+                val rectf = mCurrentCropRect
+                intent.putExtra("start",rangeStartTs)
+                intent.putExtra("duration",rangeEndTs - rangeStartTs)
+                intent.putExtra("videoPath", videoPath)
+                intent.putExtra("zoom", floatArrayOf(rectf.left, rectf.top, min(1f, rectf.right), min(1f, rectf.bottom)))
+                setResult(ModelEditorActivity.ALBUM_REQUEST_CODE_VIDEO, intent)
+                finish()
+
             }
         }
     }
@@ -368,8 +333,6 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         val videoWidth = format.getInteger(MediaFormat.KEY_WIDTH)
         val videoHeight = format.getInteger(MediaFormat.KEY_HEIGHT)
 
-//        val rotation = format.getInteger(MediaFormat.KEY_ROTATION)
-
         var rotation = 0
 
         if (format.containsKey(MediaFormat.KEY_ROTATION)){
@@ -380,35 +343,6 @@ class MovieCuterActivity : ScreenAdapterActivity() {
 
         mCurrentVideoSize = mCurrentVideoSize.transforOrientation(ImageOrientation.getValue(rotation,false))
 
-        val w = intent.getIntExtra("width", 0)
-        val h = intent.getIntExtra("height", 0)
-
-        val displaySize = TuSdkContext.getScreenSize();
-
-        val viewPortW = displaySize.width
-        val viewPortH = (viewPortW / w.toFloat() * h).toInt()
-
-        val imageW = displaySize.width
-        val imageH = (imageW / mCurrentVideoSize.width.toFloat() * mCurrentVideoSize.height).toInt()
-
-        lsq_scroll_wrap.post {
-            val params = lsq_scroll_wrap.layoutParams as RelativeLayout.LayoutParams
-
-            params.width = viewPortW
-            params.height = viewPortH
-
-            lsq_scroll_wrap.layoutParams = params
-
-
-            lsq_scroll_wrap.controller.settings.setViewport(viewPortW,viewPortH)
-            lsq_scroll_wrap.controller.settings.setImage(imageW,imageH)
-            lsq_scroll_wrap.controller.resetState()
-        }
-
-        var percent = viewPortH.toFloat() / imageH.toFloat()
-        mCurrentCropRect.bottom = percent
-
-        TLog.e("[Debug] view port w : %s h : %s video size w : %s h : %s",viewPortW,viewPortH,imageW,imageH)
 
         lsq_media_player.setPlayerCallback(object : TuSDKMediaPlayer.PlayerCallback{
             override fun setStartPlayer(paramInt: Int) {
@@ -436,11 +370,20 @@ class MovieCuterActivity : ScreenAdapterActivity() {
         val duration = mDurationTimeUs / 1000000.0f
         mRightTimeRangUs = (mDurationTimeUs * maxPercent).toLong()
 
-//        if (width > videoWidth){
-//            val scale = width.toFloat() / videoWidth
-//            lsq_media_player.scaleX = scale
-//            lsq_media_player.scaleY = scale
-//        }
+        if (width > videoWidth){
+            val scale = width.toDouble() / videoWidth
+
+//            lsq_media_player.setScale(scale)
+
+//            val params = lsq_media_player.layoutParams
+//
+//            params.width = (params.width * scale).toInt()
+//            params.height = (params.height * scale).toInt()
+//
+//            lsq_media_player.layoutParams = params
+
+//            mCurrentVideoSize = mCurrentVideoSize.scale(scale.toFloat())
+        }
 
         mVideoPlayer = lsq_media_player
         mVideoPlayer?.start()

@@ -34,6 +34,12 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e2df2af63e3cf1602e774d56df2a69c7/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e2df2af63e3cf1602e774d56df2a69c7/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e2df2af63e3cf1602e774d56df2a69c7/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a01db56013abb2ba75cc7460ce9b447b/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a01db56013abb2ba75cc7460ce9b447b/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a01db56013abb2ba75cc7460ce9b447b/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c154b3e5e0135bc57da4f3ae6434c7f3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c154b3e5e0135bc57da4f3ae6434c7f3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c154b3e5e0135bc57da4f3ae6434c7f3/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.alexvasilkov/gesture-views/2.5.2/156dec1585bcc1f62951cb97ede4e8e5adb11b03/gesture-views-2.5.2-javadoc.jar!/" />

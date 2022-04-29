@@ -85,7 +85,19 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
         when (mModelList[position].modelType) {
             EditType.Image -> {
                 val item = mModelList[position]
-                (holder as ImageViewHolder).textView.text = mContext.getString(R.string.lsq_editor_item_image)
+                var showText = ""
+                val currentItem = item.modelItem as EvaModel.VideoReplaceItem
+                if (currentItem.type == EvaModel.AssetType.kIMAGE_VIDEO) {
+                    showText =mContext.getString(R.string.lsq_editor_item_video_image)
+                } else if (currentItem.type == EvaModel.AssetType.kVIDEO_ONLY) {
+                    showText = mContext.getString(R.string.lsq_editor_item_video)
+                } else if (currentItem.type == EvaModel.AssetType.kMASK){
+                    showText = "MASK"
+                } else if (currentItem.type == EvaModel.AssetType.kIMAGE_ONLY){
+                    showText = mContext.getString(R.string.lsq_editor_item_image)
+                }
+
+                (holder as ImageViewHolder).textView.text = showText
                 holder!!.itemView.setOnClickListener { mItemClickListener!!.onImageItemClick(holder.itemView, mModelList[position].modelItem as EvaModel.VideoReplaceItem, position, EditType.Image) }
 
                 var imageEntriy = (item.modelItem as EvaModel.VideoReplaceItem)

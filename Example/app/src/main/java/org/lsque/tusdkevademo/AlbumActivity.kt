@@ -24,6 +24,8 @@ class AlbumActivity : ScreenAdapterActivity() {
     private var currentHeight = 0
     private var videoDuration = 0f
     private var isAlpha = false
+    private var maxSize = 1
+    private var minSize = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,9 @@ class AlbumActivity : ScreenAdapterActivity() {
         currentHeight = intent.getIntExtra("height", 0)
         videoDuration = intent.getFloatExtra("videoDuration",0f)
         isAlpha = intent.getBooleanExtra("isAlpha",false)
+        maxSize = intent.getIntExtra("maxSize",1)
+        minSize = intent.getIntExtra("minSize",-1)
+
         var bundle = Bundle()
         bundle.putBoolean("onlyImage", isOnlyImage)
         bundle.putBoolean("onlyVideo", isOnlyVideo)
@@ -41,6 +46,8 @@ class AlbumActivity : ScreenAdapterActivity() {
         bundle.putInt("height", currentHeight)
         bundle.putFloat("videoDuration",videoDuration)
         bundle.putBoolean("isAlpha",isAlpha)
+        bundle.putInt("maxSize",maxSize)
+        bundle.putInt("minSize",minSize)
         mAlbumFragment!!.arguments = bundle
         initView()
     }
@@ -50,6 +57,15 @@ class AlbumActivity : ScreenAdapterActivity() {
         lsq_back.setOnClickListener { finish() }
         lsq_next.visibility = View.GONE
         lsq_title_item_title.text = "素材选择"
+
+        if (maxSize > 1){
+            lsq_next.visibility = View.VISIBLE
+            lsq_next.setOnClickListener {
+                var intent = Intent()
+                intent.putExtra("itemPaths",mAlbumFragment.mSelectList)
+                finish()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
