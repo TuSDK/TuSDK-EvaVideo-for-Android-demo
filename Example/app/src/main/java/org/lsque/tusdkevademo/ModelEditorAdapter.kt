@@ -53,6 +53,10 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
 
     private var mItemClickListener: OnItemClickListener? = null
 
+    private var mCurrentClickPos = -1
+
+    private var mHighLightPos = -1
+
     private val IMAGE_TYPE = 1
     private val TEXT_TYPE = 2
     private val VIDEO_TYPE = 3
@@ -78,6 +82,27 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
 
     override fun getItemCount(): Int {
         return mModelList.size
+    }
+
+    public fun setCurrentClickPos(pos : Int){
+        val prePos = mCurrentClickPos
+        if (prePos > -1)
+            notifyItemChanged(prePos)
+        mCurrentClickPos = pos
+        notifyItemChanged(mCurrentClickPos)
+    }
+
+    public fun setHighLightPos(pos: Int){
+        val prePos = mHighLightPos
+        if (prePos > -1)
+            notifyItemChanged(prePos)
+        mHighLightPos = pos
+        notifyItemChanged(mHighLightPos)
+    }
+
+
+    public fun getCurrentClickPos() : Int{
+        return mCurrentClickPos
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -124,6 +149,19 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
                     }
 
                 })
+
+                if (mCurrentClickPos == position){
+                    holder.maskView.visibility = View.VISIBLE
+                } else {
+                    holder.maskView.visibility = View.GONE
+                }
+
+
+                if (mHighLightPos == position){
+                    holder.hightLightView.setBackgroundResource(R.drawable.red_stroke_bg)
+                } else {
+                    holder.hightLightView.setBackgroundColor(0)
+                }
             }
 
             EditType.Text -> {
@@ -132,9 +170,16 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
                 val itemTextView = (holder as TextViewHolder).textView
                 itemTextView.text = textEntity.text
                 itemTextView.textColor = if(TextUtils.isEmpty(textEntity.text)) Color.parseColor("#555555") else Color.parseColor("#ffffff")
+
+
+                if (mHighLightPos == position){
+                    holder.hightLightView.setBackgroundResource(R.drawable.red_stroke_bg)
+                } else {
+                    holder.hightLightView.setBackgroundColor(0)
+                }
+
                 holder!!.itemView.setOnClickListener { mItemClickListener!!.onTextItemClick(holder.itemView, mModelList[position].modelItem as EvaModel.TextReplaceItem, position, EditType.Text) }
             }
-
 
             EditType.Video,EditType.Alpha-> {
                 holder!!.itemView.setOnClickListener { mItemClickListener!!.onVideoItemClick(holder.itemView, mModelList[position].modelItem as EvaModel.VideoReplaceItem, position, EditType.Video) }
@@ -150,6 +195,12 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
                     showText = "MASK"
                 } else if (currentItem.type == EvaModel.AssetType.kIMAGE_ONLY){
                     showText = mContext.getString(R.string.lsq_editor_item_image)
+                }
+
+                if (mCurrentClickPos == position){
+                    (holder as ImageViewHolder).maskView.visibility = View.VISIBLE
+                } else {
+                    (holder as ImageViewHolder).maskView.visibility = View.GONE
                 }
 
                 (holder as ImageViewHolder).textView.text = showText
@@ -198,6 +249,14 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
                         holder.imageView.setImageBitmap(result)
                     }
                 }
+
+
+                if (mHighLightPos == position){
+                    holder.hightLightView.setBackgroundResource(R.drawable.red_stroke_bg)
+                } else {
+                    holder.hightLightView.setBackgroundColor(0)
+                }
+
             }
         }
     }
@@ -233,10 +292,16 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
     inner class ImageViewHolder(itemView: View) : ViewHolder(itemView) {
         val imageView = itemView.find<ImageView>(R.id.lsq_editor_icon)
         val textView = itemView.find<TextView>(R.id.lsq_editor_icon_num)
+
+        val maskView = itemView.find<TextView>(R.id.lsq_editor_mask)
+
+        val hightLightView = itemView.find<View>(R.id.lsq_editor_highlight)
     }
 
     inner class TextViewHolder(itemView: View) : ViewHolder(itemView) {
         val textView = itemView.find<TextView>(R.id.lsq_edior_text)
+
+        val hightLightView = itemView.find<View>(R.id.lsq_editor_highlight)
     }
 
 

@@ -38,12 +38,12 @@ object ModelItemFactory {
     }
 
     private fun createModelItem(modelDir: String,modelName : String,templateName: String,iconName : String,ver : String,id : Int) : ModelItem{
-        return ModelItem(modelDir,modelName, templateName,"http://files.tusdk.com/eva/$templateName",templateName,"",iconName,ver,id)
+        return ModelItem(modelDir,modelName, templateName,"http://files.tusdk.com/eva/$templateName",templateName,"",iconName,ver,id,"https://files.tusdk.com/miniprogram/eva/${id}.mp4")
     }
 
 }
 
-data class ModelItem(var modelDir:String,var modelName : String,var templateName:String,var modelDownloadUrl : String,var fileName:String,var modelDownloadFilePath:String , var iconName : String,var modelVer : String,var modelId : Int) : Parcelable {
+data class ModelItem(var modelDir:String,var modelName : String,var templateName:String,var modelDownloadUrl : String,var fileName:String,var modelDownloadFilePath:String , var iconName : String,var modelVer : String,var modelId : Int,var videoUrl : String = "") : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString()!!,
             parcel.readString()!!,
@@ -53,7 +53,9 @@ data class ModelItem(var modelDir:String,var modelName : String,var templateName
             parcel.readString()!!,
             parcel.readString()!!,
             parcel.readString()!!,
-            parcel.readInt()) {
+            parcel.readInt(),
+        parcel.readString()!!
+    ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -66,6 +68,7 @@ data class ModelItem(var modelDir:String,var modelName : String,var templateName
         parcel.writeString(iconName)
         parcel.writeString(modelVer)
         parcel.writeInt(modelId)
+        parcel.writeString(videoUrl)
     }
 
     override fun describeContents(): Int {

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="120dp"
+    android:layout_height="50dp"
+    android:background="@drawable/popup_white_bg">
+
+    <TextView
+        android:id="@+id/lsq_popup_changed"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintWidth_default="percent"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:drawableTop="@mipmap/icon_replace"
+        android:gravity="center"
+        android:paddingTop="5dp"
+        android:text="替换"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:gravity="center"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/lsq_popup_edit"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:drawableTop="@mipmap/icon_crop"
+        android:paddingTop="5dp"
+        android:text="剪裁"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@id/lsq_popup_changed"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,7 @@ import org.jetbrains.anko.startActivity
 import org.lasque.tusdkpulse.core.TuSdkContext
 import org.lasque.tusdkpulse.core.utils.FileHelper
 import org.lasque.tusdkpulse.core.utils.TLog
+import org.lsque.tusdkevademo.albumselect.AlbumSelectActivity
 import java.io.File
 
 
@@ -75,7 +76,9 @@ class EVAFileLoaderActivity : ScreenAdapterActivity() {
                 "1.0.0",
                 0
             )
-            startActivity<ModelDetailActivity>("model" to item)
+//            startActivity<ModelDetailActivity>("model" to item)
+
+            startActivity<AlbumSelectActivity>("model-path" to item.modelDir)
         }
         finish()
 

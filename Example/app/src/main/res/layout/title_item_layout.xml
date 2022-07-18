@@ -22,17 +22,18 @@
 		android:id="@+id/lsq_title_item_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
-        <TextView
 
-            android:id="@+id/lsq_next"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/lsq_next" 
-            android:textColor="@color/lsq_background_entry_default"
-            android:textSize="17sp"
-            android:gravity="center"
-            android:paddingLeft="@dimen/lsq_font_space_15"
-			android:paddingRight="@dimen/lsq_font_space_15"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"/>    
+	<TextView
+
+		android:id="@+id/lsq_next"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:layout_alignParentRight="true"
+		android:layout_centerVertical="true"
+		android:gravity="center"
+		android:paddingLeft="@dimen/lsq_font_space_15"
+		android:paddingRight="@dimen/lsq_font_space_15"
+		android:text="@string/lsq_next"
+		android:textColor="@color/lsq_background_entry_default"
+		android:textSize="17sp" />
 </RelativeLayout>

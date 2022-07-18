@@ -14,7 +14,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.SparseArray
@@ -28,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.tusdk.pulse.Engine
+import com.tusdk.pulse.utils.AssetsMapper
 import kotlinx.android.synthetic.main.demo_entry_activity.lsq_model_list
 import kotlinx.android.synthetic.main.network_model_example_activity.*
 import org.jetbrains.anko.startActivity
@@ -37,13 +37,14 @@ import org.lasque.tusdkpulse.core.utils.AssetsHelper
 import org.lasque.tusdkpulse.core.utils.FileHelper
 import org.lasque.tusdkpulse.core.utils.TLog
 import org.lasque.tusdkpulse.core.utils.ThreadHelper
+import org.lsque.tusdkevademo.albumselect.AlbumSelectActivity
 import org.lsque.tusdkevademo.utils.DownloadManagerUtil
 import org.lsque.tusdkevademo.utils.EVAItem
 import org.lsque.tusdkevademo.utils.PermissionUtils
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileReader
+import java.io.*
 import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
 
 
 class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil.DownloadStateListener {
@@ -199,7 +200,9 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
                     "1.0.0",
                     0
                 )
-                startActivity<ModelDetailActivity>("model" to item)
+//                startActivity<ModelDetailActivity>("model" to item)
+
+                startActivity<AlbumSelectActivity>("model" to item)
             }
         }
     }
@@ -219,10 +222,74 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
         mDownloadUtil = DownloadManagerUtil(this,this)
         mDownloadUtil!!.downLoadEVAJson()
         initView()
+        
+        initFonts()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        ModelManager.release()
+    }
+
+    private fun initFonts() {
+        mapZipFile("fontsDir","fonts.zip")
+    }
+
+    private fun mapZipFile(key: String, fileName: String) {
+        val sp = TuSdkContext.context().getSharedPreferences("TU-TTF", MODE_PRIVATE)
+        val assetsMapper = AssetsMapper(TuSdkContext.context())
+        if (!sp.contains(key)) {
+            try {
+                val zipFilePath = assetsMapper.mapAsset(fileName)
+                val index = zipFilePath.lastIndexOf(".")
+                val saveDir = zipFilePath.substring(0, index)
+                val saveFileDir = File(saveDir)
+                if (!saveFileDir.exists()) saveFileDir.mkdirs()
+                var entry: ZipEntry? = null
+                var entryFilePath: String? = null
+                var count = 0
+                val bufferSize = 1024
+                val buffer = ByteArray(bufferSize)
+                var bis: BufferedInputStream? = null
+                var bos: BufferedOutputStream? = null
+                val zip = ZipFile(zipFilePath)
+                val entries = zip.entries() as Enumeration<ZipEntry>
+                //循环对压缩包里的每一个文件进行解压
+                while (entries.hasMoreElements()) {
+                    entry = entries.nextElement()
+                    /**这里提示如果当前元素是文件夹时，在目录中创建对应文件夹
+                     * ，如果是文件，得出路径交给下一步处理 */
+                    entryFilePath = saveDir + File.separator + entry.name
+                    TLog.e("entry file path %s", entryFilePath)
+                    val file = File(entryFilePath)
+                    if (entryFilePath.endsWith("/")) {
+                        if (!file.exists()) {
+                            file.mkdirs()
+                        }
+                        continue
+                    }
+                    /***这里即是上一步所说的下一步，负责文件的写入✧ */
+                    bos = BufferedOutputStream(FileOutputStream(entryFilePath))
+                    bis = BufferedInputStream(zip.getInputStream(entry))
+                    while (bis.read(buffer, 0, bufferSize).also { count = it } != -1) {
+                        bos.write(buffer, 0, count)
+                    }
+                    bos.flush()
+                    bos.close()
+                }
+                sp.edit().putString(key, saveDir).apply()
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+                TLog.e(e)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                TLog.e(e)
+            }
+        }
     }
 
     private fun initView() {
-        val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE)
+        val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,  Manifest.permission.RECORD_AUDIO)
         PermissionUtils.requestRequiredPermissions(this, permissions)
         setModelView()
         lsq_refresh_layout.setOnRefreshListener {
@@ -285,7 +352,12 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
                     return
                 }
                 if (downloadMap[position]){
-                    startActivity<ModelDetailActivity>("model" to item)
+                    if (TextUtils.isEmpty(item.videoUrl)){
+                        startActivity<ModelDetailActivity>("model" to item)
+                    } else {
+                        startActivity<ModelVideoActivity>("model" to item)
+                    }
+
                 } else {
                     Toast.makeText(this@NetworkModelExampleActivity,"模板未下载,请先下载模板",Toast.LENGTH_SHORT).show()
                 }
@@ -293,6 +365,7 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
         })
         val layoutManger = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         layoutManger.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+        layoutManger.reverseLayout = false
         lsq_model_list.layoutManager = layoutManger
         lsq_model_list.animation = null
         lsq_model_list.setHasFixedSize(true)

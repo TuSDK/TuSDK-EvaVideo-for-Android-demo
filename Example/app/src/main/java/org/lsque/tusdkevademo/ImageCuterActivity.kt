@@ -10,9 +10,7 @@
  */
 package org.lsque.tusdkevademo
 
-import android.graphics.Color
-import android.graphics.RectF
-import android.graphics.Typeface
+import android.graphics.*
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -90,7 +88,16 @@ class ImageCuterActivity : ScreenAdapterActivity() {
         val imagePath = intent.getStringExtra("imagePath")
         val width = intent.getIntExtra("width", 0)
         val height = intent.getIntExtra("height", 0)
-        var bitmap = BitmapHelper.getBitmap(File(imagePath))
+
+        val imgSize = BitmapHelper.getBitmapSize(File(imagePath))
+
+        val options = BitmapFactory.Options()
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888
+
+        if (imgSize.maxSide() > 2000){
+            options.inSampleSize = Math.round(imgSize.maxSide().toFloat() / 2000f)
+        }
+        var bitmap = BitmapFactory.decodeFile(imagePath, options)
         bitmap = BitmapHelper.imageRotaing(bitmap,BitmapHelper.getImageOrientation(imagePath))
         getImageView()!!.setImageBitmap(bitmap)
         // 选取范围

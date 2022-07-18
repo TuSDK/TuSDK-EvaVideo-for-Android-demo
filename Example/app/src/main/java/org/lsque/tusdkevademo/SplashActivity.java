@@ -28,7 +28,16 @@ public class SplashActivity extends Activity
             @Override
             public void run() {
 
+//                String path = "/storage/emulated/0/sssssssssssss.mp4";
+//                String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/sssssssssssss.mp4";
+//                Intent intent = new Intent(SplashActivity.this, MovieEditorActivity.class);
+//                intent.putExtra("isDirectEdit",false);
+//                intent.putExtra("videoPath",path);
+
                 startActivity(new Intent(SplashActivity.this,NetworkModelExampleActivity.class));
+//                startActivity(new Intent(SplashActivity.this,TestActivity.class));
+//                startActivity(new Intent(SplashActivity.this,DynamicModelActivity.class));
+//                startActivity(intent);
                 overridePendingTransition(R.anim.lsq_fade_in,R.anim.lsq_fade_out);
                 finish();
             }

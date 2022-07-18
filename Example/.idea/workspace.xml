@@ -14,42 +14,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="40061123-fa58-4bce-9a42-e13fd4b05602" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_PhilJay_MPAndroidChart_3_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__D__tusdk_work_release_TUSDK_Eva_release_Example_app_libs_TuSDKPulseEva_3_1_0_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__D__tusdk_work_release_TUSDK_Eva_release_Example_app_libs_TuSDKPulseEva_3_1_1_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__D__tusdk_work_release_TUSDK_Eva_release_Example_app_libs_TuSDKPulse_2_0_9_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__D__tusdk_work_release_TUSDK_Eva_release_Example_app_libs_TuSDKPulse_2_0_10_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulseCore_4_1_1_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulseEva_3_0_1_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_TuSDKPulse_2_0_8_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_universal_image_loader_1_9_4_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__D__tusdk_work_release_TUSDK_Eva_release_Example_app_libs_universal_image_loader_1_9_4_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__D__tusdk_work_release_TUSDK_Eva_release_Example_app_libs_TuSDKPulseEva_3_1_1_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__D__tusdk_work_release_TUSDK_Eva_release_Example_app_libs_TuSDKPulseEva_3_1_2_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_1_1_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_1_1_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_common_2_1_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_common_2_1_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_collection_collection_1_1_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_collection_collection_1_1_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_1_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_1_0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_alexvasilkov_gesture_views_2_5_2_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_alexvasilkov_gesture_views_2_5_2_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_gifdecoder_4_9_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_gifdecoder_4_9_0_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_glide_4_9_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_bumptech_glide_glide_4_9_0_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_jakob_grabner_Circle_Progress_View_v1_3_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_jakob_grabner_Circle_Progress_View_v1_3_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_junit_4_12.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__junit_junit_4_12.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_0_10_8_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_coroutines_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_appcompat_v7_coroutines_0_10_8_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_support_v4_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_anko_support_v4_0_10_8_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_appcompatV7_base_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_appcompatV7_base_0_10_8_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_commons_base_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_commons_base_0_10_8_aar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_supportV4_base_0_10_8_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_anko_supportV4_base_0_10_8_aar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_3_71.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_3_71.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_71.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_71.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_3_61.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_3_61.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKPulse-2.0.9.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKPulseEva-3.1.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKPulse-2.0.10.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/libs/TuSDKPulse-2.0.10.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKPulseCore-4.1.2.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/libs/TuSDKPulseCore-4.1.2.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/libs/TuSDKPulseEva-3.1.1.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/release/release/output.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/release/release/output.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/lsq_eva_142.eva" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumAdapter.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumInfo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/AlbumInfo.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/EVAFileLoaderActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/EVAFileLoaderActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelDetailActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelDetailActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ImageCuterActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ImageCuterActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelEditorAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/MovieCuterActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/MovieCuterActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelItemFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/ModelItemFactory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/NetworkModelAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/NetworkModelAdapter.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/NetworkModelExampleActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/NetworkModelExampleActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/SplashActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/SplashActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSDKMediaPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/playview/TuSDKMediaPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/server/EVARenderServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/server/EVARenderServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/DownloadManagerUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/lsque/tusdkevademo/utils/DownloadManagerUtil.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-eva.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-eva.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-pulse.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libtusdk-pulse.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/armeabi-v7a/libtusdk-eva.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/armeabi-v7a/libtusdk-eva.so" afterDir="false" />
@@ -58,11 +60,12 @@
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/x86/libtusdk-pulse.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/x86/libtusdk-pulse.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/x86_64/libtusdk-eva.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/x86_64/libtusdk-eva.so" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/jniLibs/x86_64/libtusdk-pulse.so" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/jniLibs/x86_64/libtusdk-pulse.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_movie_editor_cut.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_movie_editor_cut.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/lsq_album_select_video_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/lsq_album_select_video_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/editor_text_bg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/editor_text_bg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_editor_image.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_editor_image.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_editor_text.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_editor_text.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/model_editor_activity.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/model_editor_activity.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/title_item_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/title_item_layout.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,8 +182,6 @@
       <option name="MODE" value="default_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
       <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
       <option name="DEBUGGER_TYPE" value="Auto" />
@@ -250,8 +251,6 @@
       <option name="MODE" value="default_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
       <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
       <option name="DEBUGGER_TYPE" value="Java" />

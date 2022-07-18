@@ -29,6 +29,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
+            android:name=".ModelVideoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
             android:name=".ImageCuterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="standard"
@@ -76,6 +81,10 @@
                 <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.eva" />
             </intent-filter>
         </activity>
+        <activity android:name=".DynamicModelActivity" />
+        <activity android:name=".DynamicModelEditorActivity" />
+        <activity android:name=".TestActivity" />
+        <activity android:name=".albumselect.AlbumSelectActivity" />
 
         <service android:name=".server.EVARenderServer" android:process=":render" />
         <service android:name=".server.DYNEVARenderServer"  android:process=":dynrender"/>
@@ -87,18 +96,12 @@
         android:glEsVersion="0x00020000"
         android:required="true" /> <!-- 开启闪光灯权限 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 访问麦克风 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" /> <!-- 以下为非必要权限 -->
     <!-- 位置信息 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许访问GPS -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /> <!-- 读取本机信息 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 读取日志 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 

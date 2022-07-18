@@ -63,6 +63,7 @@ class AlbumActivity : ScreenAdapterActivity() {
             lsq_next.setOnClickListener {
                 var intent = Intent()
                 intent.putExtra("itemPaths",mAlbumFragment.mSelectList)
+                setResult(DynamicModelActivity.ALBUM_REQUEST_CODE_DYNAMCI,intent)
                 finish()
             }
         }

@@ -25,6 +25,7 @@ import org.lasque.tusdkpulse.core.utils.ThreadHelper
 import org.lasque.tusdkpulse.core.utils.sqllite.ImageSqlHelper
 import org.lasque.tusdkpulse.core.utils.sqllite.ImageSqlInfo
 import org.lasque.tusdkpulse.impl.view.widget.TuProgressHub
+import org.lsque.tusdkevademo.DynamicModelActivity.Companion.ALBUM_REQUEST_CODE_DYNAMCI
 import org.lsque.tusdkevademo.ModelEditorActivity.Companion.ALBUM_REQUEST_CODE_ALPHA_VIDEO
 import org.lsque.tusdkevademo.utils.MD5Util
 import java.util.*
@@ -141,8 +142,8 @@ class AlbumFragment : Fragment(), LoadTaskDelegate {
         if (mAlbumAdapter == null) {
             mAlbumAdapter = AlbumAdapter(requireActivity().baseContext, imageInfos, mSelectList)
             mAlbumAdapter!!.setMaxSize(mMaxSize)
-            mAlbumAdapter!!.setOnItemClickListener(object : AlbumAdapter.OnItemClickListener {
-                override fun onClick(view: View, item: AlbumInfo, position: Int) {
+                                     mAlbumAdapter!!.setOnItemClickListener(object : AlbumAdapter.OnItemClickListener {
+                    override fun onClick(view: View, item: AlbumInfo, position: Int) {
                     if (mMaxSize == 1){
                         when (item.type) {
                             AlbumItemType.Image -> {
