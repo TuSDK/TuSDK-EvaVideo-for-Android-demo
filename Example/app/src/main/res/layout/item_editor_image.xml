@@ -7,6 +7,7 @@
     android:background="@drawable/item_editor_bg">
 
     <ImageView
+        android:layout_margin="1dp"
         android:id="@+id/lsq_editor_icon"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -43,10 +44,9 @@
         android:gravity="center"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:src="@mipmap/style_edit"
         android:text="点击编辑"
         android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textSize="10sp"
         android:translationZ="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

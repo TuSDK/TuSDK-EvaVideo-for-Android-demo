@@ -49,15 +49,19 @@ object ModelManager {
 
     public fun getImageAndVideoList() : LinkedList<EditorModelItem>{
         if (mImageAndVideoList.isEmpty()){
-            val imageList = mImageItemArray!!
-            for (i in imageList){
-                mImageAndVideoList.add(EditorModelItem(i,EditType.Image,i.startTime))
-            }
-            val videoList = mVideoItemArray!!
-            for (i in videoList){
-                mImageAndVideoList.add(EditorModelItem(i,EditType.Video,i.startTime))
-            }
+            if (mImageItemArray != null){
+                val imageList = mImageItemArray!!
+                for (i in imageList){
 
+                    mImageAndVideoList.add(EditorModelItem(i,EditType.Image,i.startTime,i.endTime,i.ioTimes,i.type))
+                }
+            }
+            if (mVideoItemArray != null){
+                val videoList = mVideoItemArray!!
+                for (i in videoList){
+                    mImageAndVideoList.add(EditorModelItem(i,EditType.Video,i.startTime,i.endTime,i.ioTimes,i.type))
+                }
+            }
             mImageAndVideoList.sortBy {
                 it.startPos
             }
@@ -85,7 +89,7 @@ object ModelManager {
 
             val textList = mTextItemArray!!
             for (i in textList){
-                itemsList.add(EditorModelItem(i,EditType.Text,i.startTime))
+                itemsList.add(EditorModelItem(i,EditType.Text,i.startTime,i.endTime,i.ioTimes,EvaModel.AssetType.kTEXT))
             }
 
             itemsList.sortBy {

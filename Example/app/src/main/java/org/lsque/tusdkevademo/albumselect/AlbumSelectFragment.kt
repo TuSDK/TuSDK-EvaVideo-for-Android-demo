@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.movie_album_fragment.*
 import org.jetbrains.anko.support.v4.runOnUiThread
 import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.toast
 import org.lasque.tusdkpulse.core.utils.ThreadHelper
 import org.lasque.tusdkpulse.core.utils.sqllite.ImageSqlHelper
 import org.lasque.tusdkpulse.core.utils.sqllite.ImageSqlInfo
@@ -45,7 +44,7 @@ import kotlin.math.max
 class AlbumSelectFragment : Fragment() {
 
     public interface OnAlbumSelectListener{
-        fun onSelect(item : AlbumSelectItem,position : Int)
+        fun onSelect(item : AlbumSelectItem,position : Int) : Boolean
 
         fun enableSelect() : Boolean
     }
@@ -101,11 +100,17 @@ class AlbumSelectFragment : Fragment() {
                            }
 
                             if (mOnAlbumSelectListener!!.enableSelect()){
-                                item.count++;
 
-                                mAlbumAdapter!!.notifyItemChanged(position)
+                                if (mOnAlbumSelectListener != null && mOnAlbumSelectListener!!.onSelect(item,position)){
+                                    item.count++;
+                                    mAlbumAdapter!!.notifyItemChanged(position)
+                                } else {
+                                    runOnUiThread {
+                                        toast("当前坑位无法选择这个素材")
+                                    }
+                                }
 
-                                mOnAlbumSelectListener?.onSelect(item,position)
+
                             } else {
                                 runOnUiThread {
                                     toast("素材已经填满了")

@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.tusdk.pulse.Engine
+import com.tusdk.pulse.eva.EvaModel
 import com.tusdk.pulse.utils.AssetsMapper
 import kotlinx.android.synthetic.main.demo_entry_activity.lsq_model_list
 import kotlinx.android.synthetic.main.network_model_example_activity.*
@@ -335,6 +336,7 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
                         val locVer = applicationContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE).getString("${mCurrentModel!!.modelId}_ver","")
                         if (!TextUtils.isEmpty(filePath) && !TextUtils.isEmpty(locVer) && !TextUtils.equals(mCurrentModel!!.modelVer,locVer)){
                             FileHelper.delete(File(filePath))
+                            EvaModel.ClearTemplatePath()
                         }
                         mDownloadUtil!!.createRuquest(item.modelDownloadUrl,"${item.modelName}模板",item.templateName)
                         applicationContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE).edit().putString("${item.modelId}_ver",item.modelVer).apply()
@@ -344,6 +346,19 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
                  *              Demo内基于DownloadManger实现的下载功能模拟 将下载地址传入即可
                  *              mDownloadUtil.createRuquest("模板下载地址")
                  * */
+            }
+
+            override fun onCheckModelVer(
+                holder: NetworkModelAdapter.ViewHolder,
+                progressView: ImageView,
+                item: ModelItem,
+                position: Int
+            ) : Boolean {
+                val locVer = applicationContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE).getString("${mCurrentModel!!.modelId}_ver","")
+
+                val currentVer = item.modelVer
+
+                return TextUtils.equals(locVer,currentVer)
             }
 
             override fun onClick(view: View, item: ModelItem, position: Int) {

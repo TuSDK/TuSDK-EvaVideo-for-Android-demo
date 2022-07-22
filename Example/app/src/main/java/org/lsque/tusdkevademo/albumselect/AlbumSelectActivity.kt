@@ -27,7 +27,6 @@ import com.tusdk.pulse.eva.EvaModel
 import com.tusdk.pulse.eva.EvaReplaceConfig
 import kotlinx.android.synthetic.main.album_select_activity.*
 import kotlinx.android.synthetic.main.title_item_layout.*
-import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
@@ -165,7 +164,7 @@ class AlbumSelectActivity : ScreenAdapterActivity() , AlbumSelectFragment.OnAlbu
 
     private fun initViews() {
 
-        lsq_next.visibility = View.VISIBLE
+        lsq_next.visibility = View.GONE
         lsq_back.setOnClickListener {
             finish()
         }
@@ -277,12 +276,26 @@ class AlbumSelectActivity : ScreenAdapterActivity() , AlbumSelectFragment.OnAlbu
 
     }
 
-    override fun onSelect(item: AlbumSelectItem, position: Int) {
+    override fun onSelect(item: AlbumSelectItem, position: Int) : Boolean{
         if (mModelItemAdapter!!.isFill()){
-            return
+            toast("素材已经填满了")
+            return false
         }
         val currentPos = mModelItemAdapter!!.getSelectPos()
+
         val currentItem = mImageAndVideoList[currentPos]
+
+        if (item.albumInfo.type == AlbumItemType.Video){
+            if (!(currentItem.assetsType == EvaModel.AssetType.kVIDEO_ONLY || currentItem.assetsType == EvaModel.AssetType.kIMAGE_VIDEO)){
+                return false
+            }
+
+        } else {
+            if (!(currentItem.assetsType == EvaModel.AssetType.kIMAGE_ONLY || currentItem.assetsType == EvaModel.AssetType.kIMAGE_VIDEO)){
+                return false
+            }
+        }
+
         mModelItemAdapter!!.bindAlbumItem(currentItem,item)
 
         val pos = mModelItemAdapter!!.getSelectPos()
@@ -290,7 +303,7 @@ class AlbumSelectActivity : ScreenAdapterActivity() , AlbumSelectFragment.OnAlbu
             lsq_album_select_view.smoothScrollToPosition(pos)
         }
 
-
+        return true
 
     }
 

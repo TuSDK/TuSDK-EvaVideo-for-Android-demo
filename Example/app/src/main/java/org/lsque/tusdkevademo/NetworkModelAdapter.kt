@@ -111,7 +111,7 @@ class NetworkModelAdapter(
 //                .placeholder(R.drawable.logo_set).error(R.drawable.logo_set)
                 .into(holder.mImageView)
         }
-        if (!TextUtils.isEmpty(mModelPath) && mModelVer == mModelList[p1].modelVer) {
+        if (!TextUtils.isEmpty(mModelPath) && TextUtils.equals(mModelVer,mModelList[p1].modelVer)) {
             mDownloadMap.put(p1, true)
             mModelList[p1]!!.modelDownloadFilePath = mModelPath
             holder.mDownloadImageView.visibility = View.GONE
@@ -212,5 +212,12 @@ class NetworkModelAdapter(
             item: ModelItem,
             position: Int
         )
+
+        fun onCheckModelVer(
+            holder: ViewHolder,
+            progressView: ImageView,
+            item: ModelItem,
+            position: Int
+        ) : Boolean
     }
 }

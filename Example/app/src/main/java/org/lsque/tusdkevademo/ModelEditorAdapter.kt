@@ -22,6 +22,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.target.SimpleTarget
@@ -30,6 +32,7 @@ import com.tusdk.pulse.eva.EvaModel
 import com.tusdk.pulse.eva.EvaReplaceConfig
 import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
+import org.lasque.tusdkpulse.core.TuSdkContext
 import org.lasque.tusdkpulse.core.struct.TuSdkSize
 import org.lasque.tusdkpulse.core.utils.AssetsHelper
 import org.lasque.tusdkpulse.core.utils.StringHelper
@@ -85,6 +88,7 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
     }
 
     public fun setCurrentClickPos(pos : Int){
+        if (pos == mCurrentClickPos) return
         val prePos = mCurrentClickPos
         if (prePos > -1)
             notifyItemChanged(prePos)
@@ -93,6 +97,7 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
     }
 
     public fun setHighLightPos(pos: Int){
+        if (pos == mHighLightPos) return
         val prePos = mHighLightPos
         if (prePos > -1)
             notifyItemChanged(prePos)
@@ -127,7 +132,11 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
 
                 var imageEntriy = (item.modelItem as EvaModel.VideoReplaceItem)
                 TLog.e("current image path ${imageEntriy.resPath}")
-                Glide.with(mContext).asBitmap().load(imageEntriy.resPath).into(object : CustomViewTarget<ImageView,Bitmap>(holder.imageView){
+                val roundedCorners = RoundedCorners(TuSdkContext.dip2px(10f))
+                val requestOption = RequestOptions.bitmapTransform(roundedCorners)
+                Glide.with(mContext).asBitmap().load(imageEntriy.resPath)
+                    .apply(requestOption)
+                    .into(object : CustomViewTarget<ImageView,Bitmap>(holder.imageView){
                     override fun onLoadFailed(errorDrawable: Drawable?) {
                         TLog.e("image load failed")
                     }
@@ -158,7 +167,7 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
 
 
                 if (mHighLightPos == position){
-                    holder.hightLightView.setBackgroundResource(R.drawable.red_stroke_bg)
+                    holder.hightLightView.setBackgroundResource(R.drawable.transparent_red_stroke_bg)
                 } else {
                     holder.hightLightView.setBackgroundColor(0)
                 }
@@ -172,8 +181,15 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
                 itemTextView.textColor = if(TextUtils.isEmpty(textEntity.text)) Color.parseColor("#555555") else Color.parseColor("#ffffff")
 
 
+                if (mCurrentClickPos == position){
+                    holder.maskView.visibility = View.VISIBLE
+                } else {
+                    holder.maskView.visibility = View.GONE
+                }
+
+
                 if (mHighLightPos == position){
-                    holder.hightLightView.setBackgroundResource(R.drawable.red_stroke_bg)
+                    holder.hightLightView.setBackgroundResource(R.drawable.transparent_red_stroke_bg)
                 } else {
                     holder.hightLightView.setBackgroundColor(0)
                 }
@@ -207,7 +223,12 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
 
                 if (currentItem.resPath.startsWith(STORAGE)) {
                     val orientation = BitmapHelper.getImageOrientation(currentItem.resPath)
-                    Glide.with(mContext).asBitmap().load(currentItem.resPath)
+                    val roundedCorners = RoundedCorners(TuSdkContext.dip2px(10f))
+                    val requestOption = RequestOptions.bitmapTransform(roundedCorners)
+
+                    Glide.with(mContext).asBitmap()
+                        .apply(requestOption)
+                        .load(currentItem.resPath)
                         .into(object : CustomViewTarget<ImageView,Bitmap>(holder.imageView){
                             override fun onLoadFailed(errorDrawable: Drawable?) {
                             }
@@ -230,7 +251,8 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
 
                         })
                 } else if (AssetsHelper.hasAssets(mContext,currentItem.resPath)){
-                    Glide.with(mContext).asBitmap().load("file:///android_asset/${currentItem.resPath}").into((holder.imageView))
+                    Glide.with(mContext).asBitmap()
+                        .load("file:///android_asset/${currentItem.resPath}").into((holder.imageView))
                 } else{
                     val loadImage = currentItem.thumbnail
                     if (loadImage != null){
@@ -252,7 +274,7 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
 
 
                 if (mHighLightPos == position){
-                    holder.hightLightView.setBackgroundResource(R.drawable.red_stroke_bg)
+                    holder.hightLightView.setBackgroundResource(R.drawable.transparent_red_stroke_bg)
                 } else {
                     holder.hightLightView.setBackgroundColor(0)
                 }
@@ -300,6 +322,8 @@ class ModelEditorAdapter(context: Context, modelList: LinkedList<EditorModelItem
 
     inner class TextViewHolder(itemView: View) : ViewHolder(itemView) {
         val textView = itemView.find<TextView>(R.id.lsq_edior_text)
+
+        val maskView = itemView.find<TextView>(R.id.lsq_editor_mask)
 
         val hightLightView = itemView.find<View>(R.id.lsq_editor_highlight)
     }

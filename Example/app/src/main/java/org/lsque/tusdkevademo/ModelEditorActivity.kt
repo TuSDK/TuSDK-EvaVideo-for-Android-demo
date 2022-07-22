@@ -111,6 +111,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
     private var mNextItemStartPos = 0L
 
+    private var mIsFromItemClick = false
+
+    private var mDelayTimes = 0L;
+
 
     /**  Eva播放器进度监听 */
     private var mPlayerProcessListener: Player.Listener = Player.Listener { state, ts ->
@@ -125,7 +129,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             mCurrentItemsPos = -1
             mNextItemStartPos = 0
 
-        } else if (state == Player.State.kPLAYING || state == Player.State.kDO_PREVIEW) {
+        } else if (state == Player.State.kPLAYING) {
 
             runOnUiThread {
                 mCurrentTs = ts
@@ -135,19 +139,29 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 //                        "剩余时长 : ${mEvaPlayer!!.duration - ts}"
 
 
-                if (ts > mNextItemStartPos){
+                if (ts > mNextItemStartPos && mCurrentItemsPos < mEditorList.size - 1){
                     mCurrentItemsPos = min(mCurrentItemsPos + 1,mEditorList.size - 1);
 
                     val prePos = mNextItemStartPos
                     mNextItemStartPos = mEditorList[mCurrentItemsPos].startPos;
 
-                    TLog.e("current item pos %s",mCurrentItemsPos)
+                    TLog.e("current item pos %s,pre pos %s next item start pos %s",mCurrentItemsPos,prePos,mNextItemStartPos)
 
-                    val delay = if (mNextItemStartPos - prePos < 50){100L} else {500L}
+                    var delay = 800L;
 
-                    TLog.e("current delay %s",delay)
+                    if (mNextItemStartPos - prePos < 200){
+
+                        delay = min(750L,mDelayTimes * 200L + 50L)
+                        mDelayTimes ++
+                    } else {
+                        mDelayTimes = 0
+                    }
+
 
                     val targetPos = mCurrentItemsPos
+
+                    TLog.e("current delay %s targetPos %s",delay,targetPos)
+
 
                     ThreadHelper.postDelayed({
                         mEditorAdapter?.setHighLightPos(targetPos)
@@ -164,18 +178,41 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
             TLog.e("current frame ${mCurrentFrame} max frame ${mDurationFrames} current ts ${ts} framerate ${mCurrentFrameRate} duration ${mEvaPlayer!!.duration}")
 
-            for (i in 0 until mEditorList.size){
-                if (ts > mEditorList[i].startPos){
-                    mCurrentItemsPos = i
-                    mNextItemStartPos = mEditorList[min(mEditorList.size - 1,i + 1)].startPos
+            runOnUiThread {
+                mCurrentTs = ts
+                lsq_seek.progress = ts.toInt()
+            }
 
-                    runOnUiThread {
-                        mEditorAdapter?.setHighLightPos(mCurrentItemsPos)
-                        lsq_editor_item_list.smoothScrollToPosition(mCurrentItemsPos)
+            if (!mIsFromItemClick){
+
+                editorlistloop@ for (i in 0 until mEditorList.size) {
+
+                    val item = mEditorList[i]
+
+                    for (j in item.ioTimes){
+                        if (j.isContains(ts)){
+
+                            val startF = (j.inTime * mCurrentFrameRate / 1000f).toInt()
+                            val endF = (j.outTime * mCurrentFrameRate / 1000f).toInt()
+
+                            TLog.e("start Pos %s end Pos %s ts %s",startF,endF,ts)
+
+                            mCurrentItemsPos = i
+                            mNextItemStartPos = j.inTime
+
+                            runOnUiThread {
+                                mEditorAdapter?.setHighLightPos(mCurrentItemsPos)
+                                lsq_editor_item_list.smoothScrollToPosition(mCurrentItemsPos)
+                            }
+                            break@editorlistloop;
+                        }
                     }
-                    break;
+
+
                 }
             }
+
+
 
 
         }
@@ -556,10 +593,13 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             ) {
                 if (editorAdapter.getCurrentClickPos() != position) {
                     editorAdapter.setCurrentClickPos(position)
+                    editorAdapter.setHighLightPos(position)
 
-                    val targetPos = (item.endTime - item.startTime) / 2 + item.startTime
-
+//                    val targetPos = (item.endTime - item.startTime) / 2 + item.startTime
+                    val targetPos = item.startTime
                     mEvaPlayer!!.previewFrame(targetPos.toLong())
+
+                    mIsFromItemClick = true
 
                 } else {
                     if (!isEnable) return
@@ -572,10 +612,16 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                     val videoDuration = (item.endTime - item.startTime) * 1000f
                     mCurrentImageItem = item
 
+                    TLog.e("item pos ${position}")
+
+                    if (lsq_editor_item_list.layoutManager == null || lsq_editor_item_list.layoutManager!!.findViewByPosition(position) == null){
+                        return
+                    }
+
                     showEditPopupWindow(
                         lsq_editor_item_list,
                         0,
-                        lsq_editor_item_list.layoutManager!!.getChildAt(position)!!.x.toInt(),
+                        lsq_editor_item_list.layoutManager!!.findViewByPosition(position)!!.x.toInt(),
                         {
                             startActivityForResult<AlbumActivity>(
                                 ALBUM_REQUEST_CODE_IMAGE,
@@ -625,10 +671,14 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             ) {
                 if (editorAdapter.getCurrentClickPos() != position) {
                     editorAdapter.setCurrentClickPos(position)
+                    editorAdapter.setHighLightPos(position)
 
-                    val targetPos = (item.endTime - item.startTime) / 2 + item.startTime
+//                    val targetPos = (item.endTime - item.startTime) / 2 + item.startTime
+                    val targetPos = item.startTime
 
                     mEvaPlayer!!.previewFrame(targetPos.toLong())
+
+                    mIsFromItemClick = true
 
                 } else {
                     if (!isEnable) return
@@ -697,14 +747,26 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 type: EditType
             ) {
                 if (!isEnable) return
-                mCurrentTextItem = item
-                lsq_editor_replace_text.setText(item.text)
-                lsq_text_editor_layout.visibility = View.VISIBLE
-                lsq_editor_replace_text.requestFocus()
-                mCurrentEditPostion = position
-                val inputManager: InputMethodManager =
-                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputManager.showSoftInput(lsq_editor_replace_text, 0)
+                if (editorAdapter.getCurrentClickPos() != position){
+                    editorAdapter.setCurrentClickPos(position)
+                    editorAdapter.setHighLightPos(position)
+
+//                    val targetPos = (item.endTime - item.startTime) / 2 + item.startTime
+                    val targetPos = item.startTime
+
+                    mEvaPlayer!!.previewFrame(targetPos.toLong())
+
+                    mIsFromItemClick = true
+                } else {
+                    mCurrentTextItem = item
+                    lsq_editor_replace_text.setText(item.text)
+                    lsq_text_editor_layout.visibility = View.VISIBLE
+                    lsq_editor_replace_text.requestFocus()
+                    mCurrentEditPostion = position
+                    val inputManager: InputMethodManager =
+                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputManager.showSoftInput(lsq_editor_replace_text, 0)
+                }
             }
 
         })
@@ -719,6 +781,8 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                 if (!fromUser) return
                 /** seek 到指定位置 播放器内范围(视频时长 ms) */
                 mEvaThreadPool.execute {
+                    mIsFromItemClick = false
+
                     mEvaPlayer!!.previewFrame(progress.toLong())
                 }
             }
@@ -1013,7 +1077,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                     if (videoWidth > metrics.widthPixels) {
                         lsq_seek.layoutParams.width = (metrics.widthPixels * 0.5).toInt()
                     } else {
-                        lsq_seek.layoutParams.width = (displayArea.height() * hwp).toInt()
+                        lsq_seek.layoutParams.width = min(metrics.widthPixels,(displayArea.height() * hwp).toInt())
                     }
                 }
                 lsq_seek.visibility = View.VISIBLE
@@ -1231,11 +1295,11 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         for (compari in editorList) {
             if (compari is EvaModel.VideoReplaceItem) {
                 if (!compari.isVideo)
-                    mEditorList.add(EditorModelItem(compari, EditType.Image, compari.startTime))
+                    mEditorList.add(EditorModelItem(compari, EditType.Image, compari.startTime,compari.endTime,compari.ioTimes,compari.type))
                 else
-                    mEditorList.add(EditorModelItem(compari, EditType.Video, compari.startTime))
+                    mEditorList.add(EditorModelItem(compari, EditType.Video, compari.startTime,compari.endTime,compari.ioTimes,compari.type))
             } else if (compari is EvaModel.TextReplaceItem) {
-                mEditorList.add(EditorModelItem(compari, EditType.Text, compari.startTime))
+                mEditorList.add(EditorModelItem(compari, EditType.Text, compari.startTime,compari.endTime,compari.ioTimes,EvaModel.AssetType.kTEXT))
             }
         }
         mEditorList.sortBy {

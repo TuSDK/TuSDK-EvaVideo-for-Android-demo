@@ -20,11 +20,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
 import com.tusdk.pulse.eva.EvaModel
 import com.tusdk.pulse.eva.EvaReplaceConfig
 import kotlinx.android.synthetic.main.album_bottom_select_item.view.*
+import org.lasque.tusdkpulse.core.TuSdkContext
 import org.lasque.tusdkpulse.core.struct.TuSdkSize
 import org.lasque.tusdkpulse.core.utils.TLog
 import org.lasque.tusdkpulse.core.utils.image.BitmapHelper
@@ -158,7 +161,7 @@ class AlbumBottomSelectAdapter(context : Context,selectList : MutableList<Editor
             if (position == mCurrentSelectPos){
                 holder.itemView.setBackgroundResource(R.drawable.red_stroke_bg)
             } else {
-                holder.itemView.setBackgroundResource(0)
+                holder.itemView.setBackgroundResource(R.drawable.item_select_stroke_bg)
             }
 
             val modelItem = currentItem.modelItem as EvaModel.VideoReplaceItem
@@ -200,7 +203,13 @@ class AlbumBottomSelectAdapter(context : Context,selectList : MutableList<Editor
 
             val currentAlbumItem = mModelMap[currentItem]
             val modelItem = currentItem.modelItem as EvaModel.VideoReplaceItem
-            Glide.with(mContext).asBitmap().load(currentAlbumItem!!.albumInfo.path).into(object : CustomViewTarget<ImageView,Bitmap>(holder.imageView){
+
+            val roundedCorners = RoundedCorners(TuSdkContext.dip2px(10f))
+            val requestOption = RequestOptions.bitmapTransform(roundedCorners)
+
+            Glide.with(mContext).asBitmap().load(currentAlbumItem!!.albumInfo.path)
+                .apply(requestOption)
+                .into(object : CustomViewTarget<ImageView,Bitmap>(holder.imageView){
                 override fun onLoadFailed(errorDrawable: Drawable?) {
                     TLog.e("image load failed")
                 }

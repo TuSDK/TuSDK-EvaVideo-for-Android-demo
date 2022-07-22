@@ -11,5 +11,6 @@
 package org.lsque.tusdkevademo
 
 import android.os.Parcelable
+import com.tusdk.pulse.eva.EvaModel
 
-data class EditorModelItem(var modelItem: Any, var modelType:EditType,var startPos : Long)
+data class EditorModelItem(var modelItem: Any, var modelType:EditType,var startPos : Long,var endPos : Long,var ioTimes : ArrayList<EvaModel.ItemIOTime>,var assetsType : EvaModel.AssetType)
