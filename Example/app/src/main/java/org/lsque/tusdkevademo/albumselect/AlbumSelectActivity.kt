@@ -116,7 +116,7 @@ class AlbumSelectActivity : ScreenAdapterActivity() , AlbumSelectFragment.OnAlbu
 
                 val config = EvaReplaceConfig.ImageOrVideo()
                 config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
-                config.audioMixWeight = 1F
+                config.audioMixWeight = 0F
 
                 modelManager.putConfig(modelItem.id,config)
 
@@ -131,7 +131,7 @@ class AlbumSelectActivity : ScreenAdapterActivity() , AlbumSelectFragment.OnAlbu
                 val config = EvaReplaceConfig.ImageOrVideo()
                 config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
                 config.repeat = 2
-                config.audioMixWeight = 0.5F
+                config.audioMixWeight = 0F
                 config.start = start
                 config.duration = duration
 
@@ -251,13 +251,13 @@ class AlbumSelectActivity : ScreenAdapterActivity() , AlbumSelectFragment.OnAlbu
                     val first = item.key
                     val second = item.value
 
-                    when(first.modelType){
-                        EditType.Image -> {
+                    when(second.albumInfo.type){
+                        AlbumItemType.Image -> {
                             val item = first.modelItem as EvaModel.VideoReplaceItem
                             item.resPath = second.albumInfo.path
                             ModelManager.putResType(item.id,AlbumItemType.Image)
                         }
-                        EditType.Video -> {
+                        AlbumItemType.Video -> {
                             val item = first.modelItem as EvaModel.VideoReplaceItem
                             item.resPath = second.albumInfo.path
                             ModelManager.putResType(item.id,AlbumItemType.Video)

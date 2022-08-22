@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.tusdk.pulse.Engine
 import com.tusdk.pulse.eva.EvaModel
+import com.tusdk.pulse.eva.TuSDKEva
 import com.tusdk.pulse.utils.AssetsMapper
 import kotlinx.android.synthetic.main.demo_entry_activity.lsq_model_list
 import kotlinx.android.synthetic.main.network_model_example_activity.*
@@ -113,7 +114,7 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
         },500)
         mDownloadMap[mRequestUrl]?.let { downloadMap.put(it,true) }
         if (mDownloadMap[mRequestUrl] !=null) {
-            modelAdapter!!.notifyItemChanged(mDownloadMap[mRequestUrl]!!, -1)
+            modelAdapter!!.notifyItemChanged(mDownloadMap[mRequestUrl]!!, -2)
             mDownloadMap.remove(mRequestUrl)
             mDownloadItemMap.remove(mRequestUrl)
         }
@@ -222,9 +223,14 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
         mEngine.init(null)
         mDownloadUtil = DownloadManagerUtil(this,this)
         mDownloadUtil!!.downLoadEVAJson()
+
+        lsq_version_code.setText("TuSDK EVA SDK ${TuSDKEva.SDK_VERSION}-${TuSDKEva.TOOLS_VERSION} \n" +
+                " © 2022 TUTUCLOUD.COM")
+
         initView()
-        
-        initFonts()
+
+        //需要模板字体外置时可参考
+        // initFonts()
     }
 
     override fun onPause() {
@@ -324,9 +330,10 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
                 holder.mDownloadCircleImageView.animation = mRotateAnimation
                 holder.mDownloadCircleImageView.tag = "NeedAddAnimation"
                 holder.mDownloadCircleImageView.animation.startNow()
+                modelAdapter!!.notifyItemChanged(position,-3)
                 /** 模拟下载操作 */
                 ThreadHelper.runThread {
-                    if(!downloadMap[position]){
+                    if(!downloadMap[position] && (!mDownloadMap.containsValue(position))){
                         mCurrentModel = item
                         mDownloadMap[mCurrentModel!!.modelDownloadUrl] = position
                         mDownloadItemMap[item.modelDownloadUrl] = item
@@ -338,7 +345,22 @@ class NetworkModelExampleActivity : ScreenAdapterActivity(), DownloadManagerUtil
                             FileHelper.delete(File(filePath))
                             EvaModel.ClearTemplatePath()
                         }
-                        mDownloadUtil!!.createRuquest(item.modelDownloadUrl,"${item.modelName}模板",item.templateName)
+                        mDownloadUtil!!.createRuquest(item.modelDownloadUrl,"${item.modelName}模板",item.templateName,object : DownloadManagerUtil.DownloadingProgressListener{
+                            override fun onProgress(progress: Float, currentBytes: Long, totalBytes: Long) {
+                                val currentPosition = position
+                                runOnUiThread {
+                                    modelAdapter?.notifyItemChanged(position,NetworkModelAdapter.ProgressData(currentBytes, totalBytes, progress))
+                                }
+                            }
+
+                            override fun onCompleted() {
+                                val currentPosition = position
+                                runOnUiThread {
+                                    modelAdapter!!.notifyItemChanged(currentPosition,-2)
+                                }
+                            }
+
+                        })
                         applicationContext.getSharedPreferences("EVA-DOWNLOAD", Context.MODE_PRIVATE).edit().putString("${item.modelId}_ver",item.modelVer).apply()
                     }
                 }

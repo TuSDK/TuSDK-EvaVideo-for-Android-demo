@@ -72,6 +72,8 @@ class AlbumBottomSelectAdapter(context : Context,selectList : MutableList<Editor
         val sloganView = itemView.lsq_select_item_slogan
         val typeView = itemView.lsq_select_type
         val durationView = itemView.lsq_select_duration
+
+        val realUnselectedView = itemView.lsq_select_unselected_real_click
     }
 
     public fun setOnItemClickListener(itemClickListener: OnItemClickListener){
@@ -185,6 +187,7 @@ class AlbumBottomSelectAdapter(context : Context,selectList : MutableList<Editor
             holder.sloganView.visibility = View.GONE
             holder.typeView.visibility = View.VISIBLE
             holder.unselectedView.visibility = View.GONE
+            holder.realUnselectedView.visibility = View.GONE
             holder.imageView.visibility = View.GONE
 
 
@@ -196,6 +199,7 @@ class AlbumBottomSelectAdapter(context : Context,selectList : MutableList<Editor
             holder.sloganView.visibility = View.VISIBLE
             holder.typeView.visibility = View.GONE
             holder.unselectedView.visibility = View.VISIBLE
+            holder.realUnselectedView.visibility = View.VISIBLE
             holder.imageView.visibility = View.VISIBLE
 
             holder.itemView.setBackgroundResource(0)
@@ -233,7 +237,7 @@ class AlbumBottomSelectAdapter(context : Context,selectList : MutableList<Editor
 
             })
 
-            holder.unselectedView.setOnClickListener {
+            holder.realUnselectedView.setOnClickListener {
                 mOnItemClickListener?.onUnselected(currentItem,currentAlbumItem,position)
             }
 

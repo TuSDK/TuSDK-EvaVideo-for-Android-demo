@@ -109,6 +109,9 @@ class ModelVideoActivity : ScreenAdapterActivity(){
         mMediaPlayer = MediaPlayer()
         mMediaPlayer!!.setDataSource(videoUrl)
 
+
+        TLog.e("MediaPlayer : url ${videoUrl}")
+
         mMediaPlayer!!.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT)
 
         val audioAttributes = AudioAttributes.Builder()
@@ -118,9 +121,19 @@ class ModelVideoActivity : ScreenAdapterActivity(){
         mMediaPlayer!!.isLooping = true
         mMediaPlayer!!.setAudioAttributes(audioAttributes.build())
 
+        mMediaPlayer!!.setOnErrorListener(object : MediaPlayer.OnErrorListener{
+            override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
+                TLog.e("MediaPlayer error what : ${what} extra : ${extra}")
+                return true;
+            }
+
+        })
+
         mMediaPlayer!!.setOnPreparedListener {
             mMediaPlayerPreparedFinish = true
             runOnUiThread {
+                lsq_video_loading_progress.visibility = View.GONE
+
                 lsq_seek.max = mMediaPlayer!!.duration
                 lsq_seek.progress = 0;
                 lsq_seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
@@ -181,7 +194,12 @@ class ModelVideoActivity : ScreenAdapterActivity(){
         lsq_model_video_seles.holder.addCallback(object : SurfaceHolder.Callback {
             override fun surfaceCreated(holder: SurfaceHolder) {
                 mMediaPlayer!!.setSurface(holder.surface)
-                mMediaPlayer!!.prepareAsync()
+                try {
+                    mMediaPlayer!!.prepareAsync()
+                } catch (e : Exception){
+                    TLog.e(e)
+                }
+
             }
 
             override fun surfaceChanged(
@@ -241,6 +259,8 @@ class ModelVideoActivity : ScreenAdapterActivity(){
             startActivity<AlbumSelectActivity>("model" to mCurrentModelItem)
             finish()
         }
+        lsq_video_loading_progress.visibility = View.VISIBLE
+
     }
 
     private fun playerPlaying(){

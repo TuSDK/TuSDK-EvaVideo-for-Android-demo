@@ -43,6 +43,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/29d86c7b897735301fc79c898adb84ae/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/29d86c7b897735301fc79c898adb84ae/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/29d86c7b897735301fc79c898adb84ae/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bf652dce44d1fd640bceecb65ec60d69/jetified-Circle-Progress-View-v1.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bf652dce44d1fd640bceecb65ec60d69/jetified-Circle-Progress-View-v1.3/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bf652dce44d1fd640bceecb65ec60d69/jetified-Circle-Progress-View-v1.3/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.jakob-grabner/Circle-Progress-View/v1.3/b51806caff7c046309c6307378b01bacae007e9e/Circle-Progress-View-v1.3-javadoc.jar!/" />

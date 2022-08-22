@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lsq_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_panel"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <TextView
             android:id="@+id/lsq_title"
             android:layout_width="0dp"
@@ -24,31 +28,61 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:paddingStart="35dp"
-            android:padding="10dp"
-            android:src="@mipmap/add_locale_model"
-            app:layout_constraintBottom_toBottomOf="@id/lsq_title"
-            app:layout_constraintTop_toTopOf="@id/lsq_title"
-            app:layout_constraintRight_toRightOf="@id/lsq_title"
             android:id="@+id/lsq_eva_file_explorer"
-            android:translationZ="200dp"
             android:layout_width="80dp"
-            android:layout_height="40dp"/>
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:paddingStart="35dp"
+            android:src="@mipmap/add_locale_model"
+            android:translationZ="200dp"
+            app:layout_constraintBottom_toBottomOf="@id/lsq_title"
+            app:layout_constraintRight_toRightOf="@id/lsq_title"
+            app:layout_constraintTop_toTopOf="@id/lsq_title" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lsq_model_list"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="#131313"
-            android:paddingStart="6dp"
-            android:paddingLeft="6dp"
-            android:paddingEnd="6dp"
-            android:paddingRight="6dp"
-            android:visibility="gone"
+        <androidx.core.widget.NestedScrollView
+            android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lsq_title"></androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintTop_toBottomOf="@id/lsq_title"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:nestedScrollingEnabled="false"
+                    android:id="@+id/lsq_model_list"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#131313"
+                    android:paddingStart="6dp"
+                    android:paddingLeft="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingRight="6dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
+                <TextView
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lsq_model_list"
+                    android:lineSpacingExtra="@dimen/lsq__space_5"
+                    android:padding="2dp"
+                    android:gravity="center"
+                    android:id="@+id/lsq_version_code"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/lsq_album_item_select_back"
+                    android:textSize="10sp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+
 
         <at.grabner.circleprogress.CircleProgressView
             android:id="@+id/lsq_load_progress"
@@ -81,5 +115,9 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/lsq_title" />
 
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

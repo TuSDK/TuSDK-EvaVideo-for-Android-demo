@@ -89,6 +89,21 @@
             app:layout_constraintRight_toRightOf="@id/lsq_model_video_seles_wrap"
             app:layout_constraintTop_toTopOf="@id/lsq_model_video_seles_wrap" />
 
+        <ProgressBar
+            android:id="@+id/lsq_video_loading_progress"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:indeterminateDrawable="@drawable/video_loading_progress"
+            android:indeterminateDuration="1000"
+            android:indeterminateOnly="true"
+            android:indeterminateBehavior="repeat"
+            android:indeterminate="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
+
 
         <include
             android:id="@+id/lsq_title"

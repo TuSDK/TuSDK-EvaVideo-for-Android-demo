@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.database.Cursor
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -40,10 +41,12 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
 
     var mEVAJsonRequestId = -1L
 
+    val mDownloadListeners : HashMap<Long,DownloadingProgressListener> = HashMap<Long,DownloadingProgressListener>()
 
 
 
-    public fun createRuquest(url : String,title:String,fileName:String){
+
+    public fun createRuquest(url : String,title:String,fileName:String,listener : DownloadingProgressListener) {
         if (mDownloadReceiver == null) {
             mDownloadReceiver = DownloadReceiver(this)
             val intentFilter = IntentFilter()
@@ -74,6 +77,46 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
         request.setDestinationInExternalFilesDir(mContext, Environment.DIRECTORY_DOWNLOADS, fileName)
         /** 6. 使用DownloadManger链接Request对象 并保存任务Id */
         val requestId = mDownloadManager.enqueue(request)
+        mDownloadListeners.put(requestId,listener)
+        ThreadHelper.runThread {
+            var c = mDownloadManager.query(DownloadManager.Query().setFilterById(requestId));
+
+            if (c.moveToFirst()){
+                var downloadBytesIdx = c.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+                var totalBytesIdx = c.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
+                var statueIdx = c.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS)
+
+                var downStatue : Int = c.getInt(statueIdx)
+
+                do{
+                    c.close()
+                    c = mDownloadManager.query(DownloadManager.Query().setFilterById(requestId))
+                    if (c.moveToFirst()){
+                        downStatue = c.getInt(statueIdx)
+                        if (downStatue == DownloadManager.STATUS_RUNNING){
+                            var totalBytes = c.getLong(totalBytesIdx)
+                            var downloadBytes = c.getLong(downloadBytesIdx)
+
+                            TLog.e("downloadBytesIdx : ${downloadBytesIdx} totalBytesIdx : ${totalBytesIdx} totalBytes : ${totalBytes} downloadBytes : ${downloadBytes}")
+
+
+                            downloadBytes = c.getLong(downloadBytesIdx)
+                            var progress = downloadBytes * 100f / totalBytes
+                            listener.onProgress(progress,downloadBytes,totalBytes)
+                        } else if (downStatue == DownloadManager.STATUS_FAILED){
+                            break
+                        }
+                    }
+                } while (downStatue != DownloadManager.STATUS_SUCCESSFUL)
+                if (downStatue == DownloadManager.STATUS_SUCCESSFUL){
+                    listener.onCompleted()
+                }
+                c.close()
+            }
+        }
+
+
+
         mRequestLinkList.add(requestId)
         mDownloadReceiver!!.requestUrlMap[requestId] = url
     }
@@ -126,6 +169,12 @@ class DownloadManagerUtil (context: Context,listener : DownloadStateListener){
          * 通知栏进度条点击回调
          */
         fun onNotificationClicked()
+    }
+
+    public interface DownloadingProgressListener{
+        fun onProgress(progress : Float,currentBytes : Long,totalBytes : Long)
+
+        fun onCompleted()
     }
 
     class DownloadReceiver(downloadManagerUtil: DownloadManagerUtil) : BroadcastReceiver(){

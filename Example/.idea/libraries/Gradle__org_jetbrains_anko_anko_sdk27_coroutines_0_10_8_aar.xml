@@ -1,9 +1,10 @@
 <component name="libraryTable">
   <library name="Gradle: org.jetbrains.anko:anko-sdk27-coroutines:0.10.8@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/646ada8f13f63b38564b121be75a7d3c/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/646ada8f13f63b38564b121be75a7d3c/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/646ada8f13f63b38564b121be75a7d3c/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ba497626e6fec1b6e4c490f7c055ae52/jetified-anko-sdk27-coroutines-0.10.8/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ba497626e6fec1b6e4c490f7c055ae52/jetified-anko-sdk27-coroutines-0.10.8/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ba497626e6fec1b6e4c490f7c055ae52/jetified-anko-sdk27-coroutines-0.10.8/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

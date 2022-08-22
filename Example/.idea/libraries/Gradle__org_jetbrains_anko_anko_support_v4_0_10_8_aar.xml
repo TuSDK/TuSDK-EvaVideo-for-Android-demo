@@ -43,6 +43,10 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2fccc0d764a2b64c2c122424ad289d45/AndroidManifest.xml" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2fccc0d764a2b64c2c122424ad289d45/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2fccc0d764a2b64c2c122424ad289d45/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/afdeb01f523b8447c5a4098e9e8f2280/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/dc7f9c6c46b9e6dc297eb4648d95e4bb/jetified-anko-support-v4-0.10.8/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/dc7f9c6c46b9e6dc297eb4648d95e4bb/jetified-anko-support-v4-0.10.8/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/dc7f9c6c46b9e6dc297eb4648d95e4bb/jetified-anko-support-v4-0.10.8/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_permission_config"
         tools:replace="android:appComponentFactory">
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -29,6 +30,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
+            android:usesCleartextTraffic="true"
             android:name=".ModelVideoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"

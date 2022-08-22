@@ -99,6 +99,28 @@ class AlbumSelectAdapter(context: Context,albumList : MutableList<AlbumSelectIte
 
     }
 
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()){
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            for (p in payloads){
+                if (p is Int){
+                    val payload : Int = p
+                    if (payload == -1){
+                        val currentItem = mAlbumList[position]
+                        if (currentItem.count > 0){
+                            holder.selectTab.visibility = View.VISIBLE
+                        } else {
+                            holder.selectTab.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+
     override fun getItemCount(): Int {
         return mAlbumList.size
     }

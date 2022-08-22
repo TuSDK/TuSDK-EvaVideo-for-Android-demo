@@ -72,6 +72,7 @@
             app:layout_constraintTop_toBottomOf="@id/lsq_editor_voice_text" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/lsq_reset_assets"
             android:layout_width="128dp"
             android:layout_height="40dp"
@@ -186,21 +187,65 @@
         app:layout_constraintRight_toRightOf="@id/lsq_model_seles"
         app:layout_constraintTop_toTopOf="@id/lsq_model_seles" />
 
-    <SeekBar
-        android:id="@+id/lsq_seek"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lsq_seek_panel"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:maxHeight="4dp"
-        android:paddingTop="27dp"
-        android:paddingBottom="30dp"
-        android:progressDrawable="@drawable/lsq_model_seekbar_bg"
-        android:thumb="@drawable/lsq_model_seekbar_thumb"
-        android:thumbOffset="0dp"
-        android:visibility="gone"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="@id/lsq_model_seles"
         app:layout_constraintLeft_toLeftOf="@id/lsq_model_seles"
         app:layout_constraintRight_toRightOf="@id/lsq_model_seles"
-        app:layout_constraintTop_toBottomOf="@id/lsq_model_seles" />
+        app:layout_constraintTop_toBottomOf="@id/lsq_model_seles"
+        >
+        <TextView
+            android:gravity="center_horizontal|bottom"
+            app:layout_constraintWidth_min="30dp"
+            android:minWidth="30dp"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:text="00:00"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/lsq_seek_current_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:gravity="center_horizontal|bottom"
+            app:layout_constraintWidth_min="30dp"
+            android:minWidth="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:text="00:00"
+            android:id="@+id/lsq_seek_total_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+
+        <SeekBar
+            android:paddingTop="2dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/lsq_seek_total_duration"
+            app:layout_constraintLeft_toRightOf="@id/lsq_seek_current_duration"
+            android:id="@+id/lsq_seek"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxHeight="4dp"
+            android:progressDrawable="@drawable/lsq_model_seekbar_bg"
+            android:thumb="@drawable/lsq_model_seekbar_thumb"
+            android:thumbOffset="0dp"
+            android:visibility="visible"
+             />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
     <!-- 加载进度 -->

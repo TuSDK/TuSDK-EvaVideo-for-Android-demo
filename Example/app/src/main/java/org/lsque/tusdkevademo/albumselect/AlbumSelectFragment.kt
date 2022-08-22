@@ -61,7 +61,7 @@ class AlbumSelectFragment : Fragment() {
 
     public fun notifyAlbumItemChanged(item : AlbumSelectItem){
         if(mAlbumList != null &&mAlbumList!!.contains(item))
-            mAlbumAdapter?.notifyItemChanged(mAlbumList!!.indexOf(item))
+            mAlbumAdapter?.notifyItemChanged(mAlbumList!!.indexOf(item),-1)
     }
 
     override fun onCreateView(
@@ -75,7 +75,7 @@ class AlbumSelectFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gridLayoutManager = GridLayoutManager(activity, 4)
+        val gridLayoutManager = GridLayoutManager(activity, 3)
         lsq_album_list.layoutManager = gridLayoutManager
     }
 
@@ -103,7 +103,7 @@ class AlbumSelectFragment : Fragment() {
 
                                 if (mOnAlbumSelectListener != null && mOnAlbumSelectListener!!.onSelect(item,position)){
                                     item.count++;
-                                    mAlbumAdapter!!.notifyItemChanged(position)
+                                    mAlbumAdapter!!.notifyItemChanged(position,-1)
                                 } else {
                                     runOnUiThread {
                                         toast("当前坑位无法选择这个素材")

@@ -42,7 +42,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.tusdk.pulse.Engine
-import com.tusdk.pulse.MediaInspector
 import com.tusdk.pulse.Player
 import com.tusdk.pulse.Producer
 import com.tusdk.pulse.eva.EvaDirector
@@ -69,7 +68,6 @@ import java.util.concurrent.Executors
 import java.util.concurrent.Semaphore
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import kotlin.math.max
 import kotlin.math.min
 
 
@@ -131,6 +129,24 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
         } else if (state == Player.State.kPLAYING) {
 
+            val currentVideoHour = ts /3600000
+            val currentVideoMinute = (ts % 3600000) /60000
+
+            val currentVideoSecond = (ts %60000 /1000)
+
+            val durationMS = mEvaPlayer!!.duration
+            val durationVideoHour = durationMS /3600000
+
+            val durationVideoMinute = (durationMS %3600000) /60000
+
+            val durationVideoSecond = (durationMS  % 60000) / 1000
+
+            runOnUiThread {
+                lsq_seek_current_duration.text = "${String.format("%02d:%02d",currentVideoMinute,currentVideoSecond)}"
+
+                lsq_seek_total_duration.text = "${String.format("%02d:%02d",durationVideoMinute,durationVideoSecond)}"
+            }
+
             runOnUiThread {
                 mCurrentTs = ts
                 lsq_seek.progress = ts.toInt()
@@ -145,8 +161,6 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                     val prePos = mNextItemStartPos
                     mNextItemStartPos = mEditorList[mCurrentItemsPos].startPos;
 
-                    TLog.e("current item pos %s,pre pos %s next item start pos %s",mCurrentItemsPos,prePos,mNextItemStartPos)
-
                     var delay = 800L;
 
                     if (mNextItemStartPos - prePos < 200){
@@ -159,10 +173,6 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
 
                     val targetPos = mCurrentItemsPos
-
-                    TLog.e("current delay %s targetPos %s",delay,targetPos)
-
-
                     ThreadHelper.postDelayed({
                         mEditorAdapter?.setHighLightPos(targetPos)
                         lsq_editor_item_list.smoothScrollToPosition(targetPos)
@@ -178,9 +188,25 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
             TLog.e("current frame ${mCurrentFrame} max frame ${mDurationFrames} current ts ${ts} framerate ${mCurrentFrameRate} duration ${mEvaPlayer!!.duration}")
 
+            val currentVideoHour = ts /3600000
+            val currentVideoMinute = (ts % 3600000) /60000
+
+            val currentVideoSecond = (ts %60000 /1000)
+
+            val durationMS = mEvaPlayer!!.duration
+            val durationVideoHour = durationMS /3600000
+
+            val durationVideoMinute = (durationMS %3600000) /60000
+
+            val durationVideoSecond = (durationMS  % 60000) / 1000
+
             runOnUiThread {
                 mCurrentTs = ts
                 lsq_seek.progress = ts.toInt()
+
+                lsq_seek_current_duration.text = "${String.format("%02d:%02d",currentVideoMinute,currentVideoSecond)}"
+
+                lsq_seek_total_duration.text = "${String.format("%02d:%02d",durationVideoMinute,durationVideoSecond)}"
             }
 
             if (!mIsFromItemClick){
@@ -229,11 +255,8 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
     private var mSavedMap = HashMap<String, String>()
 
-    /**  当前图片修改项 */
-    private var mCurrentImageItem: EvaModel.VideoReplaceItem? = null
-
     /**  当前视频修改项 */
-    private var mCurrentVideoItem: EvaModel.VideoReplaceItem? = null
+    private var mCurrentImageVideoItem: EvaModel.VideoReplaceItem? = null
 
     /**  当前文字修改项 */
     private var mCurrentTextItem: EvaModel.TextReplaceItem? = null
@@ -384,82 +407,82 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             /**  图片裁剪回调*/
             ALBUM_REQUEST_CODE_IMAGE -> {
                 val rectArray = data!!.extras!!.getFloatArray("zoom")!!
-                mCurrentImageItem!!.resPath = data!!.getStringExtra("imagePath")
-                if (TextUtils.isEmpty(mCurrentImageItem!!.resPath)) {
-                    mCurrentImageItem!!.resPath = data!!.getStringExtra("videoPath")
+                this.mCurrentImageVideoItem!!.resPath = data!!.getStringExtra("imagePath")
+                if (TextUtils.isEmpty(this.mCurrentImageVideoItem!!.resPath)) {
+                    this.mCurrentImageVideoItem!!.resPath = data!!.getStringExtra("videoPath")
                 }
 
 
                 val config = EvaReplaceConfig.ImageOrVideo()
                 config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
-                config.audioMixWeight = 1F
+                config.audioMixWeight = 0F
 
 
                 mEvaThreadPool.execute {
-                    mDiffMap[mCurrentImageItem!!.id] = true
-                    mConfigMap[mCurrentImageItem!!.id] = config
-                    val updateRes = mEvaDirector!!.updateImage(mCurrentImageItem, config)
-                    TLog.e("update image res ${updateRes} path = ${mCurrentImageItem!!.resPath}")
+                    mDiffMap[this.mCurrentImageVideoItem!!.id] = true
+                    mConfigMap[this.mCurrentImageVideoItem!!.id] = config
+                    val updateRes = mEvaDirector!!.updateImage(this.mCurrentImageVideoItem, config)
+                    TLog.e("update image res ${updateRes} path = ${this.mCurrentImageVideoItem!!.resPath}")
 
-                    ModelManager.putResType(mCurrentImageItem!!.id, AlbumItemType.Image)
+                    ModelManager.putResType(this.mCurrentImageVideoItem!!.id, AlbumItemType.Image)
                 }
-                mTargetProgress = mCurrentImageItem!!.startTime
+                mTargetProgress = this.mCurrentImageVideoItem!!.startTime
             }
             /** 视频裁剪回调 */
             ALBUM_REQUEST_CODE_VIDEO -> {
                 when (resultCode) {
                     ALBUM_REQUEST_CODE_VIDEO -> {
                         val rectArray = data!!.getFloatArrayExtra("zoom")!!
-                        mCurrentVideoItem!!.resPath = data!!.getStringExtra("videoPath")
+                        this.mCurrentImageVideoItem!!.resPath = data!!.getStringExtra("videoPath")
                         val start = data!!.extras!!.getLong("start", 0L)
                         val duration = data!!.extras!!.getLong("duration", -1L)
                         val config = EvaReplaceConfig.ImageOrVideo()
                         config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
                         config.repeat = 2
-                        config.audioMixWeight = 0.5F
+                        config.audioMixWeight = 0F
                         config.start = start
                         config.duration = duration
 
                         TLog.e("config ${config}")
 
                         mEvaThreadPool.execute {
-                            mDiffMap[mCurrentVideoItem!!.id] = true
-                            mConfigMap[mCurrentVideoItem!!.id] = config
-                            if (mCurrentVideoItem!!.isVideo) {
-                                if (!mEvaDirector!!.updateVideo(mCurrentVideoItem, config)) {
+                            mDiffMap[this.mCurrentImageVideoItem!!.id] = true
+                            mConfigMap[this.mCurrentImageVideoItem!!.id] = config
+                            if (this.mCurrentImageVideoItem!!.isVideo) {
+                                if (!mEvaDirector!!.updateVideo(this.mCurrentImageVideoItem, config)) {
                                     TLog.e("updateVideo error")
                                 }
                             } else {
-                                if (!mEvaDirector!!.updateImage(mCurrentVideoItem, config)) {
+                                if (!mEvaDirector!!.updateImage(this.mCurrentImageVideoItem, config)) {
                                     TLog.e("updateVideo error")
                                 }
                             }
 
-                            ModelManager.putResType(mCurrentVideoItem!!.id, AlbumItemType.Video)
+                            ModelManager.putResType(this.mCurrentImageVideoItem!!.id, AlbumItemType.Video)
 
                         }
                     }
 
                     ALBUM_REQUEST_CODE_IMAGE -> {
                         var rectArray = data!!.getFloatArrayExtra("zoom")!!
-                        mCurrentVideoItem!!.resPath = data!!.getStringExtra("imagePath")
+                        this.mCurrentImageVideoItem!!.resPath = data!!.getStringExtra("imagePath")
                         val config = EvaReplaceConfig.ImageOrVideo()
                         config.crop = RectF(rectArray[0], rectArray[1], rectArray[2], rectArray[3])
-                        config.audioMixWeight = 1F
+                        config.audioMixWeight = 0F
                         mEvaThreadPool.execute {
-                            mDiffMap[mCurrentVideoItem!!.id] = true
-                            mConfigMap[mCurrentVideoItem!!.id] = config
-                            if (mCurrentVideoItem!!.isVideo) {
-                                if (!mEvaDirector!!.updateVideo(mCurrentVideoItem, config)) {
+                            mDiffMap[this.mCurrentImageVideoItem!!.id] = true
+                            mConfigMap[this.mCurrentImageVideoItem!!.id] = config
+                            if (this.mCurrentImageVideoItem!!.isVideo) {
+                                if (!mEvaDirector!!.updateVideo(this.mCurrentImageVideoItem, config)) {
                                     TLog.e("updateVideo error")
                                 }
                             } else {
-                                if (!mEvaDirector!!.updateImage(mCurrentVideoItem, config)) {
+                                if (!mEvaDirector!!.updateImage(this.mCurrentImageVideoItem, config)) {
                                     TLog.e("updateImage error")
                                 }
                             }
 
-                            ModelManager.putResType(mCurrentVideoItem!!.id, AlbumItemType.Image)
+                            ModelManager.putResType(this.mCurrentImageVideoItem!!.id, AlbumItemType.Image)
                         }
                     }
 
@@ -467,7 +490,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                         // Mask 坑位正常不应该允许替换
                     }
                 }
-                mTargetProgress = mCurrentVideoItem!!.startTime
+                mTargetProgress = this.mCurrentImageVideoItem!!.startTime
             }
             /** 音频选择回调 */
             AUDIO_REQUEST_CODE -> {
@@ -610,7 +633,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                         EvaModel.AssetType.kIMAGE_VIDEO -> isOnlyImage = false
                     }
                     val videoDuration = (item.endTime - item.startTime) * 1000f
-                    mCurrentImageItem = item
+                    this@ModelEditorActivity.mCurrentImageVideoItem = item
 
                     TLog.e("item pos ${position}")
 
@@ -633,7 +656,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                             )
                         },
                         {
-                            var resType = ModelManager.getResType(item.id)
+                            val resType = ModelManager.getResType(item.id)
                             if (resType != null) {
                                 when (resType!!) {
                                     AlbumItemType.Image -> {
@@ -691,7 +714,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                         EvaModel.AssetType.kIMAGE_ONLY -> isOnlyImage = true
                     }
                     val videoDuration = (item.endTime - item.startTime) * 1000f
-                    mCurrentVideoItem = item
+                    this@ModelEditorActivity.mCurrentImageVideoItem = item
 
                     showEditPopupWindow(
                         lsq_editor_item_list,
@@ -713,7 +736,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                                 when (resType!!) {
                                     AlbumItemType.Image -> {
                                         startActivityForResult<ImageCuterActivity>(
-                                            ALBUM_REQUEST_CODE_IMAGE,
+                                                ALBUM_REQUEST_CODE_VIDEO,
                                             "width" to item.width,
                                             "height" to item.height,
                                             "imagePath" to item.resPath
@@ -829,8 +852,8 @@ class ModelEditorActivity : ScreenAdapterActivity() {
         lsq_voice_seek.progress = (volume * 10)
         lsq_voice_seek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-//                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress / 10,AudioManager.FLAG_PLAY_SOUND)
-                //mEvaDirector!!.updateAudioMixWeightSeparate("", (progress / 10.0).toDouble())
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress / 10,AudioManager.FLAG_PLAY_SOUND)
+                mEvaDirector!!.updateAudioMixWeightSeparate("", (progress / 10.0).toDouble())
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -868,8 +891,7 @@ class ModelEditorActivity : ScreenAdapterActivity() {
                     mEvaModel!!.listReplaceableTextAssets()
                 )
                 mCurrentAudioItems = mEvaModel!!.listReplaceableAudioAssets()
-                mCurrentImageItem = null
-                mCurrentVideoItem = null
+                this.mCurrentImageVideoItem = null
                 mCurrentTextItem = null
                 mCurrentAudiItem = null
                 for (item in mCurrentImageItems!!) {
@@ -1071,16 +1093,16 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 //                lsq_model_seles.layoutParams.width = w
 //                lsq_model_seles.layoutParams.height = h
 
-                if (videoHeight < lsq_model_seles.layoutParams.height) {
-                    lsq_seek.layoutParams.width = min(metrics.widthPixels, videoWidth.toInt())
-                } else {
-                    if (videoWidth > metrics.widthPixels) {
-                        lsq_seek.layoutParams.width = (metrics.widthPixels * 0.5).toInt()
-                    } else {
-                        lsq_seek.layoutParams.width = min(metrics.widthPixels,(displayArea.height() * hwp).toInt())
-                    }
-                }
-                lsq_seek.visibility = View.VISIBLE
+//                if (videoHeight < lsq_model_seles.layoutParams.height) {
+//                    lsq_seek.layoutParams.width = min(metrics.widthPixels, videoWidth.toInt())
+//                } else {
+//                    if (videoWidth > metrics.widthPixels) {
+//                        lsq_seek.layoutParams.width = (metrics.widthPixels * 0.5).toInt()
+//                    } else {
+//                        lsq_seek.layoutParams.width = min(metrics.widthPixels,(displayArea.height() * hwp).toInt())
+//                    }
+//                }
+//                lsq_seek.visibility = View.VISIBLE
             }
             lsq_model_seles.attachPlayer(mEvaPlayer)
             mCurrentAudioItems = mEvaModel!!.listReplaceableAudioAssets()
@@ -1164,10 +1186,12 @@ class ModelEditorActivity : ScreenAdapterActivity() {
 
         mEditPopupWindow!!.contentView.lsq_popup_changed.setOnClickListener {
             changedFun()
+            mEditPopupWindow?.dismiss()
         }
 
         mEditPopupWindow!!.contentView.lsq_popup_edit.setOnClickListener {
             editFun()
+            mEditPopupWindow?.dismiss()
         }
 
 //        mEditPopupWindow!!.showAsDropDown(targetView)
@@ -1223,10 +1247,10 @@ class ModelEditorActivity : ScreenAdapterActivity() {
             val supportSize = ProduceOutputUtils.getSupportSize(MediaFormat.MIMETYPE_VIDEO_AVC)
             val outputSize = TuSdkSize.create(mEvaModel!!.width, mEvaModel!!.height)
 
-            config.scale = 0.5
-//            if (supportSize.maxSide() < outputSize.maxSide()) {
-//                config.scale = supportSize.maxSide().toDouble() / outputSize.maxSide().toDouble()
-//            }
+//            config.scale = 0.5
+            if (supportSize.maxSide() < outputSize.maxSide()) {
+                config.scale = supportSize.maxSide().toDouble() / outputSize.maxSide().toDouble()
+            }
             producer.setOutputConfig(config)
 
             producer.setListener { state, ts ->
