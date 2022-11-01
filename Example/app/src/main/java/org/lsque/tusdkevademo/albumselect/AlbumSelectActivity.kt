@@ -15,6 +15,7 @@ import android.graphics.RectF
 import android.os.Bundle
 import android.util.SparseArray
 import android.view.View
+import android.widget.Toast
 import androidx.core.util.valueIterator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -58,6 +59,8 @@ class AlbumSelectActivity : ScreenAdapterActivity() , AlbumSelectFragment.OnAlbu
     private var mModelItemAdapter : AlbumBottomSelectAdapter? = null
 
     private var mCurrentModelItem : EditorModelItem? = null
+
+    private var mCurrentToast : Toast? = null
 
 
     inner class AlbumFragmentAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
@@ -245,7 +248,7 @@ class AlbumSelectActivity : ScreenAdapterActivity() , AlbumSelectFragment.OnAlbu
 
         lsq_album_bottom_commit.setOnClickListener {
             if (!mModelItemAdapter!!.isFill()){
-                toast("素材不足,需要继续选择")
+                toastText("素材不足,需要继续选择")
             } else {
                 for (item in mModelItemAdapter!!.getModelMap()){
                     val first = item.key
@@ -278,7 +281,7 @@ class AlbumSelectActivity : ScreenAdapterActivity() , AlbumSelectFragment.OnAlbu
 
     override fun onSelect(item: AlbumSelectItem, position: Int) : Boolean{
         if (mModelItemAdapter!!.isFill()){
-            toast("素材已经填满了")
+            toastText("素材已经填满了")
             return false
         }
         val currentPos = mModelItemAdapter!!.getSelectPos()
@@ -310,5 +313,22 @@ class AlbumSelectActivity : ScreenAdapterActivity() , AlbumSelectFragment.OnAlbu
     override fun enableSelect(): Boolean {
         if (mModelItemAdapter == null) return false
         else return !mModelItemAdapter!!.isFill()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        if (mCurrentToast != null){
+            mCurrentToast?.cancel()
+        }
+    }
+
+    private fun toastText(text : String){
+        if (mCurrentToast == null){
+            mCurrentToast = Toast.makeText(this,text,Toast.LENGTH_SHORT)
+        } else {
+            mCurrentToast!!.setText(text)
+        }
+        mCurrentToast?.show()
     }
 }

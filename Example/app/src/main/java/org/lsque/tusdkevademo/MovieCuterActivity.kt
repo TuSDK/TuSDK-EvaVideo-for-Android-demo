@@ -293,8 +293,8 @@ class MovieCuterActivity : ScreenAdapterActivity() {
                 size = size.transforOrientation(rotation)
                 val width = intent.getIntExtra("width", 0)
                 val height = intent.getIntExtra("height", 0)
-                val rangeStartTs = mLeftTimeRangUs / 1000
-                val rangeEndTs = mRightTimeRangUs / 1000
+                val rangeStartTs = mLeftTimeRangUs
+                val rangeEndTs = mRightTimeRangUs
                 val targetSize = TuSdkSize(width,height)
                 if (size.maxSide() > targetSize.maxSide()){
                     val scale = size.maxSide().toFloat() / targetSize.maxSide().toFloat()

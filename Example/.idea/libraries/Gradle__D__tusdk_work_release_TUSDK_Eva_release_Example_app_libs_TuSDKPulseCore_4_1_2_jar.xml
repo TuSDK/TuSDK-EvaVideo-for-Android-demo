@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: D./tusdk-work/release/TUSDK-Eva-release/Example/app/libs/TuSDKPulseCore-4.1.2.jar">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/TuSDKPulseCore-4.1.2.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

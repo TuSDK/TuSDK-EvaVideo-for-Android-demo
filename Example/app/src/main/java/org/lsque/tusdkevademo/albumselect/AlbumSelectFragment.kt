@@ -15,6 +15,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.movie_album_fragment.*
@@ -54,6 +55,9 @@ class AlbumSelectFragment : Fragment() {
     private var mOnAlbumSelectListener : OnAlbumSelectListener? = null
 
     private var mAlbumList : LinkedList<AlbumSelectItem>? = null
+
+    private var mCurrentToast : Toast? = null
+
 
     public fun setOnAlbumSelectListener(albumSelectListener: OnAlbumSelectListener){
         mOnAlbumSelectListener = albumSelectListener
@@ -106,14 +110,14 @@ class AlbumSelectFragment : Fragment() {
                                     mAlbumAdapter!!.notifyItemChanged(position,-1)
                                 } else {
                                     runOnUiThread {
-                                        toast("当前坑位无法选择这个素材")
+                                        toastText("当前坑位无法选择这个素材")
                                     }
                                 }
 
 
                             } else {
                                 runOnUiThread {
-                                    toast("素材已经填满了")
+                                    toastText("素材已经填满了")
                                 }
                             }
                         }
@@ -140,6 +144,20 @@ class AlbumSelectFragment : Fragment() {
             }
         }
         return albumList
+    }
+
+    private fun toastText(text : String){
+        if (mCurrentToast == null){
+            mCurrentToast = Toast.makeText(requireContext(),text,Toast.LENGTH_SHORT)
+        } else {
+            mCurrentToast!!.setText(text)
+        }
+        mCurrentToast?.show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mCurrentToast?.cancel()
     }
 
 }
